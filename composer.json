@@ -1,8 +1,6 @@
 {
-  "name": "gingerpayments/ginger-plugin-sdk",
+  "name": "gingerplugins/ginger-plugin-sdk",
   "description": "Extra layer for ginger-php library to use in plugin development.",
-  "type": "library",
-  "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
     {
@@ -10,9 +8,19 @@
       "email": "alexander.tutunnik@leasoft.org"
     }
   ],
+  "require": {
+    "gingerpayments/ginger-php": "^2.1",
+    "ext-intl": "*"
+  },
   "autoload": {
     "psr-4": {
-      "GingerPluginSdk\\": "src/"
-    }
+      "GingerPluginSdk\\": "src"
+    },
+    "files" : [
+      "env_autoloader.php"
+    ]
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
   }
 }
