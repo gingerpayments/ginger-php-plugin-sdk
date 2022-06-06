@@ -32,6 +32,7 @@ class Order implements MultiFieldsEntityInterface
     private BaseField $merchantId;
     private BaseField $modified;
     private BaseField $projectId;
+    private BaseField $completed;
 
     public function __construct(
         private Currency     $currency,
@@ -52,12 +53,18 @@ class Order implements MultiFieldsEntityInterface
         ?string              $merchantId = null,
         ?string              $modified = null,
         ?string              $projectId = null,
-        private ?Status      $status = null
+        private ?Status      $status = null,
+        ?string              $completed = null,
     )
     {
         $this->amount = $this->createSimpleField(
             propertyName: 'amount',
             value: $this->calculateValueInCents($amount)
+        );
+
+        if ($completed) $this->createFieldInDateTimeISO8601(
+            propertyName: 'completed',
+            value: $completed
         );
 
         if ($created) $this->created = $this->createFieldInDateTimeISO8601(
@@ -118,7 +125,7 @@ class Order implements MultiFieldsEntityInterface
         return $this->customer->toArray();
     }
 
-     public function getAmount(): int
+    public function getAmount(): int
     {
         return $this->amount->get();
     }
@@ -128,27 +135,27 @@ class Order implements MultiFieldsEntityInterface
         return $this->orderLines?->get();
     }
 
-     public function getReturnUrl(): string
+    public function getReturnUrl(): string
     {
         return $this->returnUrl->get();
     }
 
-     public function getWebhookUrl(): string
+    public function getWebhookUrl(): string
     {
         return $this->webhookUrl->get();
     }
 
-     public function getMerchantOrderId(): string
+    public function getMerchantOrderId(): string
     {
         return $this->merchantOrderId->get();
     }
 
-     public function getExtra(): array
+    public function getExtra(): array
     {
         return $this->extra?->toArray();
     }
 
-     public function getDescription(): string
+    public function getDescription(): string
     {
         return $this->description->get();
     }

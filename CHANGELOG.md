@@ -65,3 +65,4 @@ Initial version
 * Updated Customer entity to support cross usage.
 * Updated Event entity to support cross usage.
 * Updated Transaction entity to support cross usage.
+* Updated Order entity to support cross usage.
