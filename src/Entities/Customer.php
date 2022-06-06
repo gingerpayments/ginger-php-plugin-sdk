@@ -23,24 +23,18 @@ final class Customer implements MultiFieldsEntityInterface
     use SingleFieldTrait;
 
     private string $propertyName = 'customer';
-    /** ---Required--- */
+
     private BaseField $lastName;
     private BaseField $firstName;
     private BaseField $gender;
-    /** -------------- */
-
-    /** ---not-nullable--- */
-    private string $address;
+    private BaseField $address;
     private BaseField $addressType;
     private BaseField $country;
     private BaseField $postalCode;
-    /** ------------------ */
-
-
+    private BaseField $houseNumber;
     private PhoneNumbers|null $phoneNumbers = null;
     private BaseField|null $merchantCustomerId = null;
     private BaseField|null $locale = null;
-    /** @var BaseField|null - Customer's IP address */
     private BaseField|null $ipAddress = null;
 
     /**
@@ -55,6 +49,10 @@ final class Customer implements MultiFieldsEntityInterface
      * @param Locale|null $locale - POSIX locale or RFC 5646 language tag; only language and region are supported
      * @param \GingerPluginSdk\Properties\Country|null $country
      * @param string|null $ipAddress
+     * @param string|null $address
+     * @param string|null $addressType
+     * @param string|null $postalCode
+     * @param string|null $housenumber
      */
     public function __construct(
         private AdditionalAddresses $additionalAddresses,
@@ -67,7 +65,11 @@ final class Customer implements MultiFieldsEntityInterface
         private ?Birthdate          $birthdate = null,
         ?Locale                     $locale = null,
         ?Country                    $country = null,
-        ?string                     $ipAddress = null
+        ?string                     $ipAddress = null,
+        ?string                     $address = null,
+        ?string                     $addressType = null,
+        ?string                     $postalCode = null,
+        ?string                     $housenumber = null
     )
     {
         $this->firstName = $this->createSimpleField(
@@ -89,18 +91,52 @@ final class Customer implements MultiFieldsEntityInterface
                 $this->additionalAddresses->get()->getCountry()
             );
 
-        $this->setMerchantCustomerId($merchantCustomerId)
-            ->setPhoneNumbers($phoneNumbers)
-            ->setLocale($locale)
-            ->setIpAddress($ipAddress);
+        if ($address) {
+            $this->address = $this->createSimpleField(
+                propertyName: 'address',
+                value: $address
+            );
+        }
+
+        if ($addressType) {
+            $this->addressType = $this->createEnumeratedField(
+                propertyName: 'address_type',
+                value: $addressType,
+                // enum: $this->getJsonSchemaFromAPI('order')
+                enum: [
+                    'customer',
+                    'billing',
+                    'delivery'
+                ]
+            );
+        }
+
+        if ($postalCode) {
+            $this->address = $this->createSimpleField(
+                propertyName: 'postal_code',
+                value: $postalCode
+            );
+        }
+
+        if ($housenumber) {
+            $this->address = $this->createSimpleField(
+                propertyName: 'housenumber',
+                value: $housenumber
+            );
+        }
+
+        if ($phoneNumbers) $this->setPhoneNumbers($phoneNumbers);
+        if ($merchantCustomerId) $this->setMerchantCustomerId($merchantCustomerId);
+        if ($locale) $this->setLocale($locale);
+        $this->setIpAddress($ipAddress);
     }
 
-     public function getFirstName(): string
+    public function getFirstName(): string
     {
         return $this->firstName->get();
     }
 
-     public function getLastName(): string
+    public function getLastName(): string
     {
         return $this->lastName->get();
     }
@@ -115,27 +151,27 @@ final class Customer implements MultiFieldsEntityInterface
         return $this->additionalAddresses->toArray();
     }
 
-     public function getBirthdate(): string
+    public function getBirthdate(): string
     {
         return $this->birthdate?->get();
     }
 
-     public function getGender(): string
+    public function getGender(): string
     {
         return $this->gender?->get();
     }
 
-     public function getLocale(): ?string
+    public function getLocale(): ?string
     {
         return $this->locale?->get();
     }
 
-     public function getIpAddress(): string
+    public function getIpAddress(): string
     {
         return $this->ipAddress->get();
     }
 
-     public function getMerchantCustomerId(): ?string
+    public function getMerchantCustomerId(): ?string
     {
         return $this->merchantCustomerId->get();
     }
