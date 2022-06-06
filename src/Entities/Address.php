@@ -10,7 +10,6 @@ use GingerPluginSdk\Helpers\SyncUpSchemasTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 use GingerPluginSdk\Bases\BaseField;
 use GingerPluginSdk\Properties\Country;
-use JetBrains\PhpStorm\Pure;
 
 final class Address implements MultiFieldsEntityInterface
 {
@@ -29,10 +28,10 @@ final class Address implements MultiFieldsEntityInterface
     /**
      * @param string $addressType
      * @param string $postalCode
-     * @param string $street
-     * @param string $city
      * @param Country $country - ISO 3166-1 alpha-2 country code
-     * @param string|null $propertyName
+     * @param string|null $street
+     * @param string|null $city
+     * @param string|null $address
      * @param string|null $housenumber
      */
     public function __construct(
@@ -41,7 +40,6 @@ final class Address implements MultiFieldsEntityInterface
         Country $country,
         ?string $street = null,
         ?string $city = null,
-        ?string $propertyName = null,
         ?string $address = null,
         ?string $housenumber = null
     )
@@ -81,41 +79,34 @@ final class Address implements MultiFieldsEntityInterface
             $this->setAddressLine();
         };
 
-        if ($propertyName) $this->propertyName = $propertyName;
     }
 
-    public function setPropertyName($name): Address
-    {
-        $this->propertyName = $name;
-        return $this;
-    }
-
-    #[Pure] public function getAddressType(): string
+     public function getAddressType(): string
     {
         return $this->addressType->get();
     }
 
-    #[Pure] public function getPostalCode(): string
+     public function getPostalCode(): string
     {
         return $this->postalCode->get();
     }
 
-    #[Pure] public function getCountry(): string
+     public function getCountry(): string
     {
         return $this->country->get();
     }
 
-    #[Pure] public function getCity(): ?string
+     public function getCity(): ?string
     {
         return $this->city->get();
     }
 
-    #[Pure] public function getStreet(): ?string
+     public function getStreet(): ?string
     {
         return $this->street->get();
     }
 
-    #[Pure] public function getHousenumber(): ?string
+     public function getHousenumber(): ?string
     {
         return $this->housenumber?->get();
     }
@@ -142,7 +133,7 @@ final class Address implements MultiFieldsEntityInterface
         );
     }
 
-    #[Pure] public function getAddressLine(): string
+     public function getAddressLine(): string
     {
         return $this->address->get();
     }

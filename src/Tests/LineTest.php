@@ -38,14 +38,6 @@ class LineTest extends TestCase
         self::assertSame($expected_array, $this->line->toArray());
     }
 
-    public function test_invalid_count_arguments_line()
-    {
-        self::expectException(\ArgumentCountError::class);
-        $test = new Line(
-            name: 'Test'
-        );
-    }
-
     public function test_invalid_enum_for_type()
     {
         self::expectException(OutOfEnumException::class);
@@ -112,6 +104,12 @@ class LineTest extends TestCase
     {
         self::expectException(\TypeError::class);
         $test = new Line(
+            type: 'physical',
+            merchantOrderLineId: '1',
+            name: 'Banc',
+            quantity: 5,
+            amount: 11.25,
+            vatPercentage: 0,
             currency: 'EUR'
         );
     }

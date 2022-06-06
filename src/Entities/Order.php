@@ -13,7 +13,6 @@ use GingerPluginSdk\Helpers\SingleFieldTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\Status;
-use JetBrains\PhpStorm\Pure;
 
 class Order implements MultiFieldsEntityInterface
 {
@@ -33,7 +32,6 @@ class Order implements MultiFieldsEntityInterface
     private BaseField $merchantId;
     private BaseField $modified;
     private BaseField $projectId;
-
 
     public function __construct(
         private Currency     $currency,
@@ -100,6 +98,16 @@ class Order implements MultiFieldsEntityInterface
             ->setClient($client);
     }
 
+    public function getId(): string|null
+    {
+        return isset($this->id) ? $this->id->get() : null;
+    }
+
+    public function getStatus(): string|null
+    {
+        return $this->status?->get();
+    }
+
     public function getClient(): array
     {
         return $this->client?->toArray();
@@ -110,7 +118,7 @@ class Order implements MultiFieldsEntityInterface
         return $this->customer->toArray();
     }
 
-    #[Pure] public function getAmount(): int
+     public function getAmount(): int
     {
         return $this->amount->get();
     }
@@ -120,29 +128,34 @@ class Order implements MultiFieldsEntityInterface
         return $this->orderLines?->get();
     }
 
-    #[Pure] public function getReturnUrl(): string
+     public function getReturnUrl(): string
     {
         return $this->returnUrl->get();
     }
 
-    #[Pure] public function getWebhookUrl(): string
+     public function getWebhookUrl(): string
     {
         return $this->webhookUrl->get();
     }
 
-    #[Pure] public function getMerchantOrderId(): string
+     public function getMerchantOrderId(): string
     {
         return $this->merchantOrderId->get();
     }
 
-    #[Pure] public function getExtra(): array
+     public function getExtra(): array
     {
         return $this->extra?->toArray();
     }
 
-    #[Pure] public function getDescription(): string
+     public function getDescription(): string
     {
         return $this->description->get();
+    }
+
+    public function getCurrentTransaction(): Transaction
+    {
+        return $this->transactions->get();
     }
 
     public function setClient(?Client $client): Order

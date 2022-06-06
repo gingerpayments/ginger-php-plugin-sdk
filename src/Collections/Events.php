@@ -14,7 +14,7 @@ class Events extends AbstractCollection
         foreach ($items as $item) {
             $this->add($item);
         }
-        parent::__construct(self::ITEM_TYPE, $this->propertyName);
+        parent::__construct($this->propertyName);
     }
 
     public function addEvent(Event $item)

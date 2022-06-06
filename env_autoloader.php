@@ -7,4 +7,3 @@ foreach ($content as $line) {
     $line_exploded = explode("=", $line);
     $_ENV[$line_exploded[0]] = $line_exploded[1];
 }
-echo ".env loaded";

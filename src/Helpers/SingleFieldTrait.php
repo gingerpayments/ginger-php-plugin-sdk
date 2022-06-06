@@ -6,7 +6,7 @@ use GingerPluginSdk\Bases\BaseField;
 use GingerPluginSdk\Exceptions\OutOfDiapasonException;
 use GingerPluginSdk\Exceptions\OutOfPatternException;
 use GingerPluginSdk\Interfaces\ValidateFieldsInterface;
-use JetBrains\PhpStorm\Pure;
+
 
 trait SingleFieldTrait
 {
@@ -18,7 +18,7 @@ trait SingleFieldTrait
     protected function createSimpleField($propertyName, $value): BaseField
     {
         $new_class = new class($propertyName) extends BaseField {
-            #[Pure] public function __construct($propertyName)
+             public function __construct($propertyName)
             {
                 parent::__construct($propertyName);
             }
@@ -32,7 +32,7 @@ trait SingleFieldTrait
         $new_class = new class($propertyName, $enum) extends BaseField implements ValidateFieldsInterface {
             use FieldsValidatorTrait;
 
-            #[Pure] public function __construct($propertyName, $enum)
+             public function __construct($propertyName, $enum)
             {
                 $this->enum = $enum;
                 parent::__construct($propertyName);
@@ -52,7 +52,7 @@ trait SingleFieldTrait
         $new_class = new class($propertyName) extends BaseField implements ValidateFieldsInterface {
             use FieldsValidatorTrait;
 
-            #[Pure] public function __construct($propertyName)
+             public function __construct($propertyName)
             {
                 $this->propertyName = $propertyName;
                 parent::__construct($propertyName);
@@ -78,7 +78,7 @@ trait SingleFieldTrait
         $new_class = new class($propertyName) extends BaseField implements ValidateFieldsInterface {
             use FieldsValidatorTrait;
 
-            #[Pure] public function __construct($propertyName)
+             public function __construct($propertyName)
             {
                 $this->propertyName = $propertyName;
                 parent::__construct($propertyName);
@@ -107,7 +107,7 @@ trait SingleFieldTrait
             private int $min;
             private ?int $max;
 
-            #[Pure] public function __construct($propertyName, $value, $min, $max)
+             public function __construct($propertyName, $value, $min, $max)
             {
                 $this->min = $min;
                 $this->max = $max;

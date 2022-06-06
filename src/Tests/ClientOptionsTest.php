@@ -20,14 +20,6 @@ class ClientOptionsTest extends TestCase
         self::assertSame((bool)$expected, true);
     }
 
-    public function test_disallow_invalid_argument_count_client_options()
-    {
-        self::expectException(ArgumentCountError::class);
-        $test = new ClientOptions(
-            endpoint: 'test',
-            apiKey: ""
-        );
-    }
     public function test_disallow_empty_api_key_client_options()
     {
         self::expectException(EmptyApiKeyException::class);

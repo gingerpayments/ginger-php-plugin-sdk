@@ -100,20 +100,20 @@ class FromArrayTest extends TestCase
                     new Address(
                         addressType: 'customer',
                         postalCode: '12345',
-                        street: 'Soborna',
-                        city: 'Poltava',
                         country: new Country(
                             'UA'
-                        )
+                        ),
+                        street: 'Soborna',
+                        city: 'Poltava'
                     ),
                     new Address(
                         addressType: 'billing',
                         postalCode: '1234567',
-                        street: 'Donauweg',
-                        city: 'Amsterdam',
                         country: new Country(
                             'NL'
                         ),
+                        street: 'Donauweg',
+                        city: 'Amsterdam',
                         housenumber: "10"
                     )
                 ),
@@ -262,11 +262,11 @@ class FromArrayTest extends TestCase
                 new Address(
                     addressType: 'customer',
                     postalCode: '1642AJ',
-                    street: 'Weednesday',
-                    city: 'Amsterdam',
                     country: new Country(
                         'NL'
                     ),
+                    street: 'Weednesday',
+                    city: 'Amsterdam',
                     housenumber: '10'
                 )
             ),

@@ -49,3 +49,16 @@ Initial version
 * Implemented `AbstractCollectionTest.php`
 * Updated `AbstractCollection.php`
 * Refactored Collections to store `ITEM_TYPE` of included items.
+
+## 1.2
+
+* Implemented coverage for `captureOrderTransaction` method from `ginger-php`.
+* Implemented `OrderStub` to simplify valid order creation methods.
+* Implemented `CaptureOrderTransactionTest`.
+* Implemented `OrderNotFoundException` and used in `getOrder` method.
+* Implemented `CaptureFailedExcpetion`.
+* Implemented `getStatus` and `getId` methods to Order entity.
+* Refactored `sendOrder` to return `Order` entity instead of array.
+* Refactored code according to `PHPStan` analyse.
+* Refactored `AbstractCollection` to not include `class-string` into construct.
+* Added `PHPStan` to `composer.json` to a dev environment.

@@ -26,11 +26,11 @@ class CustomerTest extends TestCase
         return new Address(
             addressType: 'customer',
             postalCode: '1642AJ',
-            street: 'Weednesday',
-            city: 'Amsterdam',
             country: new Country(
                 'NL'
             ),
+            street: 'Weednesday',
+            city: 'Amsterdam',
             housenumber: '10'
         );
     }
@@ -73,11 +73,11 @@ class CustomerTest extends TestCase
                 new Address(
                     addressType: 'customer',
                     postalCode: '1642AJ',
-                    street: 'Weednesday',
-                    city: 'Amsterdam',
                     country: new Country(
                         'NL'
                     ),
+                    street: 'Weednesday',
+                    city: 'Amsterdam',
                     housenumber: '10'
                 )
             ),

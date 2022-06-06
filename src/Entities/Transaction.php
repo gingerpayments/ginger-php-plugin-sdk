@@ -12,6 +12,7 @@ use GingerPluginSdk\Interfaces\ValidateFieldsInterface;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\Status;
 
+
 final class Transaction implements MultiFieldsEntityInterface
 {
     use HelperTrait, SingleFieldTrait, MultiFieldsEntityTrait;
@@ -244,6 +245,19 @@ final class Transaction implements MultiFieldsEntityInterface
             propertyName: 'project_id',
             value: $projectId
         );
+    }
+
+     public function getId(): string|bool
+    {
+        return isset($this->id) ? $this->id->get() : false;
+    }
+
+    public function isCapturable(): bool
+    {
+        if (isset($this->isCapturable)) {
+            return $this->isCapturable->get();
+        }
+        return false;
     }
 
     public function getPaymentMethodDetails(): PaymentMethodDetails|MultiFieldsEntityInterface

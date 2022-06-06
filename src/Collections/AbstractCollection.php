@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace GingerPluginSdk\Collections;
 
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
@@ -8,31 +8,30 @@ use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 class AbstractCollection implements MultiFieldsEntityInterface
 {
     private int $pointer = 0;
+    /** @var T[]  */
     private array $items = [];
-    protected string $propertyName;
 
     /**
-     * @template T
-     * @var class-string T $classname
+     * @param string $propertyName
      */
-    public function __construct(mixed $class_string, $propertyName)
+    public function __construct(protected string $propertyName)
     {
     }
 
-    /** @var T $item */
-    public function add(mixed $item)
+    /** @param T $item */
+    public function add(mixed $item): void
     {
         $this->next();
         $this->items[$this->pointer] = $item;
     }
 
-    /** @return T */
+    /** @return T|null */
     public function get($position = null)
     {
         return $this->items[$position ?? $this->pointer];
     }
 
-    /** @return array<T> */
+    /** @return T[] */
     public function getAll(): array
     {
         return $this->items;
@@ -63,7 +62,6 @@ class AbstractCollection implements MultiFieldsEntityInterface
     public function toArray(): array
     {
         $response = [];
-        /** @var T $item */
         foreach ($this->items as $item) {
             if (method_exists($item, 'toArray')) {
                 $response[] = $item->toArray();
@@ -77,11 +75,6 @@ class AbstractCollection implements MultiFieldsEntityInterface
     private function next()
     {
         $this->pointer++;
-    }
-
-    private function prev()
-    {
-        $this->pointer--;
     }
 
     public function clear()

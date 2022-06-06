@@ -14,7 +14,7 @@ use GingerPluginSdk\Properties\Country;
 use GingerPluginSdk\Properties\Birthdate;
 use GingerPluginSdk\Properties\EmailAddress;
 use GingerPluginSdk\Properties\Locale;
-use JetBrains\PhpStorm\Pure;
+
 
 final class Customer implements MultiFieldsEntityInterface
 {
@@ -95,19 +95,19 @@ final class Customer implements MultiFieldsEntityInterface
             ->setIpAddress($ipAddress);
     }
 
-    #[Pure] public function getFirstName(): string
+     public function getFirstName(): string
     {
         return $this->firstName->get();
     }
 
-    #[Pure] public function getLastName(): string
+     public function getLastName(): string
     {
         return $this->lastName->get();
     }
 
-    #[Pure] public function getEmailAddress(): string
+    public function getEmailAddress(): string
     {
-        return $this->email_address->get();
+        return $this->emailAddress->get();
     }
 
     public function getAdditionalAddress(): array
@@ -115,27 +115,27 @@ final class Customer implements MultiFieldsEntityInterface
         return $this->additionalAddresses->toArray();
     }
 
-    #[Pure] public function getBirthdate(): string
+     public function getBirthdate(): string
     {
         return $this->birthdate?->get();
     }
 
-    #[Pure] public function getGender(): string
+     public function getGender(): string
     {
         return $this->gender?->get();
     }
 
-    #[Pure] public function getLocale(): ?string
+     public function getLocale(): ?string
     {
         return $this->locale?->get();
     }
 
-    #[Pure] public function getIpAddress(): string
+     public function getIpAddress(): string
     {
         return $this->ipAddress->get();
     }
 
-    #[Pure] public function getMerchantCustomerId(): ?string
+     public function getMerchantCustomerId(): ?string
     {
         return $this->merchantCustomerId->get();
     }

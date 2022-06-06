@@ -3,7 +3,6 @@
 namespace GingerPluginSdk\Exceptions;
 
 use Exception;
-use JetBrains\PhpStorm\Pure;
 use Throwable;
 
 class OutOfPatternException extends Exception

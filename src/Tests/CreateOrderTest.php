@@ -28,28 +28,72 @@ class CreateOrderTest extends TestCase
 
     public function setUp(): void
     {
-        $_SERVER["REMOTE_ADDR"] = "173.0.2.5";
-        $_SERVER["HTTP_USER_AGENT"] = "PHPUnit Tests";
-
         $this->client = new \GingerPluginSdk\Client(
             new ClientOptions(
                 endpoint: $_ENV["PUBLIC_API_URL"],
                 useBundle: true,
                 apiKey: getenv('GINGER_API_KEY'))
         );
-        $this->order = new Order(
-            currency: new Currency('EUR'),
-            amount: 500,
-            transactions: new Transactions(
-                $this->getTransactions()
-            ),
-            customer: $this->getCustomer(),
-            orderLines: $this->getOrderLines(),
-            description: 'Test Product',
-            extra: new Extra(
-                ['sw_order_id' => "501"]
-            ),
-            client: $this->getClient()
+        $_SERVER["REMOTE_ADDR"] = "173.0.2.5";
+        $_SERVER["HTTP_USER_AGENT"] = "PHPUnit Tests";
+        $this->order = OrderStub::getValidOrder();
+    }
+
+    public function test_method_get_id()
+    {
+        $order_with_id_property = $this->client->fromArray(
+            Order::class,
+            array_merge(
+                $this->order->toArray(),
+                ['id' => 'id123']
+            )
+        );
+        self::assertSame(
+            expected: 'id123',
+            actual: $order_with_id_property->getId()
+        );
+    }
+
+
+    public function test_method_get_empty_id()
+    {
+        self::assertSame(
+            null,
+            OrderStub::getValidOrder()->getId()
+        );
+    }
+
+    public function test_method_get_empty_status()
+    {
+        self::assertSame(
+            null,
+            OrderStub::getValidOrder()->getStatus()
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function test_method_get_status()
+    {
+        $order_with_status_property = $this->client->fromArray(
+            Order::class,
+            array_merge(
+                $this->order->toArray(),
+                ['status' => 'processing']
+            )
+        );
+        self::assertSame(
+            expected: 'processing',
+            actual: $order_with_status_property->getStatus()
+        );
+    }
+
+    public function test_method_get_current_transaction()
+    {
+        self::assertSame(
+            expected: OrderStub::getValidTransaction()->toArray(),
+            actual: $this->order->getCurrentTransaction()->toArray()
         );
     }
 
@@ -59,7 +103,7 @@ class CreateOrderTest extends TestCase
     public function test_sending()
     {
         $response = $this->client->sendOrder($this->order);
-        self::assertSame($response["status"], 'new');
+        self::assertSame($response->getStatus(), 'new');
     }
 
     public function test_get_property()
@@ -70,102 +114,20 @@ class CreateOrderTest extends TestCase
         );
     }
 
-    public function getTransactions()
-    {
-        return new Transaction(
-            paymentMethod: 'ideal',
-            paymentMethodDetails: new PaymentMethodDetails(
-                issuer_id: "15"
-            )
-        );
-    }
-
-    public function getCustomer()
-    {
-        return new Customer(
-            additionalAddresses: new AdditionalAddresses(
-                new Address(
-                    addressType: 'customer',
-                    postalCode: '12345',
-                    street: 'Soborna',
-                    city: 'Poltava',
-                    country: new Country(
-                        'UA'
-                    )
-                ),
-                new Address(
-                    addressType: 'billing',
-                    postalCode: '1234567',
-                    street: 'Donauweg',
-                    city: 'Amsterdam',
-                    country: new Country(
-                        'NL'
-                    ),
-                    housenumber: "10"
-                )
-            ),
-            firstName: 'Alexander',
-            lastName: 'Tiutiunnyk',
-            emailAddress: new EmailAddress(
-                'tutunikssa@gmail.com'
-            ),
-            gender: 'male',
-            phoneNumbers: new PhoneNumbers(
-                '0951018201'
-            ),
-            merchantCustomerId: '15',
-            birthdate: new \GingerPluginSdk\Properties\Birthdate('1999-09-01'),
-            locale: new Locale(
-                'Ua_ua'
-
-            )
-        );
-    }
-
-    public function getOrderLines()
-    {
-        return new OrderLines(
-            new Line(
-                type: 'physical',
-                merchantOrderLineId: "5",
-                name: 'Milk',
-                quantity: 1,
-                amount: 1.00,
-                vatPercentage: 50,
-                currency: new Currency(
-                    'EUR'
-                )
-            )
-        );
-    }
-
-    public function getClient()
-    {
-        return  new \GingerPluginSdk\Entities\Client(
-            userAgent: $_SERVER['HTTP_USER_AGENT'],
-            platformName: 'docker',
-            platformVersion: '1',
-            pluginName: 'ginger-plugin-sdk',
-            pluginVersion: '1.0.0'
-        );
-    }
-
     public function test_exception_validation_ideal()
     {
         self::expectException(APIException::class);
         $test_order = new Order(
             currency: new Currency('NUL'),
             amount: 500,
-            transactions: new Transactions(
-                $this->getTransactions()
-            ),
-            customer: $this->getCustomer(),
-            orderLines: $this->getOrderLines(),
+            transactions: OrderStub::getValidTransactions(),
+            customer: OrderStub::getValidCustomer(),
+            orderLines: OrderStub::getValidOrderLines(),
             description: 'Test Product',
             extra: new Extra(
                 ['sw_order_id' => 501]
             ),
-            client: $this->getClient()
+            client: OrderStub::getValidClient()
         );
         $response = $this->client->sendOrder($test_order);
     }
@@ -185,13 +147,13 @@ class CreateOrderTest extends TestCase
                     )
                 )
             ),
-            customer: $this->getCustomer(),
-            orderLines: $this->getOrderLines(),
+            customer: OrderStub::getValidCustomer(),
+            orderLines: OrderStub::getValidOrderLines(),
             description: 'Test Product',
             extra: new Extra(
                 ['sw_order_id' => 501]
             ),
-            client: $this->getClient()
+            client: OrderStub::getValidClient()
         );
         $response = $this->client->sendOrder($test_order);
     }

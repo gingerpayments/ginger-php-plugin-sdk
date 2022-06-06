@@ -20,11 +20,11 @@ class AddressTest extends TestCase
         $this->address = new Address(
             addressType: "customer",
             postalCode: "38714",
-            street: "Soborna",
-            city: "Poltava",
             country: new Country(
                 "UA"
-            )
+            ),
+            street: "Soborna",
+            city: "Poltava"
         );
     }
 
@@ -34,11 +34,11 @@ class AddressTest extends TestCase
         $super_test_address = new Address(
             addressType: "rabotiaga",
             postalCode: "38714",
-            street: "Soborna",
-            city: "Poltava",
             country: new Country(
                 "UA"
-            )
+            ),
+            street: "Soborna",
+            city: "Poltava"
         );
     }
 
@@ -48,9 +48,9 @@ class AddressTest extends TestCase
         $super_test_address = new Address(
             addressType: "customer",
             postalCode: "38714",
+            country: new Country('NIGERIA'),
             street: "Soborna",
-            city: "Poltava",
-            country: new Country('NIGERIA')
+            city: "Poltava"
         );
     }
 
@@ -58,7 +58,7 @@ class AddressTest extends TestCase
     {
         self::expectException(TypeError::class);
         new Address(
-            addressType: "customer", postalCode: "38714", street: "Red", city: "Amsterdam", country: 4
+            addressType: "customer", postalCode: "38714", country: 4, street: "Red", city: "Amsterdam"
         );
     }
 

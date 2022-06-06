@@ -3,6 +3,7 @@
 namespace GingerPluginSdk\Tests;
 
 use GingerPluginSdk\Client;
+use GingerPluginSdk\Exceptions\OrderNotFoundException;
 use GingerPluginSdk\Properties\ClientOptions;
 use PHPUnit\Framework\TestCase;
 
@@ -19,6 +20,12 @@ class GetOrderTest extends TestCase
                 apiKey: getenv('GINGER_API_KEY')
             )
         );
+    }
+
+    public function test_order_not_found()
+    {
+        self::expectException(OrderNotFoundException::class);
+        $this->client->getOrder('123');
     }
 
     /**

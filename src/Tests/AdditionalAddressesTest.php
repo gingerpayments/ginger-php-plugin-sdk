@@ -18,11 +18,11 @@ class AdditionalAddressesTest extends TestCase
             new Address(
                 addressType: 'billing',
                 postalCode: '1234567',
-                street: 'Donauweg',
-                city: 'Amsterdam',
                 country: new Country(
                     'NL'
                 ),
+                street: 'Donauweg',
+                city: 'Amsterdam',
                 housenumber: "10"
             )
         );
