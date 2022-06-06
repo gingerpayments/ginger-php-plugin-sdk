@@ -23,18 +23,6 @@ class EventTest extends \PHPUnit\Framework\TestCase
         );;
     }
 
-    public function test_event_invalid()
-    {
-        self::expectException(OutOfEnumException::class);
-        new Event(
-            occurred: '2022-05-17T11:58:33.813534+00:00',
-            event: '1',
-            source: '123',
-            noticed: '2022-05-17T11:58:33.813534+00:00',
-            id: '123'
-        );
-    }
-
     public function test_occurred_invalid()
     {
         self::expectException(OutOfPatternException::class);
@@ -86,6 +74,64 @@ class EventTest extends \PHPUnit\Framework\TestCase
         self::assertSame(
             expected: '',
             actual: (new Event('2022-05-17T11:58:33.813534+00:00', 'new', '123'))->getPropertyName()
+        );
+    }
+
+    public function test_minimal_additional_properties()
+    {
+        self::assertEqualsCanonicalizing(
+            expected: [
+                "event" => 'new',
+                'occurred' => '2022-05-17T11:58:33.813534+00:00',
+                'noticed' => '2022-05-17T11:58:33.813534+00:00',
+                'id' => '123',
+                'source' => '123',
+                "amount" => 30
+            ],
+            actual: (new Event(
+                occurred: '2022-05-17T11:58:33.813534+00:00',
+                event: 'new',
+                source: '123',
+                noticed: '2022-05-17T11:58:33.813534+00:00',
+                id: '123',
+                amount: 30
+            ))->toArray()
+        );
+    }
+
+    public function test_from_live_additional_properties()
+    {
+        $expected = ["calculation_type" => "blended",
+            "currency" => "EUR",
+            "event" => "registered_billing_fees",
+            "id" => "6ed05ed3-67b9-406f-9f92-f29d92d86a64",
+            "noticed" => "2022-06-03T11:14:04.704286+00:00",
+            "occurred" => "2022-06-03T11:14:04.704292+00:00",
+            "payout_system" => "gross",
+            "transaction_fee" => 0,
+            "vat_amount" => 0,
+            "vat_class" => "nl-high",
+            "vat_percentage" => 21
+        ];
+        sort($expected);
+
+        $actual = (new Event(
+            occurred: "2022-06-03T11:14:04.704292+00:00",
+            event: "registered_billing_fees",
+            noticed: "2022-06-03T11:14:04.704286+00:00",
+            id: "6ed05ed3-67b9-406f-9f92-f29d92d86a64",
+            payoutSystem: "gross",
+            transactionFee: 0,
+            vatAmount: 0,
+            vatClass: "nl-high",
+            vatPercentage: 21,
+            currency: "EUR",
+            calculationType: 'blended'
+        ))->toArray();
+        sort($actual);
+        self::assertEqualsCanonicalizing(
+            expected: $expected,
+            actual: $actual
         );
     }
 }

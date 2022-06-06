@@ -3,6 +3,7 @@
 namespace GingerPluginSdk\Entities;
 
 use GingerPluginSdk\Bases\BaseField;
+use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Helpers\MultiFieldsEntityTrait;
 use GingerPluginSdk\Helpers\SingleFieldTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
@@ -11,6 +12,7 @@ class Event implements MultiFieldsEntityInterface
 {
     use MultiFieldsEntityTrait;
     use SingleFieldTrait;
+    use HelperTrait;
 
     private BaseField $occurred;
     private BaseField $event;
@@ -21,22 +23,19 @@ class Event implements MultiFieldsEntityInterface
     public function __construct(
         string  $occurred,
         string  $event,
-        string  $source,
+        ?string  $source = null,
         string  $noticed = null,
-        ?string $id = null
+        ?string $id = null,
+        mixed ...$additionalArguments
     )
     {
         $this->occurred = $this->createFieldInDateTimeISO8601(
             propertyName: 'occurred',
             value: $occurred
         );
-        $this->event = $this->createEnumeratedField(
+        $this->event = $this->createSimpleField(
             propertyName: 'event',
-            value: $event,
-            enum: [
-                "new", "pending", "processing", "accepted", "completed", "cancelled", "error", "expired",
-                "matched", "settled"
-            ]
+            value: $event
         );
         $this->source = $this->createSimpleField(
             propertyName: 'source',
@@ -52,5 +51,14 @@ class Event implements MultiFieldsEntityInterface
             propertyName: 'id',
             value: $id
         );
+
+        if ($additionalArguments) {
+            foreach ($additionalArguments as $key => $value) {
+                $this->$key = $this->createSimpleField(
+                    propertyName: $this->camelCaseToDashes($key),
+                    value: $value
+                );
+            }
+        }
     }
 }

@@ -62,3 +62,5 @@ Initial version
 * Refactored code according to `PHPStan` analyse.
 * Refactored `AbstractCollection` to not include `class-string` into construct.
 * Added `PHPStan` to `composer.json` to a dev environment.
+* Updated Customer entity to support cross usage.
+* Updated Event entity to support cross usage.
