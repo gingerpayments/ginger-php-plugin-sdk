@@ -332,6 +332,22 @@ class TransactionTest extends TestCase
         );
     }
 
+    public function test_additional_property_capture_mode()
+    {
+        $real = $this->client->fromArray(
+            Transaction::class,
+            array_merge(
+                OrderStub::getValidTransaction()->toArray(),
+                ["capture_mode" => "manual"]
+            )
+        );
+        $expected = "manual";
+        self::assertSame(
+            $real->toArray()["capture_mode"],
+            $expected
+        );
+    }
+
     public function test_additional_property_credit_debit_valid()
     {
         $real = $this->client->fromArray(
