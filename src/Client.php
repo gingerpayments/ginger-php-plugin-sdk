@@ -30,6 +30,9 @@ class Client
     const CA_CERT_FILE_PATH = __DIR__ . '/Assets/cacert.pem';
     protected ApiClient $api_client;
 
+    /**
+     * @param \GingerPluginSdk\Properties\ClientOptions $options
+     */
     public function __construct(ClientOptions $options)
     {
         $this->api_client = $this->createClient(
@@ -40,12 +43,20 @@ class Client
 
     }
 
+    /**
+     * Retrieves APIClient from original ginger-php package.
+     *
+     * @return \Ginger\ApiClient
+     */
     public function getApiClient(): ApiClient
     {
         return $this->api_client;
     }
 
     /**
+     * Retrieve orders for API.
+     * Returns an Order Entity object.
+     *
      * @throws \Exception
      */
     public function getOrder(string $id): object
@@ -64,6 +75,11 @@ class Client
     }
 
     /**
+     * Capturing order transactions.
+     * Capturing is a process of capture finances on bank account after order shipping.
+     * Only completed order could be captured.
+     * Only orders with supporting capturing payment methods is allowed, for example klarna-pay-later or afterpay.
+     *
      * @throws \GingerPluginSdk\Exceptions\CaptureFailedException
      * @throws \GingerPluginSdk\Exceptions\InvalidOrderDataException
      */
@@ -90,6 +106,9 @@ class Client
     }
 
     /**
+     * Converting array to object.
+     * Returns new object using instance - $className and providing properties from $data to it.
+     *
      * @param string $className
      * @param array $data
      * @return object
@@ -149,6 +168,14 @@ class Client
         }
     }
 
+    /**
+     * Initialize SDK client to use all features through it.
+     *
+     * @param $apiKey
+     * @param $useBundle
+     * @param $endpoint
+     * @return \Ginger\ApiClient
+     */
     private function createClient($apiKey, $useBundle, $endpoint): ApiClient
     {
         return Ginger::createClient(
@@ -198,6 +225,13 @@ class Client
         unlink(self::MULTI_CURRENCY_CACHE_FILE_PATH);
     }
 
+    /**
+     * Retrieving ideal issuers.
+     * Returns collection of issuers entity.
+     *
+     * @return \GingerPluginSdk\Collections\IdealIssuers
+     * @throws \Exception
+     */
     public function getIdealIssuers(): IdealIssuers
     {
         $response = new IdealIssuers();
