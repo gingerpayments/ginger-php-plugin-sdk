@@ -12,6 +12,7 @@ use GingerPluginSdk\Interfaces\ValidateFieldsInterface;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\Status;
 
+
 final class Transaction implements MultiFieldsEntityInterface
 {
     use HelperTrait, SingleFieldTrait, MultiFieldsEntityTrait;
@@ -41,6 +42,16 @@ final class Transaction implements MultiFieldsEntityInterface
     private BaseField $channel;
     private BaseField $projectType;
     private BaseField $project_id;
+    private BaseField $captureMode;
+    private BaseField $isFullyCaptured;
+    private BaseField $mscAmount;
+    private BaseField $mscCalculationType;
+    private BaseField $mscCurrency;
+    private BaseField $mscVatAmount;
+    private BaseField $mscVatClass;
+    private BaseField $mscVatPercentage;
+    private BaseField $payoutSystem;
+    private BaseField $transactionType;
 
     /**
      * @param string $paymentMethod
@@ -96,7 +107,18 @@ final class Transaction implements MultiFieldsEntityInterface
         ?string              $channel = null,
         ?string              $projectType = null,
         private ?Events      $events = null,
-        ?string              $projectId = null
+        ?string              $projectId = null,
+        ?string              $captureMode = null,
+        ?bool                $isFullyCaptured = null,
+        ?int                 $mscAmount = null,
+        ?string              $mscCalculationType = null,
+        ?string              $mscCurrency = null,
+        ?int                 $mscVatAmount = null,
+        ?string              $mscVatClass = null,
+        ?int                 $mscVatPercentage = null,
+        ?string              $payoutSystem = null,
+        ?string              $transactionType = null,
+
     )
     {
         $this->paymentMethod = $this->createEnumeratedField(
@@ -121,6 +143,48 @@ final class Transaction implements MultiFieldsEntityInterface
             ]
         );
         $this->paymentMethodDetails = $paymentMethodDetails ?: new PaymentMethodDetails();
+
+        if ($payoutSystem) $this->payoutSystem = $this->createSimpleField(
+            propertyName: 'payout_system',
+            value: $payoutSystem
+        );
+
+        if ($transactionType) $this->transactionType = $this->createSimpleField(
+            propertyName: 'transaction_type',
+            value: $transactionType
+        );
+
+        if ($mscVatPercentage) $this->mscVatPercentage = $this->createSimpleField(
+            propertyName: 'msc_vat_percentage',
+            value: $mscVatPercentage
+        );
+
+        if ($mscVatClass) $this->mscVatClass = $this->createSimpleField(
+            propertyName: "msc_vat_class",
+            value: $mscVatClass
+        );
+
+        if ($mscVatAmount) $this->mscVatAmount = $this->createSimpleField(
+            propertyName: 'msc_vat_amount',
+            value: $mscVatAmount
+        );
+
+        if ($mscCurrency) $this->mscCurrency = $this->createSimpleField(
+            propertyName: 'msc_currency',
+            value: $mscCurrency
+        );
+
+        if ($mscCalculationType) $this->mscCalculationType = $this->createEnumeratedField(
+            propertyName: 'msc_calculation_type',
+            value: $mscCalculationType,
+            enum: ["blended", "plus", "external"]
+        );
+
+        if ($mscAmount) $this->mscAmount = $this->createFieldWithDiapasonOfValues(
+            propertyName: 'msc_amount',
+            value: $mscAmount,
+            min: 0
+        );
 
         if ($id) $this->id = $this->createSimpleField(
             'id',
@@ -244,6 +308,35 @@ final class Transaction implements MultiFieldsEntityInterface
             propertyName: 'project_id',
             value: $projectId
         );
+
+        if ($captureMode) $this->captureMode = $this->createEnumeratedField(
+            propertyName: 'capture_mode',
+            value: $captureMode,
+            enum: [
+                'manual',
+                'delayed'
+            ]
+        );
+
+        if ($isFullyCaptured) $this->isFullyCaptured = $this->createSimpleField(
+            propertyName: 'is_fully_captured',
+            value: $isFullyCaptured
+        );
+
+
+    }
+
+    public function getId(): string|bool
+    {
+        return isset($this->id) ? $this->id->get() : false;
+    }
+
+    public function isCapturable(): bool
+    {
+        if (isset($this->isCapturable)) {
+            return $this->isCapturable->get();
+        }
+        return false;
     }
 
     public function getPaymentMethodDetails(): PaymentMethodDetails|MultiFieldsEntityInterface

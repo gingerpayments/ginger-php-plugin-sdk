@@ -19,7 +19,7 @@ final class PhoneNumbers extends AbstractCollection
             $this->add($number);
         }
 
-        parent::__construct(BaseField::class, 'phone_numbers');
+        parent::__construct('phone_numbers');
     }
 
     public function addPhoneNumber(string $number): PhoneNumbers

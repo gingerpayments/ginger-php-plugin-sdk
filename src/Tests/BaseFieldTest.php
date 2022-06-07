@@ -3,7 +3,7 @@
 namespace GingerPluginSdk\Tests;
 
 use GingerPluginSdk\Bases\BaseField;
-use JetBrains\PhpStorm\Pure;
+
 use PHPUnit\Framework\TestCase;
 
 class BaseFieldTest extends TestCase
@@ -13,7 +13,7 @@ class BaseFieldTest extends TestCase
     public function setUp(): void
     {
         $this->field = new class extends BaseField {
-            #[Pure] public function __construct()
+             public function __construct()
             {
                 $propertyName = 'test_property';
                 parent::__construct($propertyName);

@@ -14,7 +14,7 @@ final class OrderLines extends AbstractCollection
         foreach ($items as $item) {
             $this->add($item);
         }
-        parent::__construct(Line::class, 'order_lines');
+        parent::__construct('order_lines');
     }
 
     public function addLine(Line $item)

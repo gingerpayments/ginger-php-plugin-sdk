@@ -4,17 +4,16 @@ namespace GingerPluginSdk;
 
 use Ginger\ApiClient;
 use Ginger\Ginger;
-use GingerPluginSdk\Collections\AbstractCollection;
-use GingerPluginSdk\Entities\Extra;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Exceptions\APIException;
+use GingerPluginSdk\Exceptions\CaptureFailedException;
 use GingerPluginSdk\Exceptions\InvalidOrderDataException;
+use GingerPluginSdk\Exceptions\OrderNotFoundException;
 use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
 use GingerPluginSdk\Interfaces\ArbitraryArgumentsEntityInterface;
 use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\Currency;
-use GingerPluginSdk\Collections\AdditionalAddresses;
 use RuntimeException;
 
 class Client
@@ -49,15 +48,54 @@ class Client
      */
     public function getOrder(string $id): object
     {
+        try {
+            $api_order = $this->api_client->getOrder(
+                id: $id
+            );
+        } catch (\Exception) {
+            throw new OrderNotFoundException();
+        }
         return self::fromArray(
             Order::class,
-            $this->api_client->getOrder(
-                id: $id
-            ));
+            $api_order
+        );
     }
 
     /**
+     * @throws \GingerPluginSdk\Exceptions\CaptureFailedException
+     * @throws \GingerPluginSdk\Exceptions\InvalidOrderDataException
+     */
+    public function captureOrderTransaction(string $id): bool
+    {
+        /** @var Order $order */
+        $order = $this->getOrder(id: $id);
+
+        if ($order->getStatus() !== 'completed') {
+            throw new InvalidOrderDataException(
+                message: sprintf("Only order with `completed` status could be captured, current order status is %s", $order->getStatus()));
+        }
+
+        try {
+            $this->api_client->captureOrderTransaction(
+                orderId: $id,
+                transactionId: $order->getCurrentTransaction()->getId()
+            );
+        } catch (\Exception $exception) {
+            throw new CaptureFailedException($exception->getMessage());
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $className
+     * @param array $data
+     * @return object
      * @throws \Exception
+     *
+     * @phpstan-template Q
+     * @phpstan-param class-string<Q> $className
+     * @phpstan-return Q
      */
     public function fromArray(string $className, array $data): object
     {
@@ -162,7 +200,7 @@ class Client
      * @throws \GingerPluginSdk\Exceptions\ValidationException
      * @throws \Exception
      */
-    public function sendOrder(Order $order): array
+    public function sendOrder(Order $order): object
     {
         try {
             $response = $this->api_client->createOrder($order->toArray());
@@ -170,7 +208,10 @@ class Client
                 throw new InvalidOrderDataException($response["reason"]);
             }
 
-            return $response;
+            return $this->fromArray(
+                Order::class,
+                $response
+            );
         } catch (RuntimeException $exception) {
             throw new APIException($exception->getMessage());
         }

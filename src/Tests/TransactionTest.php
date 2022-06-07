@@ -99,6 +99,22 @@ class TransactionTest extends TestCase
         );
     }
 
+    public function test_method_get_id()
+    {
+        $real = $this->client->fromArray(
+            Transaction::class,
+            array_merge(
+                self::MOCK_DATA_FOR_TRANSACTION,
+                ["id" => "1234567890"]
+            )
+        );
+        $expected = "1234567890";
+        self::assertSame(
+            $real->getId(),
+            $expected
+        );
+    }
+
     public function test_additional_property_merchant_id()
     {
         $real = $this->client->fromArray(
@@ -316,6 +332,22 @@ class TransactionTest extends TestCase
         );
     }
 
+    public function test_additional_property_capture_mode()
+    {
+        $real = $this->client->fromArray(
+            Transaction::class,
+            array_merge(
+                OrderStub::getValidTransaction()->toArray(),
+                ["capture_mode" => "manual"]
+            )
+        );
+        $expected = "manual";
+        self::assertSame(
+            $real->toArray()["capture_mode"],
+            $expected
+        );
+    }
+
     public function test_additional_property_credit_debit_valid()
     {
         $real = $this->client->fromArray(
@@ -420,6 +452,22 @@ class TransactionTest extends TestCase
         $expected = true;
         self::assertSame(
             $real->toArray()["is_capturable"],
+            $expected
+        );
+    }
+
+    public function test_method_is_capturable()
+    {
+        $real = $this->client->fromArray(
+            Transaction::class,
+            array_merge(
+                self::MOCK_DATA_FOR_TRANSACTION,
+                ["is_capturable" => true]
+            )
+        );
+        $expected = true;
+        self::assertSame(
+            $real->isCapturable(),
             $expected
         );
     }

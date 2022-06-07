@@ -7,7 +7,7 @@ use GingerPluginSdk\Interfaces\ValidateFieldsInterface;
 abstract class BaseField
 {
     private mixed $value;
-    private string $propertyName;
+    protected string $propertyName;
     protected array $enum;
 
     public function __construct($propertyName)

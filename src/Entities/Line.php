@@ -11,7 +11,7 @@ use GingerPluginSdk\Helpers\MultiFieldsEntityTrait;
 use GingerPluginSdk\Helpers\SingleFieldTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 use GingerPluginSdk\Properties\Currency;
-use JetBrains\PhpStorm\Pure;
+
 
 final class Line implements MultiFieldsEntityInterface
 {
@@ -44,7 +44,7 @@ final class Line implements MultiFieldsEntityInterface
         string            $merchantOrderLineId,
         string            $name,
         int               $quantity,
-        float             $amount,
+        float              $amount,
         int               $vatPercentage,
         private ?Currency $currency = null,
         ?int              $discountRate = null,
@@ -93,47 +93,47 @@ final class Line implements MultiFieldsEntityInterface
         if ($url) $this->setUrl($url);
     }
 
-    #[Pure] public function getUrl(): ?string
+     public function getUrl(): ?string
     {
         return $this->url->get();
     }
 
-    #[Pure] public function getVatPercentage(): ?int
+     public function getVatPercentage(): ?int
     {
         return $this->vatPercentage->get();
     }
 
-    #[Pure] public function getDiscountRate(): ?int
+     public function getDiscountRate(): ?int
     {
         return $this->discountRate->get();
     }
 
-    #[Pure] public function getAmount(): int
+     public function getAmount(): int
     {
         return $this->amount->get();
     }
 
-    #[Pure] public function getCurrency(): string
+     public function getCurrency(): string
     {
         return $this->currency->get();
     }
 
-    #[Pure] public function getMerchantOrderLineId(): string
+     public function getMerchantOrderLineId(): string
     {
         return $this->merchantOrderLineId->get();
     }
 
-    #[Pure] public function getName(): string
+     public function getName(): string
     {
         return $this->name->get();
     }
 
-    #[Pure] public function getQuantity(): int
+     public function getQuantity(): int
     {
         return $this->quantity->get();
     }
 
-    #[Pure] public function getType(): string
+     public function getType(): string
     {
         return $this->type->get();
     }

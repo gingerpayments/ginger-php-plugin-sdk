@@ -16,6 +16,6 @@ class Flags extends AbstractCollection
             $this->add($flag);
         }
 
-        parent::__construct(BaseField::class, 'flags');
+        parent::__construct('flags');
     }
 }

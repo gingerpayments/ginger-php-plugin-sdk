@@ -14,7 +14,7 @@ class AdditionalAddresses extends AbstractCollection
         foreach ($addresses as $address) {
             $this->add($address);
         }
-        parent::__construct(Address::class, $this->propertyName);
+        parent::__construct($this->propertyName);
     }
 
     public function addAddress(Address $address): AdditionalAddresses

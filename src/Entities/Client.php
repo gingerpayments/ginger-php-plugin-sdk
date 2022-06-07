@@ -6,7 +6,7 @@ use GingerPluginSdk\Bases\BaseField;
 use GingerPluginSdk\Helpers\MultiFieldsEntityTrait;
 use GingerPluginSdk\Helpers\SingleFieldTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
-use JetBrains\PhpStorm\Pure;
+
 
 final class Client implements MultiFieldsEntityInterface
 {
@@ -57,27 +57,27 @@ final class Client implements MultiFieldsEntityInterface
         );
     }
 
-    #[Pure] public function getUserAgent(): string
+     public function getUserAgent(): string
     {
         return $this->userAgent->get();
     }
 
-    #[Pure] public function getPlatformName(): string
+     public function getPlatformName(): string
     {
         return $this->pluginName->get();
     }
 
-    #[Pure] public function getPlatformVersion(): string
+     public function getPlatformVersion(): string
     {
         return $this->platformVersion->get();
     }
 
-    #[Pure] public function getPluginName(): string
+     public function getPluginName(): string
     {
         return $this->pluginName->get();
     }
 
-    #[Pure] public function getPluginVersion(): string
+     public function getPluginVersion(): string
     {
         return $this->pluginVersion->get();
     }

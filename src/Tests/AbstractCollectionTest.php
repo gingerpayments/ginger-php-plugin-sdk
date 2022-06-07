@@ -9,7 +9,7 @@ class AbstractCollectionTest extends TestCase
 {
     public function test_init()
     {
-        $abstract_collection = new AbstractCollection(class_string: '', propertyName: 'sore');
+        $abstract_collection = new AbstractCollection(propertyName: 'sore');
         self::assertSame(
             expected: 0,
             actual: $abstract_collection->count()
@@ -18,7 +18,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_add_item_get_value()
     {
-        $abstract_collection = new AbstractCollection(class_string: '', propertyName: 'sore');
+        $abstract_collection = new AbstractCollection(propertyName: 'sore');
         $abstract_collection->add('depression');
         self::assertSame(
             expected: 'depression',
@@ -28,7 +28,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_add_item_get_pointer()
     {
-        $abstract_collection = new AbstractCollection(class_string: '', propertyName: 'sore');
+        $abstract_collection = new AbstractCollection(propertyName: 'sore');
         $abstract_collection->add('depression');
         self::assertSame(
             expected: 1,
@@ -38,7 +38,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_remove_item_get_count()
     {
-        $abstract_collection = new AbstractCollection(class_string: '', propertyName: 'sore');
+        $abstract_collection = new AbstractCollection(propertyName: 'sore');
         $abstract_collection->add('depression');
         $abstract_collection->add('obsession');
         $abstract_collection->add('all_will_be_fine');
@@ -51,7 +51,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_remove_item_get_using_pointer()
     {
-        $abstract_collection = new AbstractCollection(class_string: '', propertyName: 'sore');
+        $abstract_collection = new AbstractCollection(propertyName: 'sore');
         $abstract_collection->add('depression');
         $abstract_collection->add('obsession');
         $abstract_collection->add('all_will_be_fine');
