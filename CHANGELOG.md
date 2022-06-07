@@ -66,3 +66,12 @@ Initial version
 * Updated Event entity to support cross usage.
 * Updated Transaction entity to support cross usage.
 * Updated Order entity to support cross usage.
+
+## 1.3
+
+* Implemented coverage for `getIdealIssuers` method from `ginger-php`
+* Implemented `Issuer` Entity.
+* Implemented `IdealIssuers` Collection.
+* Implemented `IdealIssuersTest`.
+* Implemented `IssuerTest`.
+* Implemented `GetIdealIssuersTest`.

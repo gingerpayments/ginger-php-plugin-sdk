@@ -4,6 +4,8 @@ namespace GingerPluginSdk;
 
 use Ginger\ApiClient;
 use Ginger\Ginger;
+use GingerPluginSdk\Collections\IdealIssuers;
+use GingerPluginSdk\Entities\Issuer;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Exceptions\APIException;
 use GingerPluginSdk\Exceptions\CaptureFailedException;
@@ -194,6 +196,17 @@ class Client
     public function removeCachedMultiCurrency()
     {
         unlink(self::MULTI_CURRENCY_CACHE_FILE_PATH);
+    }
+
+    public function getIdealIssuers(): IdealIssuers
+    {
+        $response = new IdealIssuers();
+        foreach ($this->api_client->getIdealIssuers() as $issuer) {
+            $response->addIssuer(
+                item: $this->fromArray(Issuer::class, $issuer)
+            );
+        }
+        return $response;
     }
 
     /**
