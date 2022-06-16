@@ -70,8 +70,23 @@ Initial version
 ## 1.3
 
 * Implemented coverage for `getIdealIssuers` method from `ginger-php`
+* Implemented coverage for `RefundOrder` method.
+* Implemented `filterAdditionalProperties` method.
+* Implemented `Amount` Property.
+* Implemented `RefundFailedException`.
+* Implemented `InvalidOrderStatusException`.
 * Implemented `Issuer` Entity.
 * Implemented `IdealIssuers` Collection.
 * Implemented `IdealIssuersTest`.
 * Implemented `IssuerTest`.
 * Implemented `GetIdealIssuersTest`.
+* Implemented `MultiFieldEntityTraitTest`.
+* Implemented `RefundOrderTest`.
+* Implemented `ValueInCentsInterface`.
+* Updated `LineTest`.
+* Updated `EventTest`.
+* Updated `CreateOrderTest`.
+* Updated `OrderLinesTest`.
+* Updated `TransactionTest`.
+* Simplified `Event` entity.
+* Simplified `Transaction` entity.

@@ -5,6 +5,7 @@ namespace GingerPluginSdk\Tests;
 use GingerPluginSdk\Client;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Exceptions\InvalidOrderDataException;
+use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Properties\ClientOptions;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +37,7 @@ class CaptureOrderTransactionTest extends TestCase
      */
     public function test_only_completed_orders_could_be_captured()
     {
-        self::expectException(InvalidOrderDataException::class);
+        self::expectException(InvalidOrderStatusException::class);
         $order = $this->client->sendOrder(
             order: OrderStub::getValidOrder()
         );

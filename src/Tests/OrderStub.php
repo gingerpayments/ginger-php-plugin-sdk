@@ -14,6 +14,7 @@ use GingerPluginSdk\Entities\Line;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Entities\PaymentMethodDetails;
 use GingerPluginSdk\Entities\Transaction;
+use GingerPluginSdk\Properties\Amount;
 use GingerPluginSdk\Properties\Country;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\EmailAddress;
@@ -87,7 +88,7 @@ class OrderStub
     {
         return new Order(
             currency: new Currency('EUR'),
-            amount: 500,
+            amount: new Amount(500),
             transactions: self::getValidTransactions(),
             customer: self::getValidCustomer(),
             orderLines: self::getValidOrderLines(),
@@ -151,7 +152,7 @@ class OrderStub
             merchantOrderLineId: "5",
             name: 'Milk',
             quantity: 1,
-            amount: 1.00,
+            amount: new Amount(1.00),
             vatPercentage: 50,
             currency: new Currency(
                 'EUR'

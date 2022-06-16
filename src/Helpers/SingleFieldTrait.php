@@ -7,7 +7,6 @@ use GingerPluginSdk\Exceptions\OutOfDiapasonException;
 use GingerPluginSdk\Exceptions\OutOfPatternException;
 use GingerPluginSdk\Interfaces\ValidateFieldsInterface;
 
-
 trait SingleFieldTrait
 {
     /**
