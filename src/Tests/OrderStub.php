@@ -74,7 +74,7 @@ class OrderStub
             ),
             gender: 'male',
             phoneNumbers: new PhoneNumbers(
-                '0951018201'
+                '666666666'
             ),
             merchantCustomerId: '15',
             birthdate: new \GingerPluginSdk\Properties\Birthdate('1999-09-01'),
@@ -92,7 +92,7 @@ class OrderStub
             transactions: self::getValidTransactions(),
             customer: self::getValidCustomer(),
             orderLines: self::getValidOrderLines(),
-            description: 'Test Product',
+            description: 'GingerPluginSDKAutomaticTest',
             extra: self::getValidExtra(),
             client: self::getValidClient()
         );
@@ -102,7 +102,7 @@ class OrderStub
     {
         return new \GingerPluginSdk\Entities\Client(
             userAgent: $_SERVER['HTTP_USER_AGENT'],
-            platformName: 'docker',
+            platformName: 'PHPSTORM',
             platformVersion: '1',
             pluginName: 'ginger-plugin-sdk',
             pluginVersion: '1.0.0'

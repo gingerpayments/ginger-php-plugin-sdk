@@ -16,7 +16,7 @@ class MultiCurrencyTest extends TestCase
     public function setUp(): void
     {
         $clientOptions = new \GingerPluginSdk\Properties\ClientOptions(
-            endpoint: "https://api.online.emspay.eu",
+            endpoint: $_ENV["PUBLIC_API_URL"],
             useBundle: true,
             apiKey: getenv('GINGER_API_KEY')
         );
