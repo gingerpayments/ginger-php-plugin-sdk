@@ -28,11 +28,11 @@ final class Client implements MultiFieldsEntityInterface
      * @param string $pluginVersion - Version of the plugin used to connect to the API, e.g. 1.0.0
      */
     public function __construct(
-        string $userAgent,
-        string $platformName,
-        string $platformVersion,
-        string $pluginName,
-        string $pluginVersion
+        string  $userAgent,
+        ?string $platformName = null,
+        ?string $platformVersion = null,
+        ?string $pluginName = null,
+        ?string $pluginVersion = null
     )
     {
         $this->userAgent = $this->createSimpleField(
@@ -57,27 +57,27 @@ final class Client implements MultiFieldsEntityInterface
         );
     }
 
-     public function getUserAgent(): string
+    public function getUserAgent(): string
     {
         return $this->userAgent->get();
     }
 
-     public function getPlatformName(): string
+    public function getPlatformName(): string
     {
         return $this->pluginName->get();
     }
 
-     public function getPlatformVersion(): string
+    public function getPlatformVersion(): string
     {
         return $this->platformVersion->get();
     }
 
-     public function getPluginName(): string
+    public function getPluginName(): string
     {
         return $this->pluginName->get();
     }
 
-     public function getPluginVersion(): string
+    public function getPluginVersion(): string
     {
         return $this->pluginVersion->get();
     }

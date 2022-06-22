@@ -14,6 +14,7 @@ use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Entities\PaymentMethodDetails;
 use GingerPluginSdk\Entities\Transaction;
 use GingerPluginSdk\Exceptions\APIException;
+use GingerPluginSdk\Properties\Amount;
 use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\Country;
 use GingerPluginSdk\Properties\Currency;
@@ -119,7 +120,7 @@ class CreateOrderTest extends TestCase
         self::expectException(APIException::class);
         $test_order = new Order(
             currency: new Currency('NUL'),
-            amount: 500,
+            amount: new Amount(500),
             transactions: OrderStub::getValidTransactions(),
             customer: OrderStub::getValidCustomer(),
             orderLines: OrderStub::getValidOrderLines(),
@@ -137,7 +138,7 @@ class CreateOrderTest extends TestCase
         self::expectException(APIException::class);
         $test_order = new Order(
             currency: new Currency('NUL'),
-            amount: 500,
+            amount: new Amount(500),
             transactions: new Transactions(
                 new Transaction(
                     paymentMethod: 'credit-card',

@@ -42,61 +42,41 @@ final class Customer implements MultiFieldsEntityInterface
      * @param string $firstName
      * @param string $lastName
      * @param EmailAddress $emailAddress
-     * @param string $gender - Customer's gender
+     * @param string|null $gender - Customer's gender
      * @param PhoneNumbers|null $phoneNumbers
-     * @param string|null $merchantCustomerId - Merchant's internal customer identifier
      * @param \GingerPluginSdk\Properties\Birthdate|null $birthdate - Customer's birthdate (ISO 8601 / RFC 3339)
-     * @param Locale|null $locale - POSIX locale or RFC 5646 language tag; only language and region are supported
      * @param \GingerPluginSdk\Properties\Country|null $country
      * @param string|null $ipAddress
-     * @param string|null $address
      * @param string|null $addressType
-     * @param string|null $postalCode
-     * @param string|null $housenumber
+     * @param mixed ...$additionalProperties
      */
     public function __construct(
         private AdditionalAddresses $additionalAddresses,
         string                      $firstName,
         string                      $lastName,
         private EmailAddress        $emailAddress,
-        string                      $gender,
+        ?string                     $gender = null,
         ?PhoneNumbers               $phoneNumbers = null,
-        ?string                     $merchantCustomerId = null,
         private ?Birthdate          $birthdate = null,
-        ?Locale                     $locale = null,
         ?Country                    $country = null,
         ?string                     $ipAddress = null,
-        ?string                     $address = null,
         ?string                     $addressType = null,
-        ?string                     $postalCode = null,
-        ?string                     $housenumber = null
+        mixed                       ...$additionalProperties
     )
     {
         $this->firstName = $this->createSimpleField(
             propertyName: 'first_name',
             value: $firstName
         );
+
         $this->lastName = $this->createSimpleField(
             propertyName: 'last_name',
             value: $lastName
         );
-        $this->gender = $this->createEnumeratedField(
-            propertyName: 'gender',
-            value: $gender,
-            enum: [
-                'male', 'female'
-            ]
-        );
+
         $this->country = $country ?? new Country(
                 $this->additionalAddresses->get()->getCountry()
             );
-
-        if ($address) {
-            $this->address = $this->createSimpleField(
-                propertyName: 'address',
-                value: $address
-            );
-        }
 
         if ($addressType) {
             $this->addressType = $this->createEnumeratedField(
@@ -111,23 +91,18 @@ final class Customer implements MultiFieldsEntityInterface
             );
         }
 
-        if ($postalCode) {
-            $this->address = $this->createSimpleField(
-                propertyName: 'postal_code',
-                value: $postalCode
+        if ($gender) {
+            $this->gender = $this->createEnumeratedField(
+                propertyName: 'gender',
+                value: $gender,
+                enum: [
+                    'male', 'female'
+                ]
             );
         }
-
-        if ($housenumber) {
-            $this->address = $this->createSimpleField(
-                propertyName: 'housenumber',
-                value: $housenumber
-            );
-        }
+        if ($additionalProperties) $this->filterAdditionalProperties($additionalProperties);
 
         if ($phoneNumbers) $this->setPhoneNumbers($phoneNumbers);
-        if ($merchantCustomerId) $this->setMerchantCustomerId($merchantCustomerId);
-        if ($locale) $this->setLocale($locale);
         $this->setIpAddress($ipAddress);
     }
 
@@ -153,12 +128,12 @@ final class Customer implements MultiFieldsEntityInterface
 
     public function getBirthdate(): string
     {
-        return $this->birthdate?->get();
+        return $this->birthdate ? $this->birthdate->get() : false;
     }
 
     public function getGender(): string
     {
-        return $this->gender?->get();
+        return $this->gender ? $this->birthdate->get() : false;
     }
 
     public function getLocale(): ?string
@@ -182,26 +157,6 @@ final class Customer implements MultiFieldsEntityInterface
     }
 
     /**
-     * @param Birthdate|null $date
-     * @return $this
-     */
-    public function setBirthdate(?Birthdate $date): Customer
-    {
-        $this->birthdate = $date ?: null;
-        return $this;
-    }
-
-    /**
-     * @param \GingerPluginSdk\Properties\Locale|null $locale
-     * @return $this
-     */
-    public function setLocale(?Locale $locale): Customer
-    {
-        $this->locale = $locale;
-        return $this;
-    }
-
-    /**
      * @return $this
      */
     public function setIpAddress($ipAddress = null): Customer
@@ -213,18 +168,6 @@ final class Customer implements MultiFieldsEntityInterface
         return $this;
     }
 
-    /**
-     * @param string|null $id
-     * @return $this
-     */
-    public function setMerchantCustomerId(?string $id): Customer
-    {
-        $this->merchantCustomerId = $this->createSimpleField(
-            propertyName: 'merchant_customer_id',
-            value: $id
-        );
-        return $this;
-    }
 
     /**
      * @param PhoneNumbers $phoneNumbers

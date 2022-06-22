@@ -1,8 +1,8 @@
-# 1.0
+# 1.0.0
 
 Initial version
 
-## 1.1
+## 1.1.0
 
 * Implemented `fromArray` method.
 * Implemented CHANGELOG.
@@ -50,7 +50,7 @@ Initial version
 * Updated `AbstractCollection.php`
 * Refactored Collections to store `ITEM_TYPE` of included items.
 
-## 1.2
+## 1.2.0
 
 * Implemented coverage for `captureOrderTransaction` method from `ginger-php`.
 * Implemented `OrderStub` to simplify valid order creation methods.
@@ -67,11 +67,26 @@ Initial version
 * Updated Transaction entity to support cross usage.
 * Updated Order entity to support cross usage.
 
-## 1.3
+## 1.3.0
 
 * Implemented coverage for `getIdealIssuers` method from `ginger-php`
+* Implemented coverage for `RefundOrder` method.
+* Implemented `filterAdditionalProperties` method.
+* Implemented `Amount` Property.
+* Implemented `RefundFailedException`.
+* Implemented `InvalidOrderStatusException`.
 * Implemented `Issuer` Entity.
 * Implemented `IdealIssuers` Collection.
 * Implemented `IdealIssuersTest`.
 * Implemented `IssuerTest`.
 * Implemented `GetIdealIssuersTest`.
+* Implemented `MultiFieldEntityTraitTest`.
+* Implemented `RefundOrderTest`.
+* Implemented `ValueInCentsInterface`.
+* Updated `LineTest`.
+* Updated `EventTest`.
+* Updated `CreateOrderTest`.
+* Updated `OrderLinesTest`.
+* Updated `TransactionTest`.
+* Simplified `Event` entity.
+* Simplified `Transaction` entity.

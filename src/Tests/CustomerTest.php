@@ -99,22 +99,6 @@ class CustomerTest extends TestCase
         );
     }
 
-    public function test_invalid_type_locale()
-    {
-        self::expectException(\TypeError::class);
-        $test = new Customer(
-            additionalAddresses: $this->createMockAdditionalAddress($this->createMockAddress()),
-            firstName: 'Test',
-            lastName: 'Test',
-            emailAddress: $this->getMockEmail(),
-            gender: 'animal',
-            phoneNumbers: $this->createMockPhoneNumber(),
-            merchantCustomerId: '0',
-            birthdate: $this->getMockBirthdate(),
-            locale: '123'
-        );
-    }
-
     public function test_invalid_type_additionall_address()
     {
         self::expectException(\TypeError::class);

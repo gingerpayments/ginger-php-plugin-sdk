@@ -238,6 +238,7 @@ class TransactionTest extends TestCase
             )
         );
         $expected = "EUR";
+
         self::assertSame(
             $real->toArray()["currency"],
             $expected
@@ -285,18 +286,6 @@ class TransactionTest extends TestCase
         self::assertSame(
             $real->toArray()["balance"],
             $expected
-        );
-    }
-
-    public function test_additional_property_balance_invalid()
-    {
-        self::expectException(OutOfEnumException::class);
-        $this->client->fromArray(
-            Transaction::class,
-            array_merge(
-                self::MOCK_DATA_FOR_TRANSACTION,
-                ["balance" => "sss"]
-            )
         );
     }
 
@@ -361,18 +350,6 @@ class TransactionTest extends TestCase
         self::assertSame(
             $real->toArray()["credit_debit"],
             $expected
-        );
-    }
-
-    public function test_additional_property_credit_debit_invalid()
-    {
-        self::expectException(OutOfEnumException::class);
-        $this->client->fromArray(
-            Transaction::class,
-            array_merge(
-                self::MOCK_DATA_FOR_TRANSACTION,
-                ["credit_debit" => "n"]
-            )
         );
     }
 
@@ -501,18 +478,6 @@ class TransactionTest extends TestCase
         self::assertSame(
             $real->toArray()["channel"],
             $expected
-        );
-    }
-
-    public function test_additional_property_channel_invalid()
-    {
-        self::expectException(OutOfEnumException::class);
-        $this->client->fromArray(
-            Transaction::class,
-            array_merge(
-                self::MOCK_DATA_FOR_TRANSACTION,
-                ["channel" => "desp"]
-            )
         );
     }
 

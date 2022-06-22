@@ -10,6 +10,7 @@ use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Helpers\MultiFieldsEntityTrait;
 use GingerPluginSdk\Helpers\SingleFieldTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
+use GingerPluginSdk\Properties\Amount;
 use GingerPluginSdk\Properties\Currency;
 
 
@@ -23,7 +24,6 @@ final class Line implements MultiFieldsEntityInterface
     private BaseField $merchantOrderLineId;
     private BaseField $name;
     private BaseField $quantity;
-    private BaseField $amount;
     private BaseField $vatPercentage;
     private BaseField $discountRate;
     private BaseField $url;
@@ -33,7 +33,7 @@ final class Line implements MultiFieldsEntityInterface
      * @param string $merchantOrderLineId - Merchant's internal order line identifier
      * @param string $name - Name, usually a short description
      * @param int $quantity
-     * @param float $amount - Amount for a single item (including VAT) in cents
+     * @param \GingerPluginSdk\Properties\Amount $amount - Amount for a single item (including VAT) in cents
      * @param int $vatPercentage - Percentage of tax rate, will be multiplied by 100 and provided as an integer. i.e. 17.50% would be sent as 1750
      * @param Currency|null $currency
      * @param int|null $discountRate - Percentage of discount, will be multiplied by 100 and provided as an integer. i.e. 11.57% would be sent as 1157
@@ -44,7 +44,7 @@ final class Line implements MultiFieldsEntityInterface
         string            $merchantOrderLineId,
         string            $name,
         int               $quantity,
-        float              $amount,
+        private Amount    $amount,
         int               $vatPercentage,
         private ?Currency $currency = null,
         ?int              $discountRate = null,
@@ -79,10 +79,6 @@ final class Line implements MultiFieldsEntityInterface
             value: $quantity,
             min: 1
         );
-        $this->amount = $this->createSimpleField(
-            propertyName: 'amount',
-            value: $this->calculateValueInCents($amount)
-        );
         $this->vatPercentage = $this->createFieldWithDiapasonOfValues(
             propertyName: 'vat_percentage',
             value: $this->calculateValueInCents($vatPercentage),
@@ -93,47 +89,47 @@ final class Line implements MultiFieldsEntityInterface
         if ($url) $this->setUrl($url);
     }
 
-     public function getUrl(): ?string
+    public function getUrl(): ?string
     {
         return $this->url->get();
     }
 
-     public function getVatPercentage(): ?int
+    public function getVatPercentage(): ?int
     {
         return $this->vatPercentage->get();
     }
 
-     public function getDiscountRate(): ?int
+    public function getDiscountRate(): ?int
     {
         return $this->discountRate->get();
     }
 
-     public function getAmount(): int
+    public function getAmount(): int
     {
         return $this->amount->get();
     }
 
-     public function getCurrency(): string
+    public function getCurrency(): string
     {
         return $this->currency->get();
     }
 
-     public function getMerchantOrderLineId(): string
+    public function getMerchantOrderLineId(): string
     {
         return $this->merchantOrderLineId->get();
     }
 
-     public function getName(): string
+    public function getName(): string
     {
         return $this->name->get();
     }
 
-     public function getQuantity(): int
+    public function getQuantity(): int
     {
         return $this->quantity->get();
     }
 
-     public function getType(): string
+    public function getType(): string
     {
         return $this->type->get();
     }
