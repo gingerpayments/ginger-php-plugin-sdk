@@ -14,8 +14,9 @@ final class Currency extends BaseField implements ValidateFieldsInterface
 
     public function __construct($value)
     {
-        parent::__construct('currency');
+        $this->propertyName = 'currency';
         $this->set($value);
+        parent::__construct('currency');
     }
 
     /**

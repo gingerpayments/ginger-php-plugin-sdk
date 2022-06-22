@@ -5,6 +5,7 @@ namespace GingerPluginSdk\Tests;
 use GingerPluginSdk\Entities\Event;
 use GingerPluginSdk\Exceptions\OutOfEnumException;
 use GingerPluginSdk\Exceptions\OutOfPatternException;
+use GingerPluginSdk\Properties\Amount;
 
 class EventTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,30 +22,6 @@ class EventTest extends \PHPUnit\Framework\TestCase
             expected: $event::class,
             actual: Event::class
         );;
-    }
-
-    public function test_occurred_invalid()
-    {
-        self::expectException(OutOfPatternException::class);
-        new Event(
-            occurred: '2022-13534+00:00',
-            event: 'new',
-            source: '123',
-            noticed: '2022-05-17T11:58:33.813534+00:00',
-            id: '123'
-        );
-    }
-
-    public function test_noticed_invalid()
-    {
-        self::expectException(OutOfPatternException::class);
-        new Event(
-            occurred: '2022-05-17T11:58:33.813534+00:00',
-            event: 'new',
-            source: '123',
-            noticed: '2022-.813534+00:00',
-            id: '123'
-        );
     }
 
     public function test_to_array()
@@ -73,7 +50,9 @@ class EventTest extends \PHPUnit\Framework\TestCase
     {
         self::assertSame(
             expected: '',
-            actual: (new Event('2022-05-17T11:58:33.813534+00:00', 'new', '123'))->getPropertyName()
+            actual: (new Event(
+                event: 'capturing',orccured:'2022-05-17T11:58:33.813534+00:00')
+            )->getPropertyName()
         );
     }
 
@@ -89,19 +68,20 @@ class EventTest extends \PHPUnit\Framework\TestCase
                 "amount" => 30
             ],
             actual: (new Event(
-                occurred: '2022-05-17T11:58:33.813534+00:00',
                 event: 'new',
+                occurred: '2022-05-17T11:58:33.813534+00:00',
                 source: '123',
                 noticed: '2022-05-17T11:58:33.813534+00:00',
                 id: '123',
-                amount: 30
+                amount: new Amount(0.30)
             ))->toArray()
         );
     }
 
     public function test_from_live_additional_properties()
     {
-        $expected = ["calculation_type" => "blended",
+        $expected = [
+            "calculation_type" => "blended",
             "currency" => "EUR",
             "event" => "registered_billing_fees",
             "id" => "6ed05ed3-67b9-406f-9f92-f29d92d86a64",
@@ -116,8 +96,8 @@ class EventTest extends \PHPUnit\Framework\TestCase
         sort($expected);
 
         $actual = (new Event(
-            occurred: "2022-06-03T11:14:04.704292+00:00",
             event: "registered_billing_fees",
+            occurred: "2022-06-03T11:14:04.704292+00:00",
             noticed: "2022-06-03T11:14:04.704286+00:00",
             id: "6ed05ed3-67b9-406f-9f92-f29d92d86a64",
             payoutSystem: "gross",
@@ -125,9 +105,10 @@ class EventTest extends \PHPUnit\Framework\TestCase
             vatAmount: 0,
             vatClass: "nl-high",
             vatPercentage: 21,
+            calculationType: 'blended',
             currency: "EUR",
-            calculationType: 'blended'
         ))->toArray();
+
         sort($actual);
         self::assertEqualsCanonicalizing(
             expected: $expected,

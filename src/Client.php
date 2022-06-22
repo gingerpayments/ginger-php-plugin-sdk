@@ -4,14 +4,19 @@ namespace GingerPluginSdk;
 
 use Ginger\ApiClient;
 use Ginger\Ginger;
+use GingerPluginSdk\Collections\IdealIssuers;
+use GingerPluginSdk\Entities\Issuer;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Exceptions\APIException;
 use GingerPluginSdk\Exceptions\CaptureFailedException;
 use GingerPluginSdk\Exceptions\InvalidOrderDataException;
+use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Exceptions\OrderNotFoundException;
+use GingerPluginSdk\Exceptions\RefundFailedException;
 use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
 use GingerPluginSdk\Interfaces\ArbitraryArgumentsEntityInterface;
+use GingerPluginSdk\Interfaces\ValueInCentsInterface;
 use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\Currency;
 use RuntimeException;
@@ -28,6 +33,9 @@ class Client
     const CA_CERT_FILE_PATH = __DIR__ . '/Assets/cacert.pem';
     protected ApiClient $api_client;
 
+    /**
+     * @param \GingerPluginSdk\Properties\ClientOptions $options
+     */
     public function __construct(ClientOptions $options)
     {
         $this->api_client = $this->createClient(
@@ -38,15 +46,23 @@ class Client
 
     }
 
+    /**
+     * Retrieves APIClient from original ginger-php package.
+     *
+     * @return \Ginger\ApiClient
+     */
     public function getApiClient(): ApiClient
     {
         return $this->api_client;
     }
 
     /**
+     * Retrieve orders for API.
+     * Returns an Order Entity object.
+     *
      * @throws \Exception
      */
-    public function getOrder(string $id): object
+    public function getOrder(string $id): Order
     {
         try {
             $api_order = $this->api_client->getOrder(
@@ -62,17 +78,22 @@ class Client
     }
 
     /**
+     * Capturing order transactions.
+     * Capturing is a process of capture finances on bank account after order shipping.
+     * Only completed order could be captured.
+     * Only orders with supporting capturing payment methods is allowed, for example klarna-pay-later or afterpay.
+     *
      * @throws \GingerPluginSdk\Exceptions\CaptureFailedException
-     * @throws \GingerPluginSdk\Exceptions\InvalidOrderDataException
+     * @throws \GingerPluginSdk\Exceptions\InvalidOrderStatusException
      */
     public function captureOrderTransaction(string $id): bool
     {
-        /** @var Order $order */
         $order = $this->getOrder(id: $id);
 
         if ($order->getStatus() !== 'completed') {
-            throw new InvalidOrderDataException(
-                message: sprintf("Only order with `completed` status could be captured, current order status is %s", $order->getStatus()));
+            throw new InvalidOrderStatusException(
+                actual: $order->getStatus(), expected: 'completed'
+            );
         }
 
         try {
@@ -88,6 +109,9 @@ class Client
     }
 
     /**
+     * Converting array to object.
+     * Returns new object using instance - $className and providing properties from $data to it.
+     *
      * @param string $className
      * @param array $data
      * @return object
@@ -97,7 +121,7 @@ class Client
      * @phpstan-param class-string<Q> $className
      * @phpstan-return Q
      */
-    public function fromArray(string $className, array $data): object
+    public function fromArray(string $className, array $data): mixed
     {
         $arguments = [];
         foreach ($data as $property_name => $value) {
@@ -129,6 +153,9 @@ class Client
                 //Check if this property has a pattern validation
                 $path_to_property = self::PROPERTIES_PATH . $this->dashesToCamelCase($property_name, true);
                 if (class_exists($path_to_property)) {
+                    if (in_array('ValueInCentsInterface', class_implements($path_to_property))) {
+                        $value /= 100;
+                    }
                     $arguments[$camel_property_name] = new $path_to_property($value);
                 } else {
                     if (array_key_exists(ArbitraryArgumentsEntityInterface::class, class_implements($className))) {
@@ -147,6 +174,14 @@ class Client
         }
     }
 
+    /**
+     * Initialize SDK client to use all features through it.
+     *
+     * @param $apiKey
+     * @param $useBundle
+     * @param $endpoint
+     * @return \Ginger\ApiClient
+     */
     private function createClient($apiKey, $useBundle, $endpoint): ApiClient
     {
         return Ginger::createClient(
@@ -197,10 +232,57 @@ class Client
     }
 
     /**
-     * @throws \GingerPluginSdk\Exceptions\ValidationException
+     * Retrieving ideal issuers.
+     * Returns collection of issuers entity.
+     *
+     * @return \GingerPluginSdk\Collections\IdealIssuers
      * @throws \Exception
      */
-    public function sendOrder(Order $order): object
+    public function getIdealIssuers(): IdealIssuers
+    {
+        $response = new IdealIssuers();
+        foreach ($this->api_client->getIdealIssuers() as $issuer) {
+            $response->addIssuer(
+                item: $this->fromArray(Issuer::class, $issuer)
+            );
+        }
+        return $response;
+    }
+
+    /**
+     * Refund order using order lines.
+     * Only completed orders could be refunded.
+     *
+     * @param string $order_id
+     * @return array
+     * @throws \GingerPluginSdk\Exceptions\InvalidOrderStatusException
+     * @throws \GingerPluginSdk\Exceptions\RefundFailedException
+     */
+    public function refundOrder(string $order_id)
+    {
+        $order = $this->getOrder(id: $order_id);
+
+        if ($order->getStatus() != "completed") {
+            throw new InvalidOrderStatusException($order->getStatus(), 'completed');
+        }
+
+        if (!$order->getCurrentTransaction()->isCaptured()) {
+            throw  new RefundFailedException('Order is not yet captured, only captured order could be refunded');
+        }
+
+        return $this->api_client->refundOrder(id: $order_id, orderData: ['order_lines' => $order->getOrderLines()->toArray()]);
+    }
+
+    /**
+     * Send POST request for API to create an order resource.
+     * If order data is invalid `InvalidOrderDataException` will be thrown
+     *
+     * @param Order $order
+     * @return Order
+     * @throws \GingerPluginSdk\Exceptions\InvalidOrderDataException
+     * @throws \GingerPluginSdk\Exceptions\APIException
+     */
+    public function sendOrder(Order $order): Order
     {
         try {
             $response = $this->api_client->createOrder($order->toArray());

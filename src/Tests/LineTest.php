@@ -7,6 +7,7 @@ namespace GingerPluginSdk\Tests;
 use GingerPluginSdk\Entities\Line;
 use GingerPluginSdk\Exceptions\OutOfDiapasonException;
 use GingerPluginSdk\Exceptions\OutOfEnumException;
+use GingerPluginSdk\Properties\Amount;
 use PHPUnit\Framework\TestCase;
 
 class LineTest extends TestCase
@@ -20,7 +21,7 @@ class LineTest extends TestCase
             merchantOrderLineId: '1',
             name: 'Bottle',
             quantity: 3,
-            amount: 664,
+            amount: new Amount(664),
             vatPercentage: 25
         );
     }
@@ -35,7 +36,7 @@ class LineTest extends TestCase
             'amount' => 66400,
             'vat_percentage' => 2500
         ];
-        self::assertSame($expected_array, $this->line->toArray());
+        self::assertEqualsCanonicalizing($expected_array, $this->line->toArray());
     }
 
     public function test_invalid_enum_for_type()
@@ -46,7 +47,7 @@ class LineTest extends TestCase
             merchantOrderLineId: '1',
             name: 'Bottle',
             quantity: 3,
-            amount: 664,
+            amount: new Amount(664),
             vatPercentage: 25
         );
     }
@@ -82,7 +83,7 @@ class LineTest extends TestCase
             merchantOrderLineId: '5',
             name: 'Home',
             quantity: 1,
-            amount: 5,
+            amount: new Amount(5),
             vatPercentage: 110,
         );
     }
@@ -95,7 +96,7 @@ class LineTest extends TestCase
             merchantOrderLineId: '5',
             name: 'Home',
             quantity: 0,
-            amount: 5,
+            amount: new Amount(5),
             vatPercentage: 20,
         );
     }
@@ -108,7 +109,7 @@ class LineTest extends TestCase
             merchantOrderLineId: '1',
             name: 'Banc',
             quantity: 5,
-            amount: 11.25,
+            amount: new Amount(11.25),
             vatPercentage: 0,
             currency: 'EUR'
         );
