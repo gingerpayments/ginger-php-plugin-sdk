@@ -90,3 +90,34 @@ Initial version
 * Updated `TransactionTest`.
 * Simplified `Event` entity.
 * Simplified `Transaction` entity.
+
+## 1.4.0
+
+* Implemented `UpdateOrderTest`.
+* Implemented supporting `update` method for such collections :
+  * Order Lines.
+  * Abstract Collection.
+  * Additional Addresses.
+  * Transactions.
+  * Phone Numbers.
+* Implemented supporting `update` method for such entities : 
+  * Line.
+  * Address.
+  * Customer.
+  * Extra.
+  * Payment Method Details.
+  * Transaction.
+* Implemented `RawCost` property.
+* Implemented `RawCostTest`.
+* Implemented `AmountTest`.
+* Implemented `Percentage` property.
+* Implemented `VatPercentage` property.
+* Implemented `VatPercentageTest`.
+* Added `update` method to `MultiFieldEntityInterface`.
+* Redesigned `Amount` property to expect two possible variants in constructor `RawCost` property or value in cents.
+* Redesigned `fromArray` method to be static.
+* Updated tests to use `fromArray` as a static method.
+* Updated `fromArray` method.
+* Updated and Simplified `AdditionallAddressesTest`.
+* Updated and Simplified `CustomerTtest`.
+* Eliminated `ValueIncentsInterface`.

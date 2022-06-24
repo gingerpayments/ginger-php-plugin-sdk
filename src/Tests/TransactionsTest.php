@@ -55,4 +55,23 @@ class TransactionsTest extends TestCase
             'transactions'
         );
     }
+
+    public function test_update_transactions()
+    {
+        $transactions = OrderStub::getValidTransactions();
+
+        self::assertSame(
+            expected: array_replace_recursive(
+                $transactions->toArray(),
+                [
+                    0 => [
+                        'payment_method' => 'non'
+                    ]
+                ]
+            ),
+            actual: $transactions->updateTransaction(
+                transaction: OrderStub::getValidTransaction()->update(payment_method: 'non')
+            )->toArray()
+        );
+    }
 }

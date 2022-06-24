@@ -33,4 +33,10 @@ final class PhoneNumbers extends AbstractCollection
         $this->remove($index);
         return $this;
     }
+
+    public function updatePhoneNumber(string $number, $index = null)
+    {
+        $this->update($number, $index);
+        return $this;
+    }
 }

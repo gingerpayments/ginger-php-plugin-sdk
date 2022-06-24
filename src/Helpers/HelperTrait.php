@@ -9,7 +9,7 @@ trait HelperTrait
         return round((float)$value * 100);
     }
 
-    protected function dashesToCamelCase($string, $capitalizeFirstCharacter = false): array|string
+    protected static function dashesToCamelCase($string, $capitalizeFirstCharacter = false): array|string
     {
 
         $str = str_replace('_', '', ucwords($string, '_'));
@@ -21,7 +21,7 @@ trait HelperTrait
         return $str;
     }
 
-    protected function isAssoc(array $array): bool
+    protected static function isAssoc(array $array): bool
     {
         $keys = array_keys($array);
         return array_keys($keys) !== $keys;

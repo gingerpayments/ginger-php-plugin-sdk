@@ -15,10 +15,15 @@ use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Entities\PaymentMethodDetails;
 use GingerPluginSdk\Entities\Transaction;
 use GingerPluginSdk\Properties\Amount;
+use GingerPluginSdk\Properties\Birthdate;
+use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\Country;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\EmailAddress;
 use GingerPluginSdk\Properties\Locale;
+use GingerPluginSdk\Properties\Percentage;
+use GingerPluginSdk\Properties\RawCost;
+use GingerPluginSdk\Properties\VatPercentage;
 
 class OrderStub
 {
@@ -26,6 +31,15 @@ class OrderStub
     {
         $_SERVER["REMOTE_ADDR"] = "173.0.2.5";
         $_SERVER["HTTP_USER_AGENT"] = "PHPUnit Tests";
+    }
+
+    static function getMockedClientOptions(): ClientOptions
+    {
+        return new ClientOptions(
+            endpoint: $_ENV['PUBLIC_API_URL'],
+            useBundle: true,
+            apiKey: getenv('GINGER_API_KEY')
+        );
     }
 
     static function getValidAdditionalAddresses(): AdditionalAddresses
@@ -76,8 +90,8 @@ class OrderStub
             phoneNumbers: new PhoneNumbers(
                 '666666666'
             ),
+            birthdate: new Birthdate('1999-09-01'),
             merchantCustomerId: '15',
-            birthdate: new \GingerPluginSdk\Properties\Birthdate('1999-09-01'),
             locale: new Locale(
                 'Ua_ua'
             )
@@ -92,9 +106,9 @@ class OrderStub
             transactions: self::getValidTransactions(),
             customer: self::getValidCustomer(),
             orderLines: self::getValidOrderLines(),
-            description: 'GingerPluginSDKAutomaticTest',
             extra: self::getValidExtra(),
-            client: self::getValidClient()
+            client: self::getValidClient(),
+            description: 'GingerPluginSDKAutomaticTest'
         );
     }
 
@@ -152,8 +166,8 @@ class OrderStub
             merchantOrderLineId: "5",
             name: 'Milk',
             quantity: 1,
-            amount: new Amount(1.00),
-            vatPercentage: 50,
+            amount: new Amount(new RawCost(1.00)),
+            vatPercentage: new VatPercentage(new Percentage(50)),
             currency: new Currency(
                 'EUR'
             )

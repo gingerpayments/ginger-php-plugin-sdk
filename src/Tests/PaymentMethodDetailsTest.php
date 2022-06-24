@@ -59,4 +59,16 @@ class PaymentMethodDetailsTest extends TestCase
             'payment_method_details'
         );
     }
+
+    public function test_update_payment_method_details()
+    {
+        $payment_method_details = OrderStub::getValidPaymentMethodDetails();
+        self::assertSame(
+            expected: array_replace(
+                $payment_method_details->toArray(),
+                ['issuer_id' => 555]
+            ),
+            actual: $payment_method_details->update(issuer_id: 555)->toArray()
+        );
+    }
 }

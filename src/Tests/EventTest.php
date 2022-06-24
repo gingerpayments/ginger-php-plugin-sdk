@@ -6,14 +6,16 @@ use GingerPluginSdk\Entities\Event;
 use GingerPluginSdk\Exceptions\OutOfEnumException;
 use GingerPluginSdk\Exceptions\OutOfPatternException;
 use GingerPluginSdk\Properties\Amount;
+use GingerPluginSdk\Properties\Money;
+use GingerPluginSdk\Properties\RawCost;
 
 class EventTest extends \PHPUnit\Framework\TestCase
 {
     public function test_valid_event()
     {
         $event = new Event(
-            occurred: '2022-05-17T11:58:33.813534+00:00',
             event: 'new',
+            occurred: '2022-05-17T11:58:33.813534+00:00',
             source: 'google',
             noticed: '2022-05-17T11:58:33.813534+00:00',
             id: '123'
@@ -51,7 +53,7 @@ class EventTest extends \PHPUnit\Framework\TestCase
         self::assertSame(
             expected: '',
             actual: (new Event(
-                event: 'capturing',orccured:'2022-05-17T11:58:33.813534+00:00')
+                event: 'capturing', orccured: '2022-05-17T11:58:33.813534+00:00')
             )->getPropertyName()
         );
     }
@@ -73,7 +75,7 @@ class EventTest extends \PHPUnit\Framework\TestCase
                 source: '123',
                 noticed: '2022-05-17T11:58:33.813534+00:00',
                 id: '123',
-                amount: new Amount(0.30)
+                amount: new Amount(new RawCost(0.30))
             ))->toArray()
         );
     }

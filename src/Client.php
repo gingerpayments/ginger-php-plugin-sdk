@@ -16,7 +16,6 @@ use GingerPluginSdk\Exceptions\RefundFailedException;
 use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
 use GingerPluginSdk\Interfaces\ArbitraryArgumentsEntityInterface;
-use GingerPluginSdk\Interfaces\ValueInCentsInterface;
 use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\Currency;
 use RuntimeException;
@@ -121,16 +120,13 @@ class Client
      * @phpstan-param class-string<Q> $className
      * @phpstan-return Q
      */
-    public function fromArray(string $className, array $data): mixed
+    public static function fromArray(string $className, array $data): mixed
     {
         $arguments = [];
         foreach ($data as $property_name => $value) {
-            if (gettype($value) == 'integer' && $property_name !== 'quantity') {
-                $value /= 100;
-            }
             if (is_array($value)) {
-                if (!$this->isAssoc($value)) {
-                    $collection_name = self::COLLECTIONS_PATH . $this->dashesToCamelCase($property_name, true);
+                if (!self::isAssoc($value)) {
+                    $collection_name = self::COLLECTIONS_PATH . self::dashesToCamelCase($property_name, true);
                     $promise = [];
                     $item_type = $collection_name::ITEM_TYPE;
                     foreach ($value as $item) {
@@ -140,22 +136,19 @@ class Client
                             array_push($promise, $item);
                         }
                     }
-                    $arguments[$this->dashesToCamelCase($property_name)] = new $collection_name(...$promise);
+                    $arguments[self::dashesToCamelCase($property_name)] = new $collection_name(...$promise);
                 } elseif (array_key_exists(AbstractCollectionContainerInterface::class, class_implements($className))) {
-                    $arguments[] = $this->fromArray($className::ITEM_TYPE, $value);
+                    $arguments[] = self::fromArray($className::ITEM_TYPE, $value);
                 } else {
-                    $camel_property_name = $this->dashesToCamelCase($property_name);
-                    $path_to_property = self::ENTITIES_PATH . $this->dashesToCamelCase($property_name, true);;
+                    $camel_property_name = self::dashesToCamelCase($property_name);
+                    $path_to_property = self::ENTITIES_PATH . self::dashesToCamelCase($property_name, true);;
                     $arguments[$camel_property_name] = self::fromArray($path_to_property, $value);
                 }
             } else {
-                $camel_property_name = $this->dashesToCamelCase($property_name);
+                $camel_property_name = self::dashesToCamelCase($property_name);
                 //Check if this property has a pattern validation
-                $path_to_property = self::PROPERTIES_PATH . $this->dashesToCamelCase($property_name, true);
+                $path_to_property = self::PROPERTIES_PATH . self::dashesToCamelCase($property_name, true);
                 if (class_exists($path_to_property)) {
-                    if (in_array('ValueInCentsInterface', class_implements($path_to_property))) {
-                        $value /= 100;
-                    }
                     $arguments[$camel_property_name] = new $path_to_property($value);
                 } else {
                     if (array_key_exists(ArbitraryArgumentsEntityInterface::class, class_implements($className))) {
@@ -297,5 +290,9 @@ class Client
         } catch (RuntimeException $exception) {
             throw new APIException($exception->getMessage());
         }
+    }
+
+    public function updateOrder(Order $order): bool
+    {
     }
 }
