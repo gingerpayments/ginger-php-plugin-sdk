@@ -27,7 +27,7 @@ class Order implements MultiFieldsEntityInterface
     private BaseField $returnUrl;
     private BaseField $description;
     private BaseField $created;
-    private BaseField $id;
+    private BaseField|null $id;
     private BaseField $lastTransactionAdded;
     private BaseField $merchantId;
     private BaseField $modified;
@@ -56,29 +56,29 @@ class Order implements MultiFieldsEntityInterface
         if ($additionalProperties) $this->filterAdditionalProperties($additionalProperties);
     }
 
-    public function getId(): string|null
+    public function getId(): BaseField|null
     {
-        return isset($this->id) ? $this->id->get() : null;
+        return $this->id;
     }
 
-    public function getStatus(): string|null
+    public function getStatus(): Status|null
     {
-        return $this->status?->get();
+        return $this->status;
     }
 
-    public function getClient(): array
+    public function getClient(): Client
     {
-        return $this->client?->toArray();
+        return $this->client;
     }
 
-    public function getCustomer(): array
+    public function getCustomer(): Customer
     {
-        return $this->customer->toArray();
+        return $this->customer;
     }
 
-    public function getAmount(): int
+    public function getAmount(): Amount
     {
-        return $this->amount->get();
+        return $this->amount;
     }
 
     public function getOrderLines(): ?OrderLines
@@ -86,29 +86,29 @@ class Order implements MultiFieldsEntityInterface
         return $this->orderLines;
     }
 
-    public function getReturnUrl(): string
+    public function getReturnUrl(): BaseField
     {
-        return $this->returnUrl->get();
+        return $this->returnUrl;
     }
 
-    public function getWebhookUrl(): string
+    public function getWebhookUrl(): BaseField
     {
-        return $this->webhookUrl->get();
+        return $this->webhookUrl;
     }
 
-    public function getMerchantOrderId(): string
+    public function getMerchantOrderId(): BaseField
     {
-        return $this->merchantOrderId->get();
+        return $this->merchantOrderId;
     }
 
-    public function getExtra(): array
+    public function getExtra(): Extra
     {
-        return $this->extra?->toArray();
+        return $this->extra;
     }
 
-    public function getDescription(): string
+    public function getDescription(): BaseField
     {
-        return $this->description->get();
+        return $this->description;
     }
 
     public function getCurrentTransaction(): Transaction

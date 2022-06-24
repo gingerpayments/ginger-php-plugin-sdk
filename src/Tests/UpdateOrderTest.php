@@ -25,13 +25,6 @@ class UpdateOrderTest extends TestCase
         $_SERVER["HTTP_USER_AGENT"] = "PHPUnit Tests";
     }
 
-    public function test_valid_update_order_call_description()
-    {
-        $order = $this->client->sendOrder(
-            order: OrderStub::getValidOrder()
-        );
-    }
-
     public function test_update_line()
     {
         $order = OrderStub::getValidOrder();
@@ -90,6 +83,21 @@ class UpdateOrderTest extends TestCase
         self::assertEqualsCanonicalizing(
             expected: $expected,
             actual: $order->toArray()
+        );
+    }
+
+    public function test_valid_update_call()
+    {
+        $order = $this->client->sendOrder(
+            order: OrderStub::getValidOrder()
+        );
+
+        $order->getCustomer()->getAdditionalAddress()->update(['country' => 'QQ'], 1);
+        self::assertSame(
+            expected: 'QQ',
+            actual: $this->client->updateOrder(
+                order: $order
+            )->getCustomer()->getAdditionalAddress()->get(1)->getCountry()->get()
         );
     }
 }

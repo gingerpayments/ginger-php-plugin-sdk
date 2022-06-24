@@ -283,7 +283,7 @@ class Client
                 throw new InvalidOrderDataException($response["reason"]);
             }
 
-            return $this->fromArray(
+            return self::fromArray(
                 Order::class,
                 $response
             );
@@ -292,7 +292,12 @@ class Client
         }
     }
 
-    public function updateOrder(Order $order): bool
+    public function updateOrder(Order $order): Order
     {
+        $order = $this->api_client->updateOrder(
+            id: $order->getId()->get(),
+            orderData: $order->toArray()
+        );
+        return self::fromArray(Order::class, $order);
     }
 }

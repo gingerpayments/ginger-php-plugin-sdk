@@ -120,4 +120,6 @@ Initial version
 * Updated `fromArray` method.
 * Updated and Simplified `AdditionallAddressesTest`.
 * Updated and Simplified `CustomerTtest`.
+* Updated `Order` entity `get` calls.
+* Updated `Customer` entity `get` calls.
 * Eliminated `ValueIncentsInterface`.
