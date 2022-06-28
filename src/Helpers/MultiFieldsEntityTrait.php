@@ -84,4 +84,10 @@ trait MultiFieldsEntityTrait
 
         }
     }
+
+    public function update(...$attributes): static
+    {
+        $this->filterAdditionalProperties($attributes);
+        return $this;
+    }
 }

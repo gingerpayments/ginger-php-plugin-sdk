@@ -8,6 +8,9 @@ use GingerPluginSdk\Collections\OrderLines;
 use GingerPluginSdk\Entities\Line;
 use GingerPluginSdk\Properties\Amount;
 use GingerPluginSdk\Properties\Locale;
+use GingerPluginSdk\Properties\Percentage;
+use GingerPluginSdk\Properties\RawCost;
+use GingerPluginSdk\Properties\VatPercentage;
 use PHPUnit\Framework\TestCase;
 
 class OrderLinesTest extends TestCase
@@ -22,16 +25,16 @@ class OrderLinesTest extends TestCase
                 merchantOrderLineId: '0',
                 name: 'Milk',
                 quantity: 1,
-                amount: new Amount(50.5),
-                vatPercentage: 25
+                amount: new Amount(new RawCost(50.50)),
+                vatPercentage: new VatPercentage(new Percentage(25))
             ),
             new Line(
                 type: 'shipping_fee',
                 merchantOrderLineId: '0',
                 name: 'Fly',
                 quantity: 1,
-                amount: new Amount(50.5),
-                vatPercentage: 25
+                amount: new Amount(new RawCost(50.5)),
+                vatPercentage: new VatPercentage(new Percentage(25))
             ),
 
         );
