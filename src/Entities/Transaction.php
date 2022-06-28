@@ -106,9 +106,9 @@ final class Transaction implements MultiFieldsEntityInterface
         if ($additionalProperties) $this->filterAdditionalProperties($additionalProperties);
     }
 
-    public function getId(): string|bool
+    public function getId(): BaseField|bool
     {
-        return isset($this->id) ? $this->id->get() : false;
+        return $this->id ?? false;
     }
 
     public function isCapturable(): bool
@@ -128,12 +128,12 @@ final class Transaction implements MultiFieldsEntityInterface
         }
     }
 
-    public function getPaymentMethodDetails(): PaymentMethodDetails|MultiFieldsEntityInterface
+    public function getPaymentMethodDetails(): PaymentMethodDetails
     {
         return $this->paymentMethodDetails;
     }
 
-    public function getPaymentMethod(): ValidateFieldsInterface|BaseField
+    public function getPaymentMethod(): BaseField
     {
         return $this->paymentMethod;
     }

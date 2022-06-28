@@ -1,14 +1,18 @@
 <?php
 declare(strict_types=1);
+
 namespace GingerPluginSdk\Collections;
 
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 
-/** @template T */
+/**
+ * @template T
+ * @phpstan-template T
+ */
 class AbstractCollection implements MultiFieldsEntityInterface
 {
     private int $pointer = 0;
-    /** @var T[]  */
+    /** @var T[] */
     private array $items = [];
 
     /**
@@ -18,20 +22,51 @@ class AbstractCollection implements MultiFieldsEntityInterface
     {
     }
 
-    /** @param T $item */
+    /**
+     * @param array $data
+     * @param null $index
+     *
+     */
+    public function update(mixed $data, $index = null): static
+    {
+        $item = $this->get($index);
+
+        if ($item instanceof MultiFieldsEntityInterface) {
+            $item->update(...$data);
+        } else {
+            $this->items[$index] = $data;
+        }
+        return $this;
+    }
+
+    /**
+     * @param T $item
+     *
+     * @phpstan-param T $item
+     */
     public function add(mixed $item): void
     {
         $this->next();
         $this->items[$this->pointer] = $item;
     }
 
-    /** @return T|null */
+    /**
+     * @param int|string $position
+     * @return T|null
+     *
+     * @phpstan-param int|string $position
+     * @phpstan-return T|null
+     */
     public function get($position = null)
     {
         return $this->items[$position ?? $this->pointer];
     }
 
-    /** @return T[] */
+    /**
+     * @return T[]
+     *
+     * @phpstan-return T[]
+     */
     public function getAll(): array
     {
         return $this->items;

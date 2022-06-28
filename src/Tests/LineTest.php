@@ -8,6 +8,9 @@ use GingerPluginSdk\Entities\Line;
 use GingerPluginSdk\Exceptions\OutOfDiapasonException;
 use GingerPluginSdk\Exceptions\OutOfEnumException;
 use GingerPluginSdk\Properties\Amount;
+use GingerPluginSdk\Properties\Percentage;
+use GingerPluginSdk\Properties\RawCost;
+use GingerPluginSdk\Properties\VatPercentage;
 use PHPUnit\Framework\TestCase;
 
 class LineTest extends TestCase
@@ -21,8 +24,8 @@ class LineTest extends TestCase
             merchantOrderLineId: '1',
             name: 'Bottle',
             quantity: 3,
-            amount: new Amount(664),
-            vatPercentage: 25
+            amount: new Amount(new RawCost(664)),
+            vatPercentage: new VatPercentage(new Percentage(25))
         );
     }
 
@@ -48,7 +51,7 @@ class LineTest extends TestCase
             name: 'Bottle',
             quantity: 3,
             amount: new Amount(664),
-            vatPercentage: 25
+            vatPercentage: new VatPercentage(new Percentage(25))
         );
     }
 
@@ -84,7 +87,7 @@ class LineTest extends TestCase
             name: 'Home',
             quantity: 1,
             amount: new Amount(5),
-            vatPercentage: 110,
+            vatPercentage: new VatPercentage(new Percentage(110)),
         );
     }
 
@@ -97,7 +100,7 @@ class LineTest extends TestCase
             name: 'Home',
             quantity: 0,
             amount: new Amount(5),
-            vatPercentage: 20,
+            vatPercentage: new VatPercentage(new Percentage(20)),
         );
     }
 

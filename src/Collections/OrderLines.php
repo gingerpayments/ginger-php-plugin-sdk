@@ -8,6 +8,7 @@ use GingerPluginSdk\Entities\Line;
 final class OrderLines extends AbstractCollection
 {
     const ITEM_TYPE = Line::class;
+
     public function __construct(Line ...$items)
     {
         $this->propertyName = 'order_lines';
@@ -25,5 +26,11 @@ final class OrderLines extends AbstractCollection
     public function removeLine($index)
     {
         $this->remove($index);
+    }
+
+    public function updateLine(Line $line, $index = 1)
+    {
+        $this->update($line->toArray(), $index);
+        return $this;
     }
 }

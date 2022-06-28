@@ -14,18 +14,9 @@ use PHPUnit\Framework\TestCase;
 class TransactionTest extends TestCase
 {
     private Transaction $transaction;
-    private Client $client;
 
     public function setUp(): void
     {
-        $this->client = new Client(
-            new ClientOptions(
-                endpoint: $_ENV["PUBLIC_API_URL"],
-                useBundle: true,
-                apiKey: getenv('GINGER_API_KEY')
-            )
-        );
-
         $this->transaction = new Transaction(
             paymentMethod: 'ideal',
             paymentMethodDetails: new PaymentMethodDetails(
@@ -85,7 +76,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_id()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -101,7 +92,7 @@ class TransactionTest extends TestCase
 
     public function test_method_get_id()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -110,14 +101,14 @@ class TransactionTest extends TestCase
         );
         $expected = "1234567890";
         self::assertSame(
-            $real->getId(),
+            $real->getId()->get(),
             $expected
         );
     }
 
     public function test_additional_property_merchant_id()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -133,7 +124,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_created()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -150,7 +141,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_modified()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -166,7 +157,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_completed()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -182,7 +173,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_settled()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -198,7 +189,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_finalized()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -214,7 +205,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_expiration_period()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -230,7 +221,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_currency()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -247,11 +238,11 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_amount_valid()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
-                ["amount" => 12.34]
+                ["amount" => 1234]
             )
         );
         $expected = 1234;
@@ -264,7 +255,7 @@ class TransactionTest extends TestCase
     public function test_additional_property_amount_invalid()
     {
         self::expectException(OutOfDiapasonException::class);
-        $this->client->fromArray(
+        Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -275,7 +266,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_balance_valid()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -291,7 +282,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_description()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -307,7 +298,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_product_type()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -323,7 +314,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_capture_mode()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 OrderStub::getValidTransaction()->toArray(),
@@ -339,7 +330,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_credit_debit_valid()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -355,7 +346,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_payment_method_brand()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -371,7 +362,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_payment_url()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -387,7 +378,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_status_valid()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -403,7 +394,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_reason()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -419,7 +410,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_is_capturable()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -435,7 +426,7 @@ class TransactionTest extends TestCase
 
     public function test_method_is_capturable()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -451,7 +442,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_order_id()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -467,7 +458,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_channel_valid()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -483,7 +474,7 @@ class TransactionTest extends TestCase
 
     public function test_additional_property_project_type()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transaction::class,
             array_merge(
                 self::MOCK_DATA_FOR_TRANSACTION,
@@ -494,6 +485,18 @@ class TransactionTest extends TestCase
         self::assertSame(
             $real->toArray()["project_type"],
             $expected
+        );
+    }
+
+    public function test_update_transaction()
+    {
+        $transaction = OrderStub::getValidTransaction();
+        self::assertSame(
+            expected: array_replace(
+                $transaction->toArray(),
+                ['payment_method'=> 'non-existing']
+            ),
+            actual: $transaction->update(payment_method: 'non-existing')->toArray()
         );
     }
 }

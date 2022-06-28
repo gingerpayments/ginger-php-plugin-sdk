@@ -63,4 +63,15 @@ class AbstractCollectionTest extends TestCase
         );
     }
 
+    public function test_update_collection_item()
+    {
+        $abstract_collection = new AbstractCollection(propertyName: 'sore');
+        $abstract_collection->add('depression');
+        $abstract_collection->add('apple');
+        $abstract_collection->update('ddepression', 1);
+        self::assertSame(
+            expected: 'ddepression',
+            actual: $abstract_collection->get(1)
+        );
+    }
 }

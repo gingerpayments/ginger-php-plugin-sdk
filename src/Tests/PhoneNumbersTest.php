@@ -44,4 +44,20 @@ class PhoneNumbersTest extends TestCase
             'phone_numbers'
         );
     }
+
+    public function test_update_phone_numbers()
+    {
+        $phone_numbers = new PhoneNumbers();
+        $phone_numbers->addPhoneNumber('095');
+        $phone_numbers->addPhoneNumber('059');
+        self::assertEqualsCanonicalizing(
+            expected: array_replace(
+                $phone_numbers->toArray(),
+                [
+                    0 => '12312'
+                ]
+            ),
+            actual: $phone_numbers->updatePhoneNumber('12312', 1)->toArray()
+        );
+    }
 }

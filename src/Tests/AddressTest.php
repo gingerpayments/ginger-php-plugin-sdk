@@ -106,4 +106,16 @@ class AddressTest extends TestCase
             ''
         );
     }
+
+    public function test_update_address()
+    {
+        $address = OrderStub::getValidCustomerAddress();
+        self::assertSame(
+            expected: array_merge(
+                $address->toArray(),
+                ['city' => 'Kharkiv']
+            ),
+            actual: $address->update(city: 'Kharkiv')->toArray()
+    );
+    }
 }

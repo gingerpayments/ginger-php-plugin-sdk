@@ -15,7 +15,7 @@ final class Transactions extends AbstractCollection implements AbstractCollectio
         foreach ($items as $item) {
             $this->add($item);
         }
-        parent::__construct( 'transactions');
+        parent::__construct('transactions');
     }
 
     /**
@@ -28,9 +28,19 @@ final class Transactions extends AbstractCollection implements AbstractCollectio
         return $this;
     }
 
+    /**
+     * @param string $index
+     * @return $this
+     */
     public function removeTransaction(string $index): Transactions
     {
         $this->remove($index);
+        return $this;
+    }
+
+    public function updateTransaction(Transaction $transaction, $index = null): static
+    {
+        $this->update($transaction->toArray(), $index);
         return $this;
     }
 }
