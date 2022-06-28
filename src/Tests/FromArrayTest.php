@@ -273,8 +273,8 @@ final class FromArrayTest extends TestCase
                 '123456',
                 '8-800-555-35-35'
             ),
-            merchantCustomerId: '666',
             birthdate: new Birthdate('2021-07-01'),
+            merchantCustomerId: '666',
             locale: new Locale(
                 value: 'NL_en'
             )

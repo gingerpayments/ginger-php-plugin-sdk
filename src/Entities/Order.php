@@ -61,9 +61,9 @@ class Order implements MultiFieldsEntityInterface
         return $this->id;
     }
 
-    public function getStatus(): Status|null
+    public function getStatus(): Status|false
     {
-        return $this->status;
+        return $this->status ?? false;
     }
 
     public function getClient(): Client

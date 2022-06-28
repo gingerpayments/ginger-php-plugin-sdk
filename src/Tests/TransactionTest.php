@@ -101,7 +101,7 @@ class TransactionTest extends TestCase
         );
         $expected = "1234567890";
         self::assertSame(
-            $real->getId(),
+            $real->getId()->get(),
             $expected
         );
     }

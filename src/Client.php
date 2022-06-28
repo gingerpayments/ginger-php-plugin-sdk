@@ -89,16 +89,16 @@ class Client
     {
         $order = $this->getOrder(id: $id);
 
-        if ($order->getStatus() !== 'completed') {
+        if ($order->getStatus()->get() !== 'completed') {
             throw new InvalidOrderStatusException(
-                actual: $order->getStatus(), expected: 'completed'
+                actual: $order->getStatus()->get(), expected: 'completed'
             );
         }
 
         try {
             $this->api_client->captureOrderTransaction(
                 orderId: $id,
-                transactionId: $order->getCurrentTransaction()->getId()
+                transactionId: $order->getCurrentTransaction()->getId()->get()
             );
         } catch (\Exception $exception) {
             throw new CaptureFailedException($exception->getMessage());
@@ -236,7 +236,7 @@ class Client
         $response = new IdealIssuers();
         foreach ($this->api_client->getIdealIssuers() as $issuer) {
             $response->addIssuer(
-                item: $this->fromArray(Issuer::class, $issuer)
+                item: self::fromArray(Issuer::class, $issuer)
             );
         }
         return $response;
@@ -255,8 +255,8 @@ class Client
     {
         $order = $this->getOrder(id: $order_id);
 
-        if ($order->getStatus() != "completed") {
-            throw new InvalidOrderStatusException($order->getStatus(), 'completed');
+        if ($order->getStatus()->get() != "completed") {
+            throw new InvalidOrderStatusException($order->getStatus()->get(), 'completed');
         }
 
         if (!$order->getCurrentTransaction()->isCaptured()) {
