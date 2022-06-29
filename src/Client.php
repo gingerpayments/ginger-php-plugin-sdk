@@ -278,7 +278,9 @@ class Client
     public function sendOrder(Order $order): Order
     {
         try {
-            $response = $this->api_client->createOrder($order->toArray());
+            $response = $this->api_client->createOrder(
+                $order->toArray()
+            );
             if ($response["status"] == 'error') {
                 throw new InvalidOrderDataException($response["reason"]);
             }

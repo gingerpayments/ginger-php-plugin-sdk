@@ -52,24 +52,22 @@ class CreateOrderTest extends TestCase
         );
         self::assertSame(
             expected: 'id123',
-            actual: $order_with_id_property->getId()
+            actual: $order_with_id_property->getId()->get()
         );
     }
 
 
     public function test_method_get_empty_id()
     {
-        self::assertSame(
-            null,
-            OrderStub::getValidOrder()->getId()
+        self::assertNull(
+            OrderStub::getValidOrder()->getId()?->get()
         );
     }
 
     public function test_method_get_false_status()
     {
-        self::assertSame(
-            false,
-            OrderStub::getValidOrder()->getStatus()->get()
+        self::assertNull(
+            OrderStub::getValidOrder()->getStatus()?->get()
         );
     }
 
@@ -105,7 +103,7 @@ class CreateOrderTest extends TestCase
     public function test_sending()
     {
         $response = $this->client->sendOrder($this->order);
-        self::assertSame($response->getStatus()->get(), 'new');
+        self::assertSame($response->getStatus()?->get(), 'new');
     }
 
     public function test_get_property()

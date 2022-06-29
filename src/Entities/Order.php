@@ -22,17 +22,7 @@ class Order implements MultiFieldsEntityInterface
     use FieldsValidatorTrait;
     use SingleFieldTrait;
 
-    private BaseField $merchantOrderId;
-    private BaseField $webhookUrl;
-    private BaseField $returnUrl;
-    private BaseField $description;
-    private BaseField $created;
-    private BaseField|null $id;
-    private BaseField $lastTransactionAdded;
-    private BaseField $merchantId;
-    private BaseField $modified;
-    private BaseField $projectId;
-    private BaseField $completed;
+    private BaseField|null $id = null;
 
     public function __construct(
         private Currency     $currency,
@@ -61,9 +51,9 @@ class Order implements MultiFieldsEntityInterface
         return $this->id;
     }
 
-    public function getStatus(): Status|false
+    public function getStatus(): Status|null
     {
-        return $this->status ?? false;
+        return $this->status;
     }
 
     public function getClient(): Client
@@ -86,29 +76,9 @@ class Order implements MultiFieldsEntityInterface
         return $this->orderLines;
     }
 
-    public function getReturnUrl(): BaseField
-    {
-        return $this->returnUrl;
-    }
-
-    public function getWebhookUrl(): BaseField
-    {
-        return $this->webhookUrl;
-    }
-
-    public function getMerchantOrderId(): BaseField
-    {
-        return $this->merchantOrderId;
-    }
-
     public function getExtra(): Extra
     {
         return $this->extra;
-    }
-
-    public function getDescription(): BaseField
-    {
-        return $this->description;
     }
 
     public function getCurrentTransaction(): Transaction

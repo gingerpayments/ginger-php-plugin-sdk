@@ -41,6 +41,6 @@ class CaptureOrderTransactionTest extends TestCase
         $order = $this->client->sendOrder(
             order: OrderStub::getValidOrder()
         );
-        $this->client->captureOrderTransaction($order->getId());
+        $this->client->captureOrderTransaction($order->getId()->get());
     }
 }
