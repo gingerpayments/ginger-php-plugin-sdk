@@ -15,7 +15,7 @@ use GingerPluginSdk\Properties\Amount;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\Status;
 
-class Order implements MultiFieldsEntityInterface
+final class Order implements MultiFieldsEntityInterface
 {
     use HelperTrait;
     use MultiFieldsEntityTrait;
@@ -23,6 +23,7 @@ class Order implements MultiFieldsEntityInterface
     use SingleFieldTrait;
 
     private BaseField|null $id = null;
+    private BaseField|null $merchantOrderId = null;
 
     public function __construct(
         private Currency     $currency,
@@ -35,12 +36,18 @@ class Order implements MultiFieldsEntityInterface
         private ?Flags       $flags = null,
         ?string              $id = null,
         private ?Status      $status = null,
+        ?string              $merchantOrderId = null,
         mixed                ...$additionalProperties
     )
     {
         if ($id) $this->id = $this->createSimpleField(
             propertyName: 'id',
             value: $id
+        );
+
+        if ($merchantOrderId) $this->merchantOrderId = $this->createSimpleField(
+            propertyName: 'merchantOrderId',
+            value: $merchantOrderId
         );
 
         if ($additionalProperties) $this->filterAdditionalProperties($additionalProperties);
@@ -74,6 +81,11 @@ class Order implements MultiFieldsEntityInterface
     public function getOrderLines(): ?OrderLines
     {
         return $this->orderLines;
+    }
+
+    public function getMerchantOrderId(): BaseField|null
+    {
+        return $this->merchantOrderId;
     }
 
     public function getExtra(): Extra
