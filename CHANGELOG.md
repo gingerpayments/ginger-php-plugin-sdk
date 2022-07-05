@@ -119,6 +119,7 @@ Initial version
 * Updated and Simplified:
   * `AdditionallAddressesTest`.
   * `CustomerTtest`.
+  * `TransactionTest`.
 * Updated  `get` calls for such entities:
   * Order.
   * Customer.
@@ -127,4 +128,5 @@ Initial version
 * Redesigned `fromArray` method to be static.
 * Updated tests to use `fromArray` as a static method.
 * Updated `fromArray` method.
+* Implemented `merchant_order_id` property for the `Order` entity.
 * Eliminated `ValueIncentsInterface`.
