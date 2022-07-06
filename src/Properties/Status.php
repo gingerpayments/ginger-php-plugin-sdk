@@ -6,7 +6,7 @@ use GingerPluginSdk\Bases\BaseField;
 use GingerPluginSdk\Helpers\FieldsValidatorTrait;
 use GingerPluginSdk\Interfaces\ValidateFieldsInterface;
 
-class Status extends BaseField implements ValidateFieldsInterface
+final class Status extends BaseField implements ValidateFieldsInterface
 {
     use FieldsValidatorTrait;
 

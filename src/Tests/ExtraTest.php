@@ -34,4 +34,18 @@ class ExtraTest extends TestCase
             'extra'
         );
     }
+
+    public function test_update_extra()
+    {
+        $extra = new Extra(
+            ['test' => 5]
+        );
+        self::assertSame(
+            expected: array_replace(
+                $extra->toArray(),
+                ['test' => 4]
+            ),
+            actual: $extra->update(test: 4)->toArray()
+        );
+    }
 }

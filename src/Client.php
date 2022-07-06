@@ -16,7 +16,6 @@ use GingerPluginSdk\Exceptions\RefundFailedException;
 use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
 use GingerPluginSdk\Interfaces\ArbitraryArgumentsEntityInterface;
-use GingerPluginSdk\Interfaces\ValueInCentsInterface;
 use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\Currency;
 use RuntimeException;
@@ -90,16 +89,16 @@ class Client
     {
         $order = $this->getOrder(id: $id);
 
-        if ($order->getStatus() !== 'completed') {
+        if ($order->getStatus()->get() !== 'completed') {
             throw new InvalidOrderStatusException(
-                actual: $order->getStatus(), expected: 'completed'
+                actual: $order->getStatus()->get(), expected: 'completed'
             );
         }
 
         try {
             $this->api_client->captureOrderTransaction(
                 orderId: $id,
-                transactionId: $order->getCurrentTransaction()->getId()
+                transactionId: $order->getCurrentTransaction()->getId()->get()
             );
         } catch (\Exception $exception) {
             throw new CaptureFailedException($exception->getMessage());
@@ -121,16 +120,13 @@ class Client
      * @phpstan-param class-string<Q> $className
      * @phpstan-return Q
      */
-    public function fromArray(string $className, array $data): mixed
+    public static function fromArray(string $className, array $data): mixed
     {
         $arguments = [];
         foreach ($data as $property_name => $value) {
-            if (gettype($value) == 'integer' && $property_name !== 'quantity') {
-                $value /= 100;
-            }
             if (is_array($value)) {
-                if (!$this->isAssoc($value)) {
-                    $collection_name = self::COLLECTIONS_PATH . $this->dashesToCamelCase($property_name, true);
+                if (!self::isAssoc($value)) {
+                    $collection_name = self::COLLECTIONS_PATH . self::dashesToCamelCase($property_name, true);
                     $promise = [];
                     $item_type = $collection_name::ITEM_TYPE;
                     foreach ($value as $item) {
@@ -140,22 +136,19 @@ class Client
                             array_push($promise, $item);
                         }
                     }
-                    $arguments[$this->dashesToCamelCase($property_name)] = new $collection_name(...$promise);
+                    $arguments[self::dashesToCamelCase($property_name)] = new $collection_name(...$promise);
                 } elseif (array_key_exists(AbstractCollectionContainerInterface::class, class_implements($className))) {
-                    $arguments[] = $this->fromArray($className::ITEM_TYPE, $value);
+                    $arguments[] = self::fromArray($className::ITEM_TYPE, $value);
                 } else {
-                    $camel_property_name = $this->dashesToCamelCase($property_name);
-                    $path_to_property = self::ENTITIES_PATH . $this->dashesToCamelCase($property_name, true);;
+                    $camel_property_name = self::dashesToCamelCase($property_name);
+                    $path_to_property = self::ENTITIES_PATH . self::dashesToCamelCase($property_name, true);;
                     $arguments[$camel_property_name] = self::fromArray($path_to_property, $value);
                 }
             } else {
-                $camel_property_name = $this->dashesToCamelCase($property_name);
+                $camel_property_name = self::dashesToCamelCase($property_name);
                 //Check if this property has a pattern validation
-                $path_to_property = self::PROPERTIES_PATH . $this->dashesToCamelCase($property_name, true);
+                $path_to_property = self::PROPERTIES_PATH . self::dashesToCamelCase($property_name, true);
                 if (class_exists($path_to_property)) {
-                    if (in_array('ValueInCentsInterface', class_implements($path_to_property))) {
-                        $value /= 100;
-                    }
                     $arguments[$camel_property_name] = new $path_to_property($value);
                 } else {
                     if (array_key_exists(ArbitraryArgumentsEntityInterface::class, class_implements($className))) {
@@ -243,7 +236,7 @@ class Client
         $response = new IdealIssuers();
         foreach ($this->api_client->getIdealIssuers() as $issuer) {
             $response->addIssuer(
-                item: $this->fromArray(Issuer::class, $issuer)
+                item: self::fromArray(Issuer::class, $issuer)
             );
         }
         return $response;
@@ -262,8 +255,8 @@ class Client
     {
         $order = $this->getOrder(id: $order_id);
 
-        if ($order->getStatus() != "completed") {
-            throw new InvalidOrderStatusException($order->getStatus(), 'completed');
+        if ($order->getStatus()->get() != "completed") {
+            throw new InvalidOrderStatusException($order->getStatus()->get(), 'completed');
         }
 
         if (!$order->getCurrentTransaction()->isCaptured()) {
@@ -285,17 +278,28 @@ class Client
     public function sendOrder(Order $order): Order
     {
         try {
-            $response = $this->api_client->createOrder($order->toArray());
+            $response = $this->api_client->createOrder(
+                $order->toArray()
+            );
             if ($response["status"] == 'error') {
                 throw new InvalidOrderDataException($response["reason"]);
             }
 
-            return $this->fromArray(
+            return self::fromArray(
                 Order::class,
                 $response
             );
         } catch (RuntimeException $exception) {
             throw new APIException($exception->getMessage());
         }
+    }
+
+    public function updateOrder(Order $order): Order
+    {
+        $order = $this->api_client->updateOrder(
+            id: $order->getId()->get(),
+            orderData: $order->toArray()
+        );
+        return self::fromArray(Order::class, $order);
     }
 }

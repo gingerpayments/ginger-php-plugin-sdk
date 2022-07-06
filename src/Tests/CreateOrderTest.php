@@ -2,6 +2,7 @@
 
 namespace GingerPluginSdk\Tests;
 
+use GingerPluginSdk\Client;
 use GingerPluginSdk\Collections\AdditionalAddresses;
 use GingerPluginSdk\Collections\OrderLines;
 use GingerPluginSdk\Collections\PhoneNumbers;
@@ -42,7 +43,7 @@ class CreateOrderTest extends TestCase
 
     public function test_method_get_id()
     {
-        $order_with_id_property = $this->client->fromArray(
+        $order_with_id_property = Client::fromArray(
             Order::class,
             array_merge(
                 $this->order->toArray(),
@@ -51,24 +52,22 @@ class CreateOrderTest extends TestCase
         );
         self::assertSame(
             expected: 'id123',
-            actual: $order_with_id_property->getId()
+            actual: $order_with_id_property->getId()->get()
         );
     }
 
 
     public function test_method_get_empty_id()
     {
-        self::assertSame(
-            null,
-            OrderStub::getValidOrder()->getId()
+        self::assertNull(
+            OrderStub::getValidOrder()->getId()?->get()
         );
     }
 
-    public function test_method_get_empty_status()
+    public function test_method_get_false_status()
     {
-        self::assertSame(
-            null,
-            OrderStub::getValidOrder()->getStatus()
+        self::assertNull(
+            OrderStub::getValidOrder()->getStatus()?->get()
         );
     }
 
@@ -77,7 +76,7 @@ class CreateOrderTest extends TestCase
      */
     public function test_method_get_status()
     {
-        $order_with_status_property = $this->client->fromArray(
+        $order_with_status_property = Client::fromArray(
             Order::class,
             array_merge(
                 $this->order->toArray(),
@@ -86,7 +85,7 @@ class CreateOrderTest extends TestCase
         );
         self::assertSame(
             expected: 'processing',
-            actual: $order_with_status_property->getStatus()
+            actual: $order_with_status_property->getStatus()->get()
         );
     }
 
@@ -104,7 +103,7 @@ class CreateOrderTest extends TestCase
     public function test_sending()
     {
         $response = $this->client->sendOrder($this->order);
-        self::assertSame($response->getStatus(), 'new');
+        self::assertSame($response->getStatus()?->get(), 'new');
     }
 
     public function test_get_property()

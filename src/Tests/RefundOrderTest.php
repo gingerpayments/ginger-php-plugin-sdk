@@ -28,6 +28,6 @@ class RefundOrderTest extends TestCase
         self::expectException(InvalidOrderStatusException::class);
         $order_data = OrderStub::getValidOrder();
         $order_obj = $this->client->sendOrder(order: $order_data);
-        $this->client->refundOrder(order_id: $order_obj->getId());
+        $this->client->refundOrder(order_id: $order_obj->getId()?->get());
     }
 }

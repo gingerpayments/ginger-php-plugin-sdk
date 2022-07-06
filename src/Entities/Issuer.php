@@ -37,4 +37,14 @@ class Issuer implements MultiFieldsEntityInterface
             value: $name
         );
     }
+
+    /**
+     * Get current issuer id
+     *
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
 }

@@ -4,6 +4,7 @@ namespace GingerPluginSdk\Entities;
 
 use Cassandra\Date;
 use GingerPluginSdk\Bases\BaseField;
+use GingerPluginSdk\Collections\AbstractCollection;
 use GingerPluginSdk\Collections\AdditionalAddresses;
 use GingerPluginSdk\Collections\PhoneNumbers;
 use GingerPluginSdk\Helpers\FieldsValidatorTrait;
@@ -26,15 +27,15 @@ final class Customer implements MultiFieldsEntityInterface
 
     private BaseField $lastName;
     private BaseField $firstName;
-    private BaseField $gender;
+    private BaseField|null $gender;
     private BaseField $address;
     private BaseField $addressType;
-    private BaseField $country;
+    private Country $country;
     private BaseField $postalCode;
     private BaseField $houseNumber;
     private PhoneNumbers|null $phoneNumbers = null;
     private BaseField|null $merchantCustomerId = null;
-    private BaseField|null $locale = null;
+    private Locale|null $locale = null;
     private BaseField|null $ipAddress = null;
 
     /**
@@ -75,7 +76,7 @@ final class Customer implements MultiFieldsEntityInterface
         );
 
         $this->country = $country ?? new Country(
-                $this->additionalAddresses->get()->getCountry()
+                $this->additionalAddresses->get()->getCountry()->get()
             );
 
         if ($addressType) {
@@ -106,54 +107,54 @@ final class Customer implements MultiFieldsEntityInterface
         $this->setIpAddress($ipAddress);
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): BaseField
     {
-        return $this->firstName->get();
+        return $this->firstName;
     }
 
-    public function getLastName(): string
+    public function getLastName(): BaseField
     {
-        return $this->lastName->get();
+        return $this->lastName;
     }
 
-    public function getEmailAddress(): string
+    public function getEmailAddress(): EmailAddress
     {
-        return $this->emailAddress->get();
+        return $this->emailAddress;
     }
 
-    public function getAdditionalAddress(): array
+    public function getAdditionalAddress(): AdditionalAddresses
     {
-        return $this->additionalAddresses->toArray();
+        return $this->additionalAddresses;
     }
 
-    public function getBirthdate(): string
+    public function getBirthdate(): Birthdate
     {
-        return $this->birthdate ? $this->birthdate->get() : false;
+        return $this->birthdate;
     }
 
-    public function getGender(): string
+    public function getGender(): BaseField|null
     {
-        return $this->gender ? $this->birthdate->get() : false;
+        return $this->gender;
     }
 
-    public function getLocale(): ?string
+    public function getLocale(): Locale
     {
-        return $this->locale?->get();
+        return $this->locale;
     }
 
-    public function getIpAddress(): string
+    public function getIpAddress(): BaseField
     {
-        return $this->ipAddress->get();
+        return $this->ipAddress;
     }
 
-    public function getMerchantCustomerId(): ?string
+    public function getMerchantCustomerId(): BaseField
     {
-        return $this->merchantCustomerId->get();
+        return $this->merchantCustomerId;
     }
 
-    public function getPhoneNumbers(): array
+    public function getPhoneNumbers(): PhoneNumbers
     {
-        return $this->phoneNumbers->toArray();
+        return $this->phoneNumbers;
     }
 
     /**

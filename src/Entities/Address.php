@@ -19,7 +19,7 @@ final class Address implements MultiFieldsEntityInterface
 
     private BaseField $addressType;
     private BaseField $postalCode;
-    private BaseField $country;
+    private Country $country;
     private BaseField $city;
     private BaseField $street;
     private BaseField $address;
@@ -91,9 +91,9 @@ final class Address implements MultiFieldsEntityInterface
         return $this->postalCode->get();
     }
 
-     public function getCountry(): string
+     public function getCountry(): Country
     {
-        return $this->country->get();
+        return $this->country;
     }
 
      public function getCity(): ?string

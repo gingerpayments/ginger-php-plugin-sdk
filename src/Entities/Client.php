@@ -21,14 +21,14 @@ final class Client implements MultiFieldsEntityInterface
     private BaseField $pluginVersion;
 
     /**
-     * @param string $userAgent - HTTP user agent
-     * @param string $platformName - Name of the software used to connect to the API, e.g. Magento Community Edition
-     * @param string $platformVersion - Version of the software used to connect to the API, e.g. 1.9.2.2
-     * @param string $pluginName - Name of the plugin used to connect to the API, e.g. ginger-magento
-     * @param string $pluginVersion - Version of the plugin used to connect to the API, e.g. 1.0.0
+     * @param string|null $userAgent - HTTP user agent
+     * @param string|null $platformName - Name of the software used to connect to the API, e.g. Magento Community Edition
+     * @param string|null $platformVersion - Version of the software used to connect to the API, e.g. 1.9.2.2
+     * @param string|null $pluginName - Name of the plugin used to connect to the API, e.g. ginger-magento
+     * @param string|null $pluginVersion - Version of the plugin used to connect to the API, e.g. 1.0.0
      */
     public function __construct(
-        string  $userAgent,
+        string  $userAgent = null,
         ?string $platformName = null,
         ?string $platformVersion = null,
         ?string $pluginName = null,

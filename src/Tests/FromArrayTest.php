@@ -21,25 +21,17 @@ use GingerPluginSdk\Properties\Birthdate;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\EmailAddress;
 use GingerPluginSdk\Properties\Locale;
+use GingerPluginSdk\Properties\Money;
+use GingerPluginSdk\Properties\Percentage;
+use GingerPluginSdk\Properties\RawCost;
+use GingerPluginSdk\Properties\VatPercentage;
 use PHPUnit\Framework\TestCase;
 
-class FromArrayTest extends TestCase
+final class FromArrayTest extends TestCase
 {
-    private Client $client;
-
-    public function setUp(): void
-    {
-        $this->client = new \GingerPluginSdk\Client(
-            new ClientOptions(
-                endpoint: $_ENV["PUBLIC_API_URL"],
-                useBundle: true,
-                apiKey: getenv('GINGER_API_KEY'))
-        );
-    }
-
     public function test_payment_methods_details_from_array()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             PaymentMethodDetails::class,
             [
                 "issuer_id" => "15"
@@ -56,7 +48,7 @@ class FromArrayTest extends TestCase
 
     public function test_transactions_from_array()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Transactions::class,
             [
                 [
@@ -87,7 +79,7 @@ class FromArrayTest extends TestCase
         $_SERVER["HTTP_USER_AGENT"] = "PHPUnit Tests";
         $expected_order = new Order(
             currency: new Currency('EUR'),
-            amount: new Amount(500),
+            amount: new Amount(new RawCost(500)),
             transactions: new Transactions(
                 new Transaction(
                     paymentMethod: 'ideal',
@@ -127,8 +119,8 @@ class FromArrayTest extends TestCase
                 phoneNumbers: new PhoneNumbers(
                     '0951018201'
                 ),
-                merchantCustomerId: '15',
                 birthdate: new \GingerPluginSdk\Properties\Birthdate('1999-09-01'),
+                merchantCustomerId: '15',
                 locale: new Locale(
                     'Ua_ua'
 
@@ -140,14 +132,13 @@ class FromArrayTest extends TestCase
                     merchantOrderLineId: "5",
                     name: 'Milk',
                     quantity: 1,
-                    amount: new Amount(1.00),
-                    vatPercentage: 50,
+                    amount: new Amount(new RawCost(1.00)),
+                    vatPercentage: new VatPercentage(new Percentage(50)),
                     currency: new Currency(
                         'EUR'
                     )
                 )
             ),
-            description: 'Test Product',
             extra: new Extra(
                 ['sw_order_id' => "501"]
             ),
@@ -157,9 +148,10 @@ class FromArrayTest extends TestCase
                 platformVersion: '1',
                 pluginName: 'ginger-plugin-sdk',
                 pluginVersion: '1.0.0'
-            )
+            ),
+            description: 'Test Product'
         );
-        $real_order = $this->client->fromArray(
+        $real_order = Client::fromArray(
             Order::class,
             [
                 "amount" => 50000,
@@ -241,7 +233,7 @@ class FromArrayTest extends TestCase
 
     public function test_extra_from_array()
     {
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Extra::class,
             [
                 "sw_order_id" => '501'
@@ -281,13 +273,13 @@ class FromArrayTest extends TestCase
                 '123456',
                 '8-800-555-35-35'
             ),
-            merchantCustomerId: '666',
             birthdate: new Birthdate('2021-07-01'),
+            merchantCustomerId: '666',
             locale: new Locale(
                 value: 'NL_en'
             )
         );
-        $real_customer = $this->client->fromArray(
+        $real_customer = Client::fromArray(
             Customer::class,
             [
                 'additional_addresses' => [
@@ -321,9 +313,12 @@ class FromArrayTest extends TestCase
 
     public function test_customer_from_api_array()
     {
-        $order_array = $this->client->getApiClient()->getOrder($_ENV["ORDER_ID_FOR_TESTS"]);
+        $client = new Client(
+            options: OrderStub::getMockedClientOptions()
+        );
+        $order_array = $client->getApiClient()->getOrder($_ENV["ORDER_ID_FOR_TESTS"]);
         $expected = $order_array["customer"];
-        $real = $this->client->fromArray(
+        $real = Client::fromArray(
             Customer::class,
             $expected
         )->toArray();
