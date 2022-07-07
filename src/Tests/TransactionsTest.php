@@ -5,6 +5,7 @@ namespace GingerPluginSdk\Tests;
 use GingerPluginSdk\Collections\Transactions;
 use GingerPluginSdk\Entities\PaymentMethodDetails;
 use GingerPluginSdk\Entities\Transaction;
+use GingerPluginSdk\Exceptions\OutOfEnumException;
 use GingerPluginSdk\Properties\Locale;
 use PHPUnit\Framework\TestCase;
 
@@ -58,20 +59,11 @@ class TransactionsTest extends TestCase
 
     public function test_update_transactions()
     {
+        self::expectException(OutOfEnumException::class);
         $transactions = OrderStub::getValidTransactions();
+        $transactions->updateTransaction(
+            transaction: OrderStub::getValidTransaction()->update(payment_method: 'non')
 
-        self::assertSame(
-            expected: array_replace_recursive(
-                $transactions->toArray(),
-                [
-                    0 => [
-                        'payment_method' => 'non'
-                    ]
-                ]
-            ),
-            actual: $transactions->updateTransaction(
-                transaction: OrderStub::getValidTransaction()->update(payment_method: 'non')
-            )->toArray()
         );
     }
 }

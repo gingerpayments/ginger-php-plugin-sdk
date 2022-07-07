@@ -130,3 +130,7 @@ Initial version
 * Updated `fromArray` method.
 * Implemented `merchant_order_id` property for the `Order` entity.
 * Eliminated `ValueIncentsInterface`.
+
+## 1.4.1
+
+* Resolved issue when `update()` method doesn't use `validate()` method of unregistered single field properties. 
