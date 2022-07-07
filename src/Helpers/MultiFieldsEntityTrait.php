@@ -87,7 +87,14 @@ trait MultiFieldsEntityTrait
 
     public function update(...$attributes): static
     {
-        $this->filterAdditionalProperties($attributes);
+        foreach ($attributes as $key => $value) {
+            $upped_key = $this->dashesToCamelCase($key);
+            if (isset($this->$upped_key)) {
+                $this->$upped_key->set($value);
+            } else {
+                $this->filterAdditionalProperties([$key => $value]);
+            }
+        }
         return $this;
     }
 }

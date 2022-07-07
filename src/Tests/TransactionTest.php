@@ -5,9 +5,7 @@ namespace GingerPluginSdk\Tests;
 use GingerPluginSdk\Client;
 use GingerPluginSdk\Entities\PaymentMethodDetails;
 use GingerPluginSdk\Entities\Transaction;
-use GingerPluginSdk\Exceptions\OutOfDiapasonException;
 use GingerPluginSdk\Exceptions\OutOfEnumException;
-use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\EmailAddress;
 use PHPUnit\Framework\TestCase;
 
@@ -112,9 +110,18 @@ class TransactionTest extends TestCase
         self::assertSame(
             expected: array_replace(
                 $transaction->toArray(),
-                ['payment_method'=> 'non-existing']
+                ['payment_method' => 'ideal']
             ),
-            actual: $transaction->update(payment_method: 'non-existing')->toArray()
+            actual: $transaction->update(payment_method: 'ideal')->toArray()
+        );
+    }
+
+    public function test_update_property_with_custom_condition()
+    {
+        $transaction = OrderStub::getValidTransaction();
+        self::expectException(OutOfEnumException::class);
+        $transaction->update(
+            payment_method: 'non-existing'
         );
     }
 }
