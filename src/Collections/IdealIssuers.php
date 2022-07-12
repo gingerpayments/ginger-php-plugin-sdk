@@ -17,13 +17,15 @@ class IdealIssuers extends AbstractCollection
         parent::__construct($this->propertyName);
     }
 
-    public function addIssuer(Issuer $item)
+    public function addIssuer(Issuer $item): static
     {
         $this->add($item);
+        return $this;
     }
 
-    public function removeIssuer($index)
+    public function removeIssuer($index): static
     {
         $this->remove($index);
+        return $this;
     }
 }

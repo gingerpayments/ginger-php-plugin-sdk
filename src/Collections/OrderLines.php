@@ -18,6 +18,11 @@ final class OrderLines extends AbstractCollection
         parent::__construct('order_lines');
     }
 
+    public function getLine($index = null): Line
+    {
+        return $this->get($index);
+    }
+
     public function addLine(Line $item)
     {
         $this->add($item);

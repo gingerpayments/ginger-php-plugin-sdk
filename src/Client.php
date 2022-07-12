@@ -9,7 +9,6 @@ use GingerPluginSdk\Entities\Issuer;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Exceptions\APIException;
 use GingerPluginSdk\Exceptions\CaptureFailedException;
-use GingerPluginSdk\Exceptions\InvalidOrderDataException;
 use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Exceptions\OrderNotFoundException;
 use GingerPluginSdk\Exceptions\RefundFailedException;
@@ -268,11 +267,9 @@ class Client
 
     /**
      * Send POST request for API to create an order resource.
-     * If order data is invalid `InvalidOrderDataException` will be thrown
      *
      * @param Order $order
      * @return Order
-     * @throws \GingerPluginSdk\Exceptions\InvalidOrderDataException
      * @throws \GingerPluginSdk\Exceptions\APIException
      */
     public function sendOrder(Order $order): Order
@@ -281,9 +278,6 @@ class Client
             $response = $this->api_client->createOrder(
                 $order->toArray()
             );
-            if ($response["status"] == 'error') {
-                throw new InvalidOrderDataException($response["reason"]);
-            }
 
             return self::fromArray(
                 Order::class,

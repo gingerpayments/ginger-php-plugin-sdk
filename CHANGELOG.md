@@ -134,3 +134,11 @@ Initial version
 ## 1.4.1
 
 * Resolved issue when `update()` method doesn't use `validate()` method of unregistered single field properties. 
+
+## 1.4.2
+
+* Eliminated `InvalidOrderDataException`. 
+* Covered by tests: 
+  * `addIssuer()`
+  * `removeIssuer()`
+* Updated `remove()` method from `AbstractCollection`.

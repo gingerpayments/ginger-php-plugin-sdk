@@ -3,8 +3,6 @@
 namespace GingerPluginSdk\Tests;
 
 use GingerPluginSdk\Client;
-use GingerPluginSdk\Entities\Order;
-use GingerPluginSdk\Exceptions\InvalidOrderDataException;
 use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Properties\ClientOptions;
 use PHPUnit\Framework\TestCase;

@@ -53,4 +53,35 @@ class IdealIssuersTest extends TestCase
             actual: $this->issuers->getPropertyName()
         );
     }
+
+    public function test_add_issuer()
+    {
+        self::assertEqualsCanonicalizing(
+            [
+                'id' => '1',
+                'name' => 'test_issuer',
+                'list_type' => 'test'
+
+            ],
+            $this->issuers->addIssuer(item: new Issuer(
+                id: '1',
+                listType: 'test',
+                name: 'test_issuer'
+            ))->get(3)->toArray()
+        );
+    }
+
+    public function test_remove_issuer()
+    {
+        self::assertEqualsCanonicalizing(
+            [
+                [
+                    "id" => "ak12",
+                    "list_type" => "admin",
+                    "name" => "bill"
+                ]
+            ],
+            $this->issuers->removeIssuer(2)->toArray()
+        );
+    }
 }

@@ -80,6 +80,11 @@ class AbstractCollection implements MultiFieldsEntityInterface
     public function remove($index): static
     {
         unset($this->items[$index]);
+
+        if ($this->count() == 1) {
+            return $this;
+        }
+
         for ($i = $index; $i + 1 <= $this->count(); $i++) {
 
             $this->items[$i] = $this->items[$i + 1];
