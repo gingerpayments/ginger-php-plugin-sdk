@@ -65,7 +65,9 @@ class AdditionalAddressesTest extends TestCase
         self::assertSame(
             expected: array_replace(
                 OrderStub::getValidAdditionalAddresses()->toArray(),
-                [OrderStub::getValidCustomerAddress()->update(city: 'Kharkiv')->toArray()]
+                [
+                    OrderStub::getValidCustomerAddress()->update(city: 'Kharkiv')->toArray()
+                ]
             ),
             actual: OrderStub::getValidAdditionalAddresses()->update(['city' => 'Kharkiv'], 1)->toArray()
         );

@@ -2,8 +2,15 @@
 
 namespace GingerPluginSdk\Helpers;
 
+use GingerPluginSdk\Collections\AbstractCollection;
+
 trait HelperTrait
 {
+    public static function isCollection(string $className): bool
+    {
+        return array_key_exists(AbstractCollection::class, class_parents($className));
+    }
+
     public function calculateValueInCents($value): int
     {
         return round((float)$value * 100);

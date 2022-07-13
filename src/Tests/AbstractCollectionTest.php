@@ -2,6 +2,7 @@
 
 namespace GingerPluginSdk\Tests;
 
+use GingerPluginSdk\Bases\BaseField;
 use GingerPluginSdk\Collections\AbstractCollection;
 use PHPUnit\Framework\TestCase;
 
