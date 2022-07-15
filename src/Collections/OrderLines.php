@@ -26,14 +26,16 @@ final class OrderLines extends AbstractCollection
     public function addLine(Line $item)
     {
         $this->add($item);
+        return $this;
     }
 
     public function removeLine($index)
     {
         $this->remove($index);
+        return $this;
     }
 
-    public function updateLine(Line $line, $index = 1)
+    public function updateLine(Line $line, $index = 0)
     {
         $this->update($line->toArray(), $index);
         return $this;

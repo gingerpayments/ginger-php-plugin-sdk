@@ -84,4 +84,42 @@ class OrderLinesTest extends TestCase
             'order_lines'
         );
     }
+
+    public function test_add_line()
+    {
+        $lines = new OrderLines();
+        $line = new Line(
+            type: 'physical',
+            merchantOrderLineId: '666',
+            name: 'Quilvier',
+            quantity: 5001,
+            amount: new Amount(new RawCost(2.50))
+        );
+        self::assertEqualsCanonicalizing(
+            expected: [
+                'type' => 'physical',
+                'merchant_order_line_id' => '666',
+                'name' => 'Quilvier',
+                'quantity' => 5001,
+                'amount' => 250
+            ],
+            actual: $lines->addLine(item: $line)->get()->toArray()
+        );
+    }
+
+    public function test_remove_line()
+    {
+        $lines = new OrderLines(new Line(
+            type: 'physical',
+            merchantOrderLineId: '666',
+            name: 'Quilvier',
+            quantity: 5001,
+            amount: new Amount(new RawCost(2.50))
+        ));
+
+        self::assertEqualsCanonicalizing(
+            expected: [],
+            actual: $lines->removeLine(0)->getAll()
+        );
+    }
 }

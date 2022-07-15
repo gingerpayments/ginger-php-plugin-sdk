@@ -32,7 +32,7 @@ class AbstractCollectionTest extends TestCase
         $abstract_collection = new AbstractCollection(propertyName: 'sore');
         $abstract_collection->add('depression');
         self::assertSame(
-            expected: 1,
+            expected: 0,
             actual: $abstract_collection->getCurrentPointer()
         );
     }
@@ -43,7 +43,7 @@ class AbstractCollectionTest extends TestCase
         $abstract_collection->add('depression');
         $abstract_collection->add('obsession');
         $abstract_collection->add('all_will_be_fine');
-        $abstract_collection->remove($abstract_collection->getCurrentPointer() - 1);
+        $abstract_collection->remove($abstract_collection->getCurrentPointer());
         self::assertSame(
             expected: 2,
             actual: $abstract_collection->count()
@@ -56,8 +56,8 @@ class AbstractCollectionTest extends TestCase
         $abstract_collection->add('depression');
         $abstract_collection->add('obsession');
         $abstract_collection->add('all_will_be_fine');
-        $expected = $abstract_collection->get(2);
-        $abstract_collection->remove(1);
+        $expected = $abstract_collection->get(1);
+        $abstract_collection->remove(0);
         self::assertSame(
             expected: $expected,
             actual: $abstract_collection->first()
@@ -73,6 +73,20 @@ class AbstractCollectionTest extends TestCase
         self::assertSame(
             expected: 'ddepression',
             actual: $abstract_collection->get(1)
+        );
+    }
+
+    public function test_get_all()
+    {
+        $std_object = new \stdClass();
+        $std_object->check = true;
+        $collection = new AbstractCollection('test');
+        $collection->add($std_object);
+        self::assertSame(
+            expected: [
+                $std_object
+            ],
+            actual: $collection->getAll()
         );
     }
 }

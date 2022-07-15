@@ -140,8 +140,18 @@ Initial version
 * Eliminated `InvalidOrderDataException`.
 * Eliminated `AbstractCollectionContainerInterface`.
 * Covered by tests:
-    * `addIssuer()`
-    * `removeIssuer()`
-* Updated `remove()` method from `AbstractCollection`.
+    * `addIssuer()`;
+    * `removeIssuer()`;
+    * `addAddress()`;
+    * `removeAddress`;
+    * `addLine()`;
+    * `removeLine()`;
+* Update tests:
+  * `AbstractCollectionTest`.
+  * `UpdateOrderTest`.
+  * `PhoneNumberTest`.
+* Updated `OrderLines` collection.
+* Updated few methods `AbstractCollection`.
 * Updated `fromArray()`.
 * Implemented `isCollection` method for `HelperTrait`.
+* Implemented `reindex()`, `resetPointer` method for `AbstractCollection`.

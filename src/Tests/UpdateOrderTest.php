@@ -115,7 +115,7 @@ class UpdateOrderTest extends TestCase
         );
         self::assertSame(
             200,
-            $order->getOrderLines()->getLine(1)->getAmount(),
+            $order->getOrderLines()->getLine(0)->getAmount(),
         );
     }
 

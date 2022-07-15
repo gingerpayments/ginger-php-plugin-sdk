@@ -28,4 +28,5 @@ class IdealIssuers extends AbstractCollection
         $this->remove($index);
         return $this;
     }
+
 }

@@ -69,7 +69,47 @@ class AdditionalAddressesTest extends TestCase
                     OrderStub::getValidCustomerAddress()->update(city: 'Kharkiv')->toArray()
                 ]
             ),
-            actual: OrderStub::getValidAdditionalAddresses()->update(['city' => 'Kharkiv'], 1)->toArray()
+            actual: OrderStub::getValidAdditionalAddresses()->update(['city' => 'Kharkiv'], 0)->toArray()
+        );
+    }
+
+    public function test_add_address()
+    {
+        $additional_addresses = new AdditionalAddresses();
+        $address = new Address(
+            addressType: 'customer',
+            postalCode: '1',
+            country: new Country('UA')
+        );
+        self::assertSame(
+            expected: [
+                'address_type' => 'customer',
+                'postal_code' => '1',
+                'country' => 'UA',
+                'address' => '1'
+            ],
+            actual: $additional_addresses->addAddress($address)->get()->toArray()
+        );
+    }
+
+    public function test_remove_address()
+    {
+        $additional_addresses = new AdditionalAddresses(OrderStub::getValidCustomerAddress());
+        $additional_addresses->addAddress(
+            new Address(
+                addressType: 'customer',
+                postalCode: '1',
+                country: new Country('UA')
+            )
+        );
+        self::assertSame(
+            expected: [
+                'address_type' => 'customer',
+                'postal_code' => '1',
+                'country' => 'UA',
+                'address' => '1'
+            ],
+            actual: $additional_addresses->removeAddress(0)->get()->toArray()
         );
     }
 }

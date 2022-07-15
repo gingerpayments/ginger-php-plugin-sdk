@@ -57,7 +57,7 @@ class PhoneNumbersTest extends TestCase
                     0 => '12312'
                 ]
             ),
-            actual: $phone_numbers->updatePhoneNumber('12312', 1)->toArray()
+            actual: $phone_numbers->updatePhoneNumber('12312', 0)->toArray()
         );
     }
 }
