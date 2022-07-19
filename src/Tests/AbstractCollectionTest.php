@@ -89,4 +89,21 @@ class AbstractCollectionTest extends TestCase
             actual: $collection->getAll()
         );
     }
+
+    public function test_different_item_types_not_allowed_object()
+    {
+        self::expectException(\InvalidArgumentException::class);
+        $collection = new AbstractCollection('testing',);
+        $collection->add(OrderStub::getValidLine());
+        $collection->add(OrderStub::getValidCustomerAddress());
+    }
+
+    public function test_different_item_types_not_allowed_primitive()
+    {
+        self::expectException(\InvalidArgumentException::class);
+        $collection = new AbstractCollection('testing');
+        $collection->add('1');
+        $collection->add(1);
+    }
+
 }

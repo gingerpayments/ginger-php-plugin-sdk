@@ -2,7 +2,6 @@
 
 namespace GingerPluginSdk\Tests;
 
-use GingerPluginSdk\Client;
 use GingerPluginSdk\Collections\AdditionalAddresses;
 use GingerPluginSdk\Collections\OrderLines;
 use GingerPluginSdk\Collections\PhoneNumbers;
@@ -91,10 +90,10 @@ class OrderStub
                 '666666666'
             ),
             birthdate: new Birthdate('1999-09-01'),
-            merchantCustomerId: '15',
             locale: new Locale(
                 'Ua_ua'
-            )
+            ),
+            merchantCustomerId: '15'
         );
     }
 

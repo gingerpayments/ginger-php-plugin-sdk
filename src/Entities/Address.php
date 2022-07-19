@@ -81,9 +81,9 @@ final class Address implements MultiFieldsEntityInterface
 
     }
 
-     public function getAddressType(): string
+     public function getAddressType(): BaseField
     {
-        return $this->addressType->get();
+        return $this->addressType;
     }
 
      public function getPostalCode(): string

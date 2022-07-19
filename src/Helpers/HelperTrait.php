@@ -6,6 +6,18 @@ use GingerPluginSdk\Collections\AbstractCollection;
 
 trait HelperTrait
 {
+    public static function isSameType($argument1, $argument2): bool
+    {
+        if (is_object($argument1)) {
+            if (is_object($argument2)) {
+                return get_class($argument1) == get_class($argument2);
+            }
+            return false;
+        }
+
+        return gettype($argument1) == gettype($argument2);
+    }
+
     public static function isCollection(string $className): bool
     {
         return array_key_exists(AbstractCollection::class, class_parents($className));

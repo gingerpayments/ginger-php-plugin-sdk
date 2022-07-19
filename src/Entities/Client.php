@@ -57,28 +57,28 @@ final class Client implements MultiFieldsEntityInterface
         );
     }
 
-    public function getUserAgent(): string
+    public function getUserAgent(): BaseField
     {
-        return $this->userAgent->get();
+        return $this->userAgent;
     }
 
-    public function getPlatformName(): string
+    public function getPlatformName(): BaseField
     {
-        return $this->pluginName->get();
+        return $this->platformName;
     }
 
-    public function getPlatformVersion(): string
+    public function getPlatformVersion(): BaseField
     {
-        return $this->platformVersion->get();
+        return $this->platformVersion;
     }
 
-    public function getPluginName(): string
+    public function getPluginName(): BaseField
     {
-        return $this->pluginName->get();
+        return $this->pluginName;
     }
 
-    public function getPluginVersion(): string
+    public function getPluginVersion(): BaseField
     {
-        return $this->pluginVersion->get();
+        return $this->pluginVersion;
     }
 }

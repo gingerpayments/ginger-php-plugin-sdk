@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace GingerPluginSdk\Collections;
 
+use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 
 /**
@@ -46,9 +47,13 @@ class AbstractCollection implements MultiFieldsEntityInterface
      */
     public function add(mixed $item): void
     {
-        if ($this->count() > 0) $this->next();
+        if ($this->count() > 0) {
+            if (!HelperTrait::isSameType($this->get(), $item)) {
+                throw new \InvalidArgumentException("Provided argument is not same type as collection already have.");
+            }
+            $this->next();
+        }
         $this->items[$this->pointer] = $item;
-
     }
 
     /**
@@ -71,11 +76,6 @@ class AbstractCollection implements MultiFieldsEntityInterface
     public function getAll(): array
     {
         return $this->items;
-    }
-
-    public function getField($fieldName): mixed
-    {
-        return $this->items[$fieldName] ?? "";
     }
 
     private function reindex()

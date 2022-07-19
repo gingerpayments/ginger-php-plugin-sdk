@@ -139,6 +139,9 @@ Initial version
 
 * Eliminated `InvalidOrderDataException`.
 * Eliminated `AbstractCollectionContainerInterface`.
+* Eliminated `getField()` method.
+* Eliminated enumeration for payment method name in `Transaction` entity.
+* Eliminated enumeration for customer type in `Customer` entity.
 * Covered by tests:
     * `addIssuer()`;
     * `removeIssuer()`;
@@ -146,6 +149,26 @@ Initial version
     * `removeAddress`;
     * `addLine()`;
     * `removeLine()`;
+    * `removePhoneNumber()`;
+    * `getAddressType()`;
+    * `updateTransaction()`;
+    * `addTransaction()`;
+    * `removeTransaction()`;
+    * `getUserAgent()`;
+    * `getPlatformName()`;
+    * `getPlatformVersion()`;
+    * `getPluginName()`;
+    * `getPluginVersion()`;
+    * `getMerchantOrderId()`;
+    * `getType()`;
+    * `isCaptured()`;
+    * `getPaymentMethodDetails()`;
+    * `getVatPercentage()`;
+    * `getCurrency()`;
+    * `getMerchantOrderLineId()`;
+    * `getName()`;
+    * `getQuantity()`;
+    * `getId()`;
 * Update tests:
   * `AbstractCollectionTest`.
   * `UpdateOrderTest`.
@@ -153,5 +176,8 @@ Initial version
 * Updated `OrderLines` collection.
 * Updated few methods `AbstractCollection`.
 * Updated `fromArray()`.
-* Implemented `isCollection` method for `HelperTrait`.
-* Implemented `reindex()`, `resetPointer` method for `AbstractCollection`.
+* Updated `update()` method from `MultiFieldEntityTrait`.
+* Implemented `isCollection(), isSameType()` method for `HelperTrait`.
+* Implemented check to avoid different type of items in `AbstractCollection`.
+* Implemented `reindex()`, `resetPointer()` method for `AbstractCollection`.
+* Implemented `OrderTest`.

@@ -60,4 +60,26 @@ class PhoneNumbersTest extends TestCase
             actual: $phone_numbers->updatePhoneNumber('12312', 0)->toArray()
         );
     }
+
+    public function test_remove_number()
+    {
+        $phones = new PhoneNumbers();
+        $phones->add('102021');
+        $phones->add('333221');
+        self::assertSame(
+            expected: 2,
+            actual: $phones->count()
+        );
+
+        $phones->removePhoneNumber(0);
+        self::assertSame(
+            expected: '333221',
+            actual: $phones->get(0)
+        );
+
+        self::assertSame(
+            expected: 1,
+            actual: $phones->count()
+        );
+    }
 }
