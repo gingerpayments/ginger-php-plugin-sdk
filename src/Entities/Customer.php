@@ -35,7 +35,6 @@ final class Customer implements MultiFieldsEntityInterface
     private BaseField $houseNumber;
     private PhoneNumbers|null $phoneNumbers = null;
     private BaseField|null $merchantCustomerId = null;
-    private Locale|null $locale = null;
     private BaseField|null $ipAddress = null;
 
     /**
@@ -62,6 +61,8 @@ final class Customer implements MultiFieldsEntityInterface
         ?Country                    $country = null,
         ?string                     $ipAddress = null,
         ?string                     $addressType = null,
+        private ?Locale             $locale = null,
+        ?string                     $merchantCustomerId = null,
         mixed                       ...$additionalProperties
     )
     {
@@ -80,17 +81,13 @@ final class Customer implements MultiFieldsEntityInterface
             );
 
         if ($addressType) {
-            $this->addressType = $this->createEnumeratedField(
+            $this->addressType = $this->createSimpleField(
+            //TODO: add schema enum validation
                 propertyName: 'address_type',
                 value: $addressType,
-                // enum: $this->getJsonSchemaFromAPI('order')
-                enum: [
-                    'customer',
-                    'billing',
-                    'delivery'
-                ]
             );
         }
+
 
         if ($gender) {
             $this->gender = $this->createEnumeratedField(
@@ -101,6 +98,13 @@ final class Customer implements MultiFieldsEntityInterface
                 ]
             );
         }
+        if ($merchantCustomerId) {
+            $this->merchantCustomerId = $this->createSimpleField(
+                propertyName: 'merchant_customer_id',
+                value: $merchantCustomerId
+            );
+        }
+
         if ($additionalProperties) $this->filterAdditionalProperties($additionalProperties);
 
         if ($phoneNumbers) $this->setPhoneNumbers($phoneNumbers);

@@ -83,7 +83,7 @@ final class Order implements MultiFieldsEntityInterface
         return $this->orderLines;
     }
 
-    public function getMerchantOrderId(): BaseField|null
+    public function getMerchantOrderId(): ?BaseField
     {
         return $this->merchantOrderId;
     }

@@ -10,11 +10,6 @@ trait MultiFieldsEntityTrait
 {
     use HelperTrait;
 
-    public function getField($fieldName): mixed
-    {
-        return $this->$fieldName ?? null;
-    }
-
 
     public function getPropertyName(): string
     {
@@ -89,8 +84,14 @@ trait MultiFieldsEntityTrait
     {
         foreach ($attributes as $key => $value) {
             $upped_key = $this->dashesToCamelCase($key);
+            // Block if we need just update key property with a new value.
             if (isset($this->$upped_key)) {
-                $this->$upped_key->set($value);
+                if ($this->$upped_key instanceof MultiFieldsEntityInterface) {
+                    $this->$upped_key->update($value);
+                } else {
+                    $this->$upped_key->set($value);
+                }
+                // Block if we need to assign key property with updated value.
             } else {
                 $this->filterAdditionalProperties([$key => $value]);
             }

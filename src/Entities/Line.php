@@ -89,9 +89,9 @@ final class Line implements MultiFieldsEntityInterface
         return $this->url->get();
     }
 
-    public function getVatPercentage(): ?int
+    public function getVatPercentage(): ?BaseField
     {
-        return $this->vatPercentage->get();
+        return $this->vatPercentage;
     }
 
     public function getDiscountRate(): ?int
@@ -104,29 +104,29 @@ final class Line implements MultiFieldsEntityInterface
         return $this->amount->get();
     }
 
-    public function getCurrency(): string
+    public function getCurrency(): ?    BaseField
     {
-        return $this->currency->get();
+        return $this->currency;
     }
 
-    public function getMerchantOrderLineId(): string
+    public function getMerchantOrderLineId(): BaseField
     {
-        return $this->merchantOrderLineId->get();
+        return $this->merchantOrderLineId;
     }
 
-    public function getName(): string
+    public function getName(): BaseField
     {
-        return $this->name->get();
+        return $this->name;
     }
 
-    public function getQuantity(): int
+    public function getQuantity(): BaseField
     {
-        return $this->quantity->get();
+        return $this->quantity;
     }
 
-    public function getType(): string
+    public function getType(): BaseField
     {
-        return $this->type->get();
+        return $this->type;
     }
 
     /**

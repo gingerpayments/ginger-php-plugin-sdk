@@ -45,17 +45,6 @@ class TransactionTest extends TestCase
         );
     }
 
-    public function test_payment_method_out_of_enum()
-    {
-        self::expectException(OutOfEnumException::class);
-        $test = new Transaction(
-            paymentMethod: 'invalid_type',
-            paymentMethodDetails: new PaymentMethodDetails(
-                issuer_id: 'test'
-            )
-        );
-    }
-
     public function test_get_property()
     {
         self::assertSame(
@@ -116,12 +105,26 @@ class TransactionTest extends TestCase
         );
     }
 
-    public function test_update_property_with_custom_condition()
+    public function test_is_captured()
     {
         $transaction = OrderStub::getValidTransaction();
-        self::expectException(OutOfEnumException::class);
-        $transaction->update(
-            payment_method: 'non-existing'
+        self::assertSame(
+            expected: false,
+            actual: $transaction->isCaptured()
+        );
+    }
+
+    public function test_get_payment_method_details()
+    {
+        $transaction = new Transaction(
+            paymentMethod: 'ideal',
+            paymentMethodDetails: new PaymentMethodDetails(
+                issuer_id: 'AJ12J'
+            )
+        );
+        self::assertSame(
+            expected: "AJ12J",
+            actual: $transaction->getPaymentMethodDetails()->toArray()['issuer_id']
         );
     }
 }

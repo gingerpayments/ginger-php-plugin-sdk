@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace GingerPluginSdk\Collections;
 
+use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 
 /**
@@ -46,18 +47,23 @@ class AbstractCollection implements MultiFieldsEntityInterface
      */
     public function add(mixed $item): void
     {
-        $this->next();
+        if ($this->count() > 0) {
+            if (!HelperTrait::isSameType($this->get(), $item)) {
+                throw new \InvalidArgumentException("Provided argument is not same type as collection already have.");
+            }
+            $this->next();
+        }
         $this->items[$this->pointer] = $item;
     }
 
     /**
-     * @param int|string $position
+     * @param int|string|null $position
      * @return T|null
      *
      * @phpstan-param int|string $position
      * @phpstan-return T|null
      */
-    public function get($position = null)
+    public function get(?int $position = null)
     {
         return $this->items[$position ?? $this->pointer];
     }
@@ -72,26 +78,32 @@ class AbstractCollection implements MultiFieldsEntityInterface
         return $this->items;
     }
 
-    public function getField($fieldName): mixed
+    private function reindex()
     {
-        return $this->items[$fieldName] ?? "";
+        $old_items = $this->items;
+        $this->clear();
+        $this->resetPointer();
+        foreach ($old_items as $key => $item) {
+            $this->add($item);
+        }
     }
 
     public function remove($index): static
     {
         unset($this->items[$index]);
-        for ($i = $index; $i + 1 <= $this->count(); $i++) {
-
-            $this->items[$i] = $this->items[$i + 1];
-        }
-        unset($this->items[$this->count()]);
-
+        $this->reindex();
         return $this;
     }
 
     public function getCurrentPointer(): int
     {
         return $this->pointer;
+    }
+
+    private function resetPointer(): static
+    {
+        $this->pointer = 0;
+        return $this;
     }
 
     public function toArray(): array
@@ -124,7 +136,7 @@ class AbstractCollection implements MultiFieldsEntityInterface
 
     public function first()
     {
-        return $this->items[1];
+        return $this->items[0];
     }
 
     public function getPropertyName(): string

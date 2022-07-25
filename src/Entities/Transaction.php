@@ -53,26 +53,10 @@ final class Transaction implements MultiFieldsEntityInterface
 
     )
     {
-        $this->paymentMethod = $this->createEnumeratedField(
+        $this->paymentMethod = $this->createSimpleField(
             propertyName: 'payment_method',
-            value: $paymentMethod,
-            enum: [
-                "afterpay",
-                "amex",
-                "apple-pay",
-                "bancontact",
-                "bank-transfer",
-                "credit-card",
-                "google-pay",
-                "ideal",
-                "klarna-direct-debit",
-                "klarna-pay-later",
-                "klarna-pay-now",
-                "payconiq",
-                "paypal",
-                "sepa-direct-debit",
-                "sofort"
-            ]
+            value: $paymentMethod
+            //TODO: implement schema enum sync-up
         );
         $this->paymentMethodDetails = $paymentMethodDetails ?: new PaymentMethodDetails();
 

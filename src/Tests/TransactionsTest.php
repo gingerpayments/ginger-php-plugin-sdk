@@ -59,11 +59,47 @@ class TransactionsTest extends TestCase
 
     public function test_update_transactions()
     {
-        self::expectException(OutOfEnumException::class);
         $transactions = OrderStub::getValidTransactions();
         $transactions->updateTransaction(
-            transaction: OrderStub::getValidTransaction()->update(payment_method: 'non')
+            transaction: OrderStub::getValidTransaction()->update(payment_method: '999')
+        );
+        self::assertSame(
+            expected: '999',
+            actual: $transactions->get()->getPaymentMethod()->get()
+        );
 
+    }
+
+    public function test_add_transaction()
+    {
+        $transactions = OrderStub::getValidTransactions();
+        $transactions->addTransaction(new Transaction(
+            paymentMethod: 'amex'
+        ));
+        self::assertSame(
+            expected: 'amex',
+            actual: $transactions->get(1)->getPaymentMethod()->get()
+        );
+    }
+
+    public function test_remove_transaction()
+    {
+        $transactions = OrderStub::getValidTransactions();
+        $transactions->addTransaction(new Transaction(
+            paymentMethod: 'amex'
+        ));
+        self::assertSame(
+            expected: 2,
+            actual: $transactions->count()
+        );
+        $transactions->removeTransaction(0);
+        self::assertSame(
+            expected: 'amex',
+            actual: $transactions->get()->getPaymentMethod()->get()
+        );
+        self::assertSame(
+            expected: 1,
+            actual: $transactions->count()
         );
     }
 }

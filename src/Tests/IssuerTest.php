@@ -32,4 +32,15 @@ class IssuerTest extends TestCase
             ))->toArray()
         );
     }
+
+    public function test_get_id()
+    {
+        $issuer = new Issuer(
+            id: '1',listType: 'enigma',name: 'bl'
+        );
+        self::assertSame(
+            expected: '1',
+            actual: $issuer->getId()
+        );
+    }
 }
