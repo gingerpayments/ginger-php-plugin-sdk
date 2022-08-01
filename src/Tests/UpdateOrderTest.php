@@ -3,6 +3,7 @@
 namespace GingerPluginSdk\Tests;
 
 use GingerPluginSdk\Client;
+use GingerPluginSdk\Collections\AbstractCollection;
 use GingerPluginSdk\Entities\Line;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Properties\Amount;

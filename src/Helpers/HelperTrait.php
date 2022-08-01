@@ -6,16 +6,14 @@ use GingerPluginSdk\Collections\AbstractCollection;
 
 trait HelperTrait
 {
-    public static function isSameType($argument1, $argument2): bool
+    public static function isSameType($observer, $reference): bool
     {
-        if (is_object($argument1)) {
-            if (is_object($argument2)) {
-                return get_class($argument1) == get_class($argument2);
-            }
-            return false;
+        if (!is_object($observer)) {
+            return gettype($observer) == gettype($reference);
         }
 
-        return gettype($argument1) == gettype($argument2);
+        return is_object($reference) && (get_class($observer) == get_class($reference));
+
     }
 
     public static function isCollection(string $className): bool
