@@ -181,3 +181,5 @@ Initial version
 * Implemented check to avoid different type of items in `AbstractCollection`.
 * Implemented `reindex()`, `resetPointer()` method for `AbstractCollection`.
 * Implemented `OrderTest`.
+* Implemented support for webhook and return url in `Order` Entity.
+* Implemented `getPaymentUrl()` for `Order` and `Transaction` Entity.

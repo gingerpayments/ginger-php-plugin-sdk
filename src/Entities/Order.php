@@ -23,6 +23,8 @@ final class Order implements MultiFieldsEntityInterface
     use SingleFieldTrait;
 
     private BaseField|null $id = null;
+    private BaseField|null $webhookUrl = null;
+    private BaseField|null $returnUrl = null;
     private BaseField|null $merchantOrderId = null;
 
     public function __construct(
@@ -33,6 +35,8 @@ final class Order implements MultiFieldsEntityInterface
         private ?OrderLines  $orderLines = null,
         private ?Extra       $extra = null,
         private ?Client      $client = null,
+        string               $webhook_url = null,
+        string               $return_url = null,
         private ?Flags       $flags = null,
         ?string              $id = null,
         private ?Status      $status = null,
@@ -49,6 +53,19 @@ final class Order implements MultiFieldsEntityInterface
             propertyName: 'merchantOrderId',
             value: $merchantOrderId
         );
+
+        if ($webhook_url) {
+            $this->webhookUrl = $this->createSimpleField(
+                propertyName: 'webhook_url',
+                value: $webhook_url
+            );
+        }
+        if ($return_url) {
+            $this->returnUrl = $this->createSimpleField(
+                propertyName: 'return_url',
+                value: $return_url
+            );
+        }
 
         if ($additionalProperties) $this->filterAdditionalProperties($additionalProperties);
     }
@@ -96,5 +113,20 @@ final class Order implements MultiFieldsEntityInterface
     public function getCurrentTransaction(): Transaction
     {
         return $this->transactions->get();
+    }
+
+    public function getPaymentUrl(): string
+    {
+        return $this->getCurrentTransaction()->getPaymentUrl()->get();
+    }
+
+    public function getWebhookUrl(): BaseField
+    {
+        return $this->webhookUrl;
+    }
+
+    public function getReturnUrl(): BaseField
+    {
+        return $this->returnUrl;
     }
 }
