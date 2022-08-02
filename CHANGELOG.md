@@ -32,12 +32,12 @@ Initial version
     * projectType
     * flags
     * events
-      * event
-        * occurred
-        * noticed
-        * source
-        * id
         * event
+            * occurred
+            * noticed
+            * source
+            * id
+            * event
 * Implemented `EventsTest`.
 * Implemented `EventTest`.
 * Implemented `GetOrderTest`.
@@ -94,36 +94,36 @@ Initial version
 ## 1.4.0
 
 * Implemented supporting `update` method for such collections :
-  * Order Lines.
-  * Abstract Collection.
-  * Additional Addresses.
-  * Transactions.
-  * Phone Numbers.
-* Implemented supporting `update` method for such entities : 
-  * Line.
-  * Address.
-  * Customer.
-  * Extra.
-  * Payment Method Details.
-  * Transaction.
+    * Order Lines.
+    * Abstract Collection.
+    * Additional Addresses.
+    * Transactions.
+    * Phone Numbers.
+* Implemented supporting `update` method for such entities :
+    * Line.
+    * Address.
+    * Customer.
+    * Extra.
+    * Payment Method Details.
+    * Transaction.
 * Implemented `update` method to `MultiFieldEntityInterface`.
-* Implemented properties: 
-  * `RawCost`.
-  * `Percentage`.
-  * `VatPercentage`
-* Implemented tests: 
-  * `RawCostTest`.
-  * `AmountTest`.
-  * `VatPercentageTest`.
-  * `UpdateOrderTest`.
+* Implemented properties:
+    * `RawCost`.
+    * `Percentage`.
+    * `VatPercentage`
+* Implemented tests:
+    * `RawCostTest`.
+    * `AmountTest`.
+    * `VatPercentageTest`.
+    * `UpdateOrderTest`.
 * Updated and Simplified:
-  * `AdditionallAddressesTest`.
-  * `CustomerTtest`.
-  * `TransactionTest`.
+    * `AdditionallAddressesTest`.
+    * `CustomerTtest`.
+    * `TransactionTest`.
 * Updated  `get` calls for such entities:
-  * Order.
-  * Customer.
-  * Transaction.
+    * Order.
+    * Customer.
+    * Transaction.
 * Redesigned `Amount` property to expect two possible variants in constructor `RawCost` property or value in cents.
 * Redesigned `fromArray` method to be static.
 * Updated tests to use `fromArray` as a static method.
@@ -133,4 +133,53 @@ Initial version
 
 ## 1.4.1
 
-* Resolved issue when `update()` method doesn't use `validate()` method of unregistered single field properties. 
+* Resolved issue when `update()` method doesn't use `validate()` method of unregistered single field properties.
+
+## 1.4.2
+
+* Eliminated `InvalidOrderDataException`.
+* Eliminated `AbstractCollectionContainerInterface`.
+* Eliminated `getField()` method.
+* Eliminated enumeration for payment method name in `Transaction` entity.
+* Eliminated enumeration for customer type in `Customer` entity.
+* Covered by tests:
+    * `addIssuer()`;
+    * `removeIssuer()`;
+    * `addAddress()`;
+    * `removeAddress`;
+    * `addLine()`;
+    * `removeLine()`;
+    * `removePhoneNumber()`;
+    * `getAddressType()`;
+    * `updateTransaction()`;
+    * `addTransaction()`;
+    * `removeTransaction()`;
+    * `getUserAgent()`;
+    * `getPlatformName()`;
+    * `getPlatformVersion()`;
+    * `getPluginName()`;
+    * `getPluginVersion()`;
+    * `getMerchantOrderId()`;
+    * `getType()`;
+    * `isCaptured()`;
+    * `getPaymentMethodDetails()`;
+    * `getVatPercentage()`;
+    * `getCurrency()`;
+    * `getMerchantOrderLineId()`;
+    * `getName()`;
+    * `getQuantity()`;
+    * `getId()`;
+* Update tests:
+  * `AbstractCollectionTest`.
+  * `UpdateOrderTest`.
+  * `PhoneNumberTest`.
+* Updated `OrderLines` collection.
+* Updated few methods `AbstractCollection`.
+* Updated `fromArray()`.
+* Updated `update()` method from `MultiFieldEntityTrait`.
+* Implemented `isCollection(), isSameType()` method for `HelperTrait`.
+* Implemented check to avoid different type of items in `AbstractCollection`.
+* Implemented `reindex()`, `resetPointer()` method for `AbstractCollection`.
+* Implemented `OrderTest`.
+* Implemented support for webhook and return url in `Order` Entity.
+* Implemented `getPaymentUrl()` for `Order` and `Transaction` Entity.

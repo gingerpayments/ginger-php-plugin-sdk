@@ -4,12 +4,12 @@ namespace GingerPluginSdk;
 
 use Ginger\ApiClient;
 use Ginger\Ginger;
+use GingerPluginSdk\Collections\AbstractCollection;
 use GingerPluginSdk\Collections\IdealIssuers;
 use GingerPluginSdk\Entities\Issuer;
 use GingerPluginSdk\Entities\Order;
 use GingerPluginSdk\Exceptions\APIException;
 use GingerPluginSdk\Exceptions\CaptureFailedException;
-use GingerPluginSdk\Exceptions\InvalidOrderDataException;
 use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Exceptions\OrderNotFoundException;
 use GingerPluginSdk\Exceptions\RefundFailedException;
@@ -124,45 +124,62 @@ class Client
     {
         $arguments = [];
         foreach ($data as $property_name => $value) {
-            if (is_array($value)) {
-                if (!self::isAssoc($value)) {
-                    $collection_name = self::COLLECTIONS_PATH . self::dashesToCamelCase($property_name, true);
-                    $promise = [];
-                    $item_type = $collection_name::ITEM_TYPE;
-                    foreach ($value as $item) {
-                        if (is_array($item)) {
-                            array_push($promise, self::fromArray($item_type, $item));
-                        } else {
-                            array_push($promise, $item);
-                        }
-                    }
-                    $arguments[self::dashesToCamelCase($property_name)] = new $collection_name(...$promise);
-                } elseif (array_key_exists(AbstractCollectionContainerInterface::class, class_implements($className))) {
-                    $arguments[] = self::fromArray($className::ITEM_TYPE, $value);
-                } else {
-                    $camel_property_name = self::dashesToCamelCase($property_name);
-                    $path_to_property = self::ENTITIES_PATH . self::dashesToCamelCase($property_name, true);;
-                    $arguments[$camel_property_name] = self::fromArray($path_to_property, $value);
-                }
-            } else {
-                $camel_property_name = self::dashesToCamelCase($property_name);
-                //Check if this property has a pattern validation
-                $path_to_property = self::PROPERTIES_PATH . self::dashesToCamelCase($property_name, true);
-                if (class_exists($path_to_property)) {
-                    $arguments[$camel_property_name] = new $path_to_property($value);
-                } else {
-                    if (array_key_exists(ArbitraryArgumentsEntityInterface::class, class_implements($className))) {
-                        $arguments[] = [$property_name => $value];
+            /*
+            * Process collection
+            */
+            $path_to_collection = self::COLLECTIONS_PATH . self::dashesToCamelCase($property_name, true);
+            if (self::isCollection($className) && $path_to_collection !== $className) {
+                $property_name = $className::ITEM_TYPE;
+            }
+            if (class_exists($path_to_collection)) {
+                $promise = [];
+                $item_type = $path_to_collection::ITEM_TYPE;
+                foreach ($value as $item) {
+                    if (is_array($item)) {
+                        array_push($promise, self::fromArray($item_type, $item));
                     } else {
-                        $arguments[$camel_property_name] = $value;
+                        array_push($promise, $item);
                     }
+                }
+                $arguments[self::dashesToCamelCase($property_name)] = new $path_to_collection(...$promise);
+                continue;
+            }
+
+            /**
+             * Process Entities
+             */
+
+            if (class_exists($property_name)) {
+                $path_to_entity = $property_name;
+            } else {
+                $path_to_entity = self::ENTITIES_PATH . self::dashesToCamelCase($property_name, true);
+            }
+
+            if (class_exists($path_to_entity) && is_array($value)) {
+                $camel_property_name = self::dashesToCamelCase($property_name);
+                $arguments[$camel_property_name] = self::fromArray($path_to_entity, $value);
+                continue;
+            }
+
+            /**
+             * Process Properties
+             */
+            $path_to_property = self::PROPERTIES_PATH . self::dashesToCamelCase($property_name, true);
+            if (class_exists($path_to_property)) {
+                $arguments[self::dashesToCamelCase($property_name)] = new $path_to_property($value);
+            } else {
+                if (array_key_exists(ArbitraryArgumentsEntityInterface::class, class_implements($className))) {
+                    $arguments[] = [$property_name => $value];
+                } else {
+                    $arguments[self::dashesToCamelCase($property_name)] = $value;
                 }
             }
         }
 
         try {
             return new $className(...$arguments);
-        } catch (\Error $exception) {
+        } catch
+        (\Error $exception) {
             throw new \Exception(sprintf("Error occurs while try to initialize %s class, result: %s", $className, $exception->getMessage()));
         }
     }
@@ -268,11 +285,9 @@ class Client
 
     /**
      * Send POST request for API to create an order resource.
-     * If order data is invalid `InvalidOrderDataException` will be thrown
      *
      * @param Order $order
      * @return Order
-     * @throws \GingerPluginSdk\Exceptions\InvalidOrderDataException
      * @throws \GingerPluginSdk\Exceptions\APIException
      */
     public function sendOrder(Order $order): Order
@@ -281,9 +296,6 @@ class Client
             $response = $this->api_client->createOrder(
                 $order->toArray()
             );
-            if ($response["status"] == 'error') {
-                throw new InvalidOrderDataException($response["reason"]);
-            }
 
             return self::fromArray(
                 Order::class,

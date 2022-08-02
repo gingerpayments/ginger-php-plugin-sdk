@@ -9,6 +9,9 @@ final class Transactions extends AbstractCollection implements AbstractCollectio
 {
     const ITEM_TYPE = Transaction::class;
 
+    /**
+     * @param \GingerPluginSdk\Entities\Transaction ...$items
+     */
     public function __construct(Transaction ...$items)
     {
         $this->propertyName = 'transactions';
@@ -29,15 +32,20 @@ final class Transactions extends AbstractCollection implements AbstractCollectio
     }
 
     /**
-     * @param string $index
+     * @param int $index
      * @return $this
      */
-    public function removeTransaction(string $index): Transactions
+    public function removeTransaction(int $index): Transactions
     {
         $this->remove($index);
         return $this;
     }
 
+    /**
+     * @param \GingerPluginSdk\Entities\Transaction $transaction
+     * @param null $index
+     * @return $this
+     */
     public function updateTransaction(Transaction $transaction, $index = null): static
     {
         $this->update($transaction->toArray(), $index);

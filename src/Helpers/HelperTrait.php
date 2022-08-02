@@ -2,8 +2,25 @@
 
 namespace GingerPluginSdk\Helpers;
 
+use GingerPluginSdk\Collections\AbstractCollection;
+
 trait HelperTrait
 {
+    public static function isSameType($observer, $reference): bool
+    {
+        if (!is_object($observer)) {
+            return gettype($observer) == gettype($reference);
+        }
+
+        return is_object($reference) && (get_class($observer) == get_class($reference));
+
+    }
+
+    public static function isCollection(string $className): bool
+    {
+        return array_key_exists(AbstractCollection::class, class_parents($className));
+    }
+
     public function calculateValueInCents($value): int
     {
         return round((float)$value * 100);

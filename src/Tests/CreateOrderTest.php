@@ -30,12 +30,6 @@ class CreateOrderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->client = new \GingerPluginSdk\Client(
-            new ClientOptions(
-                endpoint: $_ENV["PUBLIC_API_URL"],
-                useBundle: true,
-                apiKey: getenv('GINGER_API_KEY'))
-        );
         $_SERVER["REMOTE_ADDR"] = "173.0.2.5";
         $_SERVER["HTTP_USER_AGENT"] = "PHPUnit Tests";
         $this->order = OrderStub::getValidOrder();
@@ -102,6 +96,12 @@ class CreateOrderTest extends TestCase
      */
     public function test_sending()
     {
+        $this->client = new \GingerPluginSdk\Client(
+            new ClientOptions(
+                endpoint: $_ENV["PUBLIC_API_URL"],
+                useBundle: true,
+                apiKey: getenv('GINGER_API_KEY'))
+        );
         $response = $this->client->sendOrder($this->order);
         self::assertSame($response->getStatus()?->get(), 'new');
     }
@@ -116,6 +116,12 @@ class CreateOrderTest extends TestCase
 
     public function test_exception_validation_ideal()
     {
+        $this->client = new \GingerPluginSdk\Client(
+            new ClientOptions(
+                endpoint: $_ENV["PUBLIC_API_URL"],
+                useBundle: true,
+                apiKey: getenv('GINGER_API_KEY'))
+        );
         self::expectException(APIException::class);
         $test_order = new Order(
             currency: new Currency('NUL'),
@@ -134,6 +140,12 @@ class CreateOrderTest extends TestCase
 
     public function test_exception_validation_afterpay()
     {
+        $this->client = new \GingerPluginSdk\Client(
+            new ClientOptions(
+                endpoint: $_ENV["PUBLIC_API_URL"],
+                useBundle: true,
+                apiKey: getenv('GINGER_API_KEY'))
+        );
         self::expectException(APIException::class);
         $test_order = new Order(
             currency: new Currency('NUL'),

@@ -2,8 +2,6 @@
 
 namespace GingerPluginSdk\Collections;
 
-use GingerPluginSdk\Bases\BaseField;
-
 class Flags extends AbstractCollection
 {
     const ITEM_TYPE = 'String';

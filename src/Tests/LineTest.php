@@ -8,6 +8,7 @@ use GingerPluginSdk\Entities\Line;
 use GingerPluginSdk\Exceptions\OutOfDiapasonException;
 use GingerPluginSdk\Exceptions\OutOfEnumException;
 use GingerPluginSdk\Properties\Amount;
+use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\Percentage;
 use GingerPluginSdk\Properties\RawCost;
 use GingerPluginSdk\Properties\VatPercentage;
@@ -123,6 +124,101 @@ class LineTest extends TestCase
         self::assertSame(
             $this->line->getPropertyName(),
             ""
+        );
+    }
+
+    public function test_vat_percentage()
+    {
+        $line = new Line(
+            type: 'physical',
+            merchantOrderLineId: '1',
+            name: 'exel',
+            quantity: 1,
+            amount: new Amount(1)
+        );
+        self::assertSame(
+            expected: null,
+            actual: $line->getVatPercentage()
+        );
+    }
+
+    public function test_currency()
+    {
+        $line = new Line(
+            type: 'physical',
+            merchantOrderLineId: '1',
+            name: 'exel',
+            quantity: 1,
+            amount: new Amount(1),
+            currency: new Currency('EUR')
+        );
+        self::assertSame(
+            expected: "EUR",
+            actual: $line->getCurrency()->get()
+        );
+    }
+
+    public function test_merchant_order_line_id()
+    {
+        $line = new Line(
+            type: 'physical',
+            merchantOrderLineId: '121',
+            name: 'exel',
+            quantity: 1,
+            amount: new Amount(1),
+            currency: new Currency('EUR')
+        );
+        self::assertSame(
+            expected: "121",
+            actual: $line->getMerchantOrderLineId()->get()
+        );
+    }
+
+    public function test_get_name()
+    {
+        $line = new Line(
+            type: 'physical',
+            merchantOrderLineId: '121',
+            name: 'exel',
+            quantity: 1,
+            amount: new Amount(1),
+            currency: new Currency('EUR')
+        );
+        self::assertSame(
+            expected: "exel",
+            actual: $line->getName()->get()
+        );
+    }
+
+    public function test_get_quantity()
+    {
+        $line = new Line(
+            type: 'physical',
+            merchantOrderLineId: '121',
+            name: 'exel',
+            quantity: 1,
+            amount: new Amount(1),
+            currency: new Currency('EUR')
+        );
+        self::assertSame(
+            expected: 1,
+            actual: $line->getQuantity()->get()
+        );
+    }
+
+    public function test_get_type()
+    {
+        $line = new Line(
+            type: 'physical',
+            merchantOrderLineId: '121',
+            name: 'exel',
+            quantity: 1,
+            amount: new Amount(1),
+            currency: new Currency('EUR')
+        );
+        self::assertSame(
+            expected: "physical",
+            actual: $line->getType()->get()
         );
     }
 }

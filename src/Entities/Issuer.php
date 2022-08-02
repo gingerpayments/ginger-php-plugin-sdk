@@ -45,6 +45,6 @@ class Issuer implements MultiFieldsEntityInterface
      */
     public function getId(): string
     {
-        return $this->id;
+        return $this->id->get();
     }
 }

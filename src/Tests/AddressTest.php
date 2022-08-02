@@ -118,4 +118,13 @@ class AddressTest extends TestCase
             actual: $address->update(city: 'Kharkiv')->toArray()
     );
     }
+
+    public function test_get_address_type()
+    {
+        $address = OrderStub::getValidBillingAddress();
+        self::assertSame(
+            expected: 'billing',
+            actual: $address->getAddressType()->get()
+        );
+    }
 }
