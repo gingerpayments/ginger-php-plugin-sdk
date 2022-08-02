@@ -117,6 +117,11 @@ final class Transaction implements MultiFieldsEntityInterface
         return $this->paymentMethodDetails;
     }
 
+    public function getPaymentUrl(): BaseField
+    {
+        return $this->paymentUrl;
+    }
+
     public function getPaymentMethod(): BaseField
     {
         return $this->paymentMethod;
