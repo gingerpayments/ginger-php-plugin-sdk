@@ -20,12 +20,4 @@ class StatusTest extends TestCase
             actual: $real->get()
         );
     }
-
-    public function test_non_allowed_status()
-    {
-        self::expectException(OutOfEnumException::class);
-        new Status(
-            value: 'fake'
-        );
-    }
 }
