@@ -120,6 +120,8 @@ final class Order implements MultiFieldsEntityInterface
         return $this->getCurrentTransaction()->getPaymentUrl()->get();
     }
 
+    //@TODO: Add get order url for pay now payment method.
+
     public function getWebhookUrl(): BaseField
     {
         return $this->webhookUrl;

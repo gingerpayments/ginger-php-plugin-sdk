@@ -102,4 +102,17 @@ class TransactionsTest extends TestCase
             actual: $transactions->count()
         );
     }
+
+    public function test_create_transactions_without_payment_method_details()
+    {
+        $transactions = new Transactions(new Transaction('next.js'));
+        self::assertEqualsCanonicalizing(
+            expected: [
+                [
+                    'payment_method' => 'next.js'
+                ]
+            ],
+            actual: $transactions->toArray()
+        );
+    }
 }

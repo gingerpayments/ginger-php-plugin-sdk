@@ -183,3 +183,8 @@ Initial version
 * Implemented `OrderTest`.
 * Implemented support for webhook and return url in `Order` Entity.
 * Implemented `getPaymentUrl()` for `Order` and `Transaction` Entity.
+
+## 1.4.3
+
+* Abstract Collection now actually abstract.
+* Resolved issue, when payment method details does force connection to any transaction. 

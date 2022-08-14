@@ -10,7 +10,7 @@ use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
  * @template T
  * @phpstan-template T
  */
-class AbstractCollection implements MultiFieldsEntityInterface
+abstract class AbstractCollection implements MultiFieldsEntityInterface
 {
     private int $pointer = 0;
     /** @var T[] */
