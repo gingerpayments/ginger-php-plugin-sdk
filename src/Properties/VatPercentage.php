@@ -37,10 +37,10 @@ final class VatPercentage extends BaseField implements ValidateFieldsInterface
 
     public function validate($value)
     {
-        if ($value < 1 || $value > 10000) throw new OutOfDiapasonException(
+        if ($value < 0 || $value > 10000) throw new OutOfDiapasonException(
             propertyName: $this->propertyName,
             value: $value,
-            min: 1,
+            min: 0,
             max: 10000);
     }
 }
