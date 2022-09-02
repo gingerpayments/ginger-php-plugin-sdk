@@ -44,7 +44,7 @@ class OrderTest extends TestCase
             $old_order
         );
         self::assertSame(
-            expected: 'merchantOrderId',
+            expected: 'merchant_order_id',
             actual: $updated_order->getMerchantOrderId()->getPropertyName()
         );
     }
