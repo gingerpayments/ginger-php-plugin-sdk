@@ -264,11 +264,12 @@ class Client
      * Only completed orders could be refunded.
      *
      * @param string $order_id
+     * @param Properties\Amount $anount
      * @return array
      * @throws \GingerPluginSdk\Exceptions\InvalidOrderStatusException
      * @throws \GingerPluginSdk\Exceptions\RefundFailedException
      */
-    public function refundOrder(string $order_id)
+    public function refundOrder(string $order_id, Properties\Amount $amount = null)
     {
         $order = $this->getOrder(id: $order_id);
 
@@ -280,7 +281,13 @@ class Client
             throw  new RefundFailedException('Order is not yet captured, only captured order could be refunded');
         }
 
-        return $this->api_client->refundOrder(id: $order_id, orderData: ['amount' => $order->getAmount()->get(), "description" => "Order refund", 'order_lines' => $order->getOrderLines()->toArray()]);
+        return $this->api_client->refundOrder(
+            id: $order_id,
+            orderData: [
+                'amount' => $amount->get() ?? $order->getAmount()->get(),
+                "description" => "Order refund",
+                'order_lines' => $order->getOrderLines()->toArray()
+            ]);
     }
 
     /**
