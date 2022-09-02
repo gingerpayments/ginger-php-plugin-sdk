@@ -280,7 +280,7 @@ class Client
             throw  new RefundFailedException('Order is not yet captured, only captured order could be refunded');
         }
 
-        return $this->api_client->refundOrder(id: $order_id, orderData: ['order_lines' => $order->getOrderLines()->toArray()]);
+        return $this->api_client->refundOrder(id: $order_id, orderData: ['amount' => $order->getAmount()->get(), "description" => "Order refund", 'order_lines' => $order->getOrderLines()->toArray()]);
     }
 
     /**
