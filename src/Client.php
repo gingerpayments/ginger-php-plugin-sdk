@@ -276,7 +276,7 @@ class Client
             throw new InvalidOrderStatusException($order->getStatus()->get(), 'completed');
         }
 
-        if (!$order->getCurrentTransaction()->isCaptured()) {
+        if ($order->getCurrentTransaction()->isCapturable() && !$order->getCurrentTransaction()->isCaptured()) {
             throw  new RefundFailedException('Order is not yet captured, only captured order could be refunded');
         }
 
