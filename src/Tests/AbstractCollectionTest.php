@@ -10,7 +10,7 @@ class AbstractCollectionTest extends TestCase
 {
     public function test_init()
     {
-        $abstract_collection = new AbstractCollection(propertyName: 'sore');
+        $abstract_collection = new class('sore') extends AbstractCollection{};
         self::assertSame(
             expected: 0,
             actual: $abstract_collection->count()
@@ -19,7 +19,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_add_item_get_value()
     {
-        $abstract_collection = new AbstractCollection(propertyName: 'sore');
+        $abstract_collection = new class('sore') extends AbstractCollection{};
         $abstract_collection->add('depression');
         self::assertSame(
             expected: 'depression',
@@ -29,7 +29,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_add_item_get_pointer()
     {
-        $abstract_collection = new AbstractCollection(propertyName: 'sore');
+        $abstract_collection = new class('sore') extends AbstractCollection{};
         $abstract_collection->add('depression');
         self::assertSame(
             expected: 0,
@@ -39,7 +39,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_remove_item_get_count()
     {
-        $abstract_collection = new AbstractCollection(propertyName: 'sore');
+        $abstract_collection = new class('sore') extends AbstractCollection{};
         $abstract_collection->add('depression');
         $abstract_collection->add('obsession');
         $abstract_collection->add('all_will_be_fine');
@@ -52,7 +52,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_remove_item_get_using_pointer()
     {
-        $abstract_collection = new AbstractCollection(propertyName: 'sore');
+        $abstract_collection = new class('sore') extends AbstractCollection{};
         $abstract_collection->add('depression');
         $abstract_collection->add('obsession');
         $abstract_collection->add('all_will_be_fine');
@@ -66,7 +66,7 @@ class AbstractCollectionTest extends TestCase
 
     public function test_update_collection_item()
     {
-        $abstract_collection = new AbstractCollection(propertyName: 'sore');
+        $abstract_collection = new class('sore') extends AbstractCollection{};
         $abstract_collection->add('depression');
         $abstract_collection->add('apple');
         $abstract_collection->update('ddepression', 1);
@@ -80,7 +80,7 @@ class AbstractCollectionTest extends TestCase
     {
         $std_object = new \stdClass();
         $std_object->check = true;
-        $collection = new AbstractCollection('test');
+        $collection = new class('test') extends AbstractCollection{};
         $collection->add($std_object);
         self::assertSame(
             expected: [
@@ -93,7 +93,7 @@ class AbstractCollectionTest extends TestCase
     public function test_different_item_types_not_allowed_object()
     {
         self::expectException(\InvalidArgumentException::class);
-        $collection = new AbstractCollection('testing',);
+        $collection = new class('testing') extends AbstractCollection{};
         $collection->add(OrderStub::getValidLine());
         $collection->add(OrderStub::getValidCustomerAddress());
     }
@@ -101,7 +101,7 @@ class AbstractCollectionTest extends TestCase
     public function test_different_item_types_not_allowed_primitive()
     {
         self::expectException(\InvalidArgumentException::class);
-        $collection = new AbstractCollection('testing');
+        $collection = new class('testing') extends AbstractCollection{};
         $collection->add('1');
         $collection->add(1);
     }

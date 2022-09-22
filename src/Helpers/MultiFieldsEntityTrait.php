@@ -28,7 +28,7 @@ trait MultiFieldsEntityTrait
         }
 
         return array_filter($response, function ($value) {
-            return ($value !== null);
+            return ($value !== null && $value !== []);
         });
     }
 

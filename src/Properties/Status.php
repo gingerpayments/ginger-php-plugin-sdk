@@ -4,9 +4,8 @@ namespace GingerPluginSdk\Properties;
 
 use GingerPluginSdk\Bases\BaseField;
 use GingerPluginSdk\Helpers\FieldsValidatorTrait;
-use GingerPluginSdk\Interfaces\ValidateFieldsInterface;
 
-final class Status extends BaseField implements ValidateFieldsInterface
+final class Status extends BaseField
 {
     use FieldsValidatorTrait;
 
@@ -15,26 +14,7 @@ final class Status extends BaseField implements ValidateFieldsInterface
      */
     public function __construct(string $value)
     {
-        $this->enum = [
-            "new",
-            "pending",
-            "processing",
-            "accepted",
-            "captured",
-            "completed",
-            "cancelled",
-            "error",
-            "expired"
-        ];
-        parent::__construct('status');
         $this->set($value);
-    }
-
-    /**
-     * @throws \GingerPluginSdk\Exceptions\OutOfEnumException
-     */
-    public function validate($value)
-    {
-        $this->validateEnum($value);
+        parent::__construct('status');
     }
 }
