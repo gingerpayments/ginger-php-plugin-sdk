@@ -265,7 +265,7 @@ class Client
      * Only completed orders could be refunded.
      *
      * @param string $order_id
-     * @param Properties\Amount $anount
+     * @param Properties\Amount|null $amount
      * @return array
      * @throws \GingerPluginSdk\Exceptions\InvalidOrderStatusException
      * @throws \GingerPluginSdk\Exceptions\RefundFailedException
