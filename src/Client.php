@@ -12,6 +12,7 @@ use GingerPluginSdk\Exceptions\APIException;
 use GingerPluginSdk\Exceptions\CaptureFailedException;
 use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Exceptions\OrderNotFoundException;
+use GingerPluginSdk\Exceptions\RefundAlreadyDoneException;
 use GingerPluginSdk\Exceptions\RefundFailedException;
 use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
@@ -268,6 +269,7 @@ class Client
      * @return array
      * @throws \GingerPluginSdk\Exceptions\InvalidOrderStatusException
      * @throws \GingerPluginSdk\Exceptions\RefundFailedException
+     * @throws \GingerPluginSdk\Exceptions\RefundAlreadyDoneException
      */
     public function refundOrder(string $order_id, Properties\Amount $amount = null)
     {
@@ -279,6 +281,10 @@ class Client
 
         if ($order->getCurrentTransaction()->isCapturable() && !$order->getCurrentTransaction()->isCaptured()) {
             throw  new RefundFailedException('Order is not yet captured, only captured order could be refunded');
+        }
+
+        if ($order->getFlags() && in_array('has-refunds', ( $order->getFlags()->getAll() ?? []) )) {
+            throw new RefundAlreadyDoneException('Refund already done.');
         }
 
         return $this->api_client->refundOrder(

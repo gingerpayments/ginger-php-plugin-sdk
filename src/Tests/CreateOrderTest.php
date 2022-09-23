@@ -83,6 +83,32 @@ class CreateOrderTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function test_method_get_flags()
+    {
+        $order_with_flags = Client::fromArray(
+            Order::class,
+            array_merge(
+                $this->order->toArray(),
+                ['flags' => [
+                    'is-test',
+                    'has-refund'
+                ]
+                ]
+            )
+        );
+
+        self::assertSame(
+            expected: [
+                'is-test',
+                'has-refund'
+            ],
+            actual: $order_with_flags->getFlags()->getAll()
+        );
+    }
+
     public function test_method_get_current_transaction()
     {
         self::assertSame(

@@ -131,4 +131,9 @@ final class Order implements MultiFieldsEntityInterface
     {
         return $this->returnUrl;
     }
+
+    public function getFlags() : Flags | null
+    {
+        return $this->flags;
+    }
 }
