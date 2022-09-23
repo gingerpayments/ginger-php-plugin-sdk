@@ -291,7 +291,7 @@ class Client
             id: $order_id,
             orderData: [
                 'amount' => $amount->get() ?? $order->getAmount()->get(),
-                "description" => "Order refund",
+                'description' => 'Order refund',
                 'order_lines' => $order->getOrderLines()->toArray()
             ]);
     }

@@ -92,10 +92,10 @@ class CreateOrderTest extends TestCase
             Order::class,
             array_merge(
                 $this->order->toArray(),
-                ['flags' => [
-                    'is-test',
-                    'has-refund'
-                ]
+                    ['flags' => [
+                        'is-test',
+                        'has-refund'
+                    ]
                 ]
             )
         );
