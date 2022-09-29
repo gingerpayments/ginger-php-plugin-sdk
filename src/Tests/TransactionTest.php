@@ -127,4 +127,34 @@ class TransactionTest extends TestCase
             actual: $transaction->getPaymentMethodDetails()->toArray()['issuer_id']
         );
     }
+
+    public function test_get_reason()
+    {
+        $transaction = new Transaction(
+            paymentMethod: 'ideal',
+            paymentMethodDetails: new PaymentMethodDetails(
+                issuer_id: 'AJ12J'
+            ),
+            reason: 'N:-50716:3D Secure authentication failed'
+        );
+        self::assertSame(
+            expected: "N:-50716:3D Secure authentication failed",
+            actual: $transaction->getReason()->get()
+        );
+    }
+
+    public function test_get_customer_message()
+    {
+        $transaction = new Transaction(
+            paymentMethod: 'ideal',
+            paymentMethodDetails: new PaymentMethodDetails(
+                issuer_id: 'AJ12J'
+            ),
+            customerMessage: 'Transaction not authenticated, please retry'
+        );
+        self::assertSame(
+            expected: "Transaction not authenticated, please retry",
+            actual: $transaction->getCustomerMessage()->get()
+        );
+    }
 }
