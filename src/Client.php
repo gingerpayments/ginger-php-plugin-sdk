@@ -170,6 +170,7 @@ class Client
             } else {
                 if (array_key_exists(ArbitraryArgumentsEntityInterface::class, class_implements($className))) {
                     $arguments[] = [$property_name => $value];
+                    sort($arguments);   // that should halt to avoid error when positional argument stay after named argument
                 } else {
                     $arguments[self::dashesToCamelCase($property_name)] = $value;
                 }
