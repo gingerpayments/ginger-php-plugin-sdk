@@ -191,8 +191,12 @@ Initial version
 * Resolved issue, when enumeration of Status field being bottleneck for whole Order.
 
 ## 1.4.4
+
 * Resolved issue, when `refundOrder()` sent request that server could not understand.
 * Updated diapason of VatPercentage according to documentation.
 * Implemented partial refunds.
 * Implemented check if refund is already done and `RefundAlreadyDoneException` for it.
 * Implemented `getFlags()` for `Order` Entity and covered by test.
+* Added `getReason()` and `getCustomerMessage()` methods for `Transaction`.
+* Updated test `TransactionTest`.
+* Resolved issue when positional argument used after named argument.

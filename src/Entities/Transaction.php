@@ -24,6 +24,7 @@ final class Transaction implements MultiFieldsEntityInterface
     private BaseField $id;
     private BaseField $paymentUrl;
     private BaseField $reason;
+    private BaseField $customerMessage;
     private BaseField $isCapturable;
     private BaseField $isFullyCaptured;
 
@@ -34,6 +35,7 @@ final class Transaction implements MultiFieldsEntityInterface
      * @param string|null $paymentUrl
      * @param \GingerPluginSdk\Properties\Status|null $status
      * @param string|null $reason
+     * @param string|null $customerMessage
      * @param bool|null $isCapturable
      * @param \GingerPluginSdk\Collections\Events|null $events
      * @param bool|null $isFullyCaptured
@@ -46,6 +48,7 @@ final class Transaction implements MultiFieldsEntityInterface
         ?string              $paymentUrl = null,
         private ?Status      $status = null,
         ?string              $reason = null,
+        ?string              $customerMessage = null,
         ?bool                $isCapturable = null,
         private ?Events      $events = null,
         ?bool                $isFullyCaptured = false,
@@ -73,6 +76,11 @@ final class Transaction implements MultiFieldsEntityInterface
         if ($reason) $this->reason = $this->createSimpleField(
             propertyName: 'reason',
             value: $reason
+        );
+
+        if ($customerMessage) $this->customerMessage = $this->createSimpleField(
+            propertyName: 'customer_message',
+            value: $customerMessage
         );
 
         if (isset($isCapturable)) {
@@ -125,5 +133,15 @@ final class Transaction implements MultiFieldsEntityInterface
     public function getPaymentMethod(): BaseField
     {
         return $this->paymentMethod;
+    }
+
+    public function getReason(): BaseField | null
+    {
+        return $this->reason;
+    }
+
+    public function getCustomerMessage(): BaseField | null
+    {
+        return $this->customerMessage;
     }
 }
