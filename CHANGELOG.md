@@ -189,3 +189,7 @@ Initial version
 * Abstract Collection now actually abstract.
 * Resolved issue, when payment method details does force connection to any transaction.
 * Resolved issue, when enumeration of Status field being bottleneck for whole Order.
+
+## 1.4.4
+
+* Resolved issue when positional argument used after named argument 
