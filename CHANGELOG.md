@@ -194,3 +194,4 @@ Initial version
 
 * Added `getReason()` and `getCustomerMessage()` methods for `Transaction`.
 * Updated test `TransactionTest`.
+* Resolved issue when positional argument used after named argument.
