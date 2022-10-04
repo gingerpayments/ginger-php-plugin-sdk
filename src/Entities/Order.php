@@ -50,7 +50,7 @@ final class Order implements MultiFieldsEntityInterface
         );
 
         if ($merchantOrderId) $this->merchantOrderId = $this->createSimpleField(
-            propertyName: 'merchantOrderId',
+            propertyName: 'merchant_order_id',
             value: $merchantOrderId
         );
 
@@ -130,5 +130,10 @@ final class Order implements MultiFieldsEntityInterface
     public function getReturnUrl(): BaseField
     {
         return $this->returnUrl;
+    }
+
+    public function getFlags() : Flags | null
+    {
+        return $this->flags;
     }
 }

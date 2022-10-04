@@ -12,6 +12,7 @@ use GingerPluginSdk\Exceptions\APIException;
 use GingerPluginSdk\Exceptions\CaptureFailedException;
 use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Exceptions\OrderNotFoundException;
+use GingerPluginSdk\Exceptions\RefundAlreadyDoneException;
 use GingerPluginSdk\Exceptions\RefundFailedException;
 use GingerPluginSdk\Helpers\HelperTrait;
 use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
@@ -265,11 +266,13 @@ class Client
      * Only completed orders could be refunded.
      *
      * @param string $order_id
+     * @param Properties\Amount|null $amount
      * @return array
      * @throws \GingerPluginSdk\Exceptions\InvalidOrderStatusException
      * @throws \GingerPluginSdk\Exceptions\RefundFailedException
+     * @throws \GingerPluginSdk\Exceptions\RefundAlreadyDoneException
      */
-    public function refundOrder(string $order_id)
+    public function refundOrder(string $order_id, Properties\Amount $amount = null)
     {
         $order = $this->getOrder(id: $order_id);
 
@@ -277,11 +280,21 @@ class Client
             throw new InvalidOrderStatusException($order->getStatus()->get(), 'completed');
         }
 
-        if (!$order->getCurrentTransaction()->isCaptured()) {
+        if ($order->getCurrentTransaction()->isCapturable() && !$order->getCurrentTransaction()->isCaptured()) {
             throw  new RefundFailedException('Order is not yet captured, only captured order could be refunded');
         }
 
-        return $this->api_client->refundOrder(id: $order_id, orderData: ['order_lines' => $order->getOrderLines()->toArray()]);
+        if ($order->getFlags() && in_array('has-refunds', ( $order->getFlags()->getAll() ?? []) )) {
+            throw new RefundAlreadyDoneException('Refund already done.');
+        }
+
+        return $this->api_client->refundOrder(
+            id: $order_id,
+            orderData: [
+                'amount' => $amount->get() ?? $order->getAmount()->get(),
+                'description' => 'Order refund',
+                'order_lines' => $order->getOrderLines()->toArray()
+            ]);
     }
 
     /**
