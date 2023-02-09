@@ -23,8 +23,8 @@ final class Transaction implements MultiFieldsEntityInterface
     private MultiFieldsEntityInterface $paymentMethodDetails;
     private BaseField $id;
     private BaseField $paymentUrl;
-    private $reason = null;
-    private $customerMessage = null;
+    private BaseField $reason;
+    private BaseField $customerMessage;
     private BaseField $isCapturable;
     private BaseField $isFullyCaptured;
 
@@ -63,22 +63,22 @@ final class Transaction implements MultiFieldsEntityInterface
         );
         $this->paymentMethodDetails = $paymentMethodDetails ?: new PaymentMethodDetails();
 
-        if ($id) $this->id = $this->createSimpleField(
+        $this->id = $this->createSimpleField(
             'id',
             $id
         );
 
-        if ($paymentUrl) $this->paymentUrl = $this->createSimpleField(
+        $this->paymentUrl = $this->createSimpleField(
             propertyName: 'payment_url',
             value: $paymentUrl
         );
 
-        if ($reason) $this->reason = $this->createSimpleField(
+        $this->reason = $this->createSimpleField(
             propertyName: 'reason',
             value: $reason
         );
 
-        if ($customerMessage) $this->customerMessage = $this->createSimpleField(
+        $this->customerMessage = $this->createSimpleField(
             propertyName: 'customer_message',
             value: $customerMessage
         );
