@@ -143,6 +143,17 @@ class TransactionTest extends TestCase
         );
     }
 
+    public function test_get_empty_reason()
+    {
+        $transaction = new Transaction(
+            paymentMethod: 'ideal',
+            paymentMethodDetails: new PaymentMethodDetails(
+                issuer_id: 'AJ12J'
+            )
+        );
+        self::assertEmpty($transaction->getReason()->get());
+    }
+
     public function test_get_customer_message()
     {
         $transaction = new Transaction(
@@ -156,5 +167,16 @@ class TransactionTest extends TestCase
             expected: "Transaction not authenticated, please retry",
             actual: $transaction->getCustomerMessage()->get()
         );
+    }
+
+    public function test_get_empty_consumer_message()
+    {
+        $transaction = new Transaction(
+            paymentMethod: 'ideal',
+            paymentMethodDetails: new PaymentMethodDetails(
+                issuer_id: 'AJ12J'
+            )
+        );
+        self::assertEmpty($transaction->getCustomerMessage()->get());
     }
 }
