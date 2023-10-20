@@ -1,10 +1,10 @@
 <?php
 
 namespace GingerPluginSdk;
+error_reporting(E_ALL ^ E_DEPRECATED);
 
 use Ginger\ApiClient;
 use Ginger\Ginger;
-use GingerPluginSdk\Collections\AbstractCollection;
 use GingerPluginSdk\Collections\IdealIssuers;
 use GingerPluginSdk\Entities\Issuer;
 use GingerPluginSdk\Entities\Order;

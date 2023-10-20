@@ -12,6 +12,7 @@ use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
  */
 abstract class AbstractCollection implements MultiFieldsEntityInterface
 {
+    use HelperTrait;
     private int $pointer = 0;
     /** @var T[] */
     private array $items = [];
@@ -48,7 +49,7 @@ abstract class AbstractCollection implements MultiFieldsEntityInterface
     public function add(mixed $item): void
     {
         if ($this->count() > 0) {
-            if (!HelperTrait::isSameType($this->get(), $item)) {
+            if (!$this->isSameType($this->get(), $item)) {
                 throw new \InvalidArgumentException("Provided argument is not same type as collection already have.");
             }
             $this->next();

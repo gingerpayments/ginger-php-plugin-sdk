@@ -36,49 +36,41 @@ trait MultiFieldsEntityTrait
     {
         foreach ($additionalProperties as $key => $value) {
             $key = $this->dashesToCamelCase($key, true);
-            //Check if $additionalProperties is already an entities
+
+            // Check if $additionalProperties is already an entity class
             $path_to_properties = \GingerPluginSdk\Client::PROPERTIES_PATH . $key;
-            if (class_exists($path_to_properties)) {
-                if ($value instanceof $path_to_properties) {
-                    $this->$key = $value;
-                } else {
-                    $this->$key = new $path_to_properties($value);
-                }
-                continue;
-            }
-
             $path_to_collection = \GingerPluginSdk\Client::COLLECTIONS_PATH . $key;
-            if (class_exists($path_to_collection)) {
-                if ($value instanceof $path_to_collection) {
-                    $this->$key = $value;
-                } else if ($this->isAssoc($value)) {
-                    $this->$key = new $path_to_collection($value);
-                } else {
-                    $this->$key = new $path_to_collection();
-                    foreach ($value as $item) {
-                        $this->$key->add($item);
-                    }
-                }
-                continue;
-            }
-
             $path_to_entities = \GingerPluginSdk\Client::ENTITIES_PATH . $key;
-            if (class_exists($path_to_entities)) {
-                if ($value instanceof $path_to_entities) {
-                    $this->$key = $value;
+
+            if (class_exists($path_to_properties)) {
+                $propertyValue = $value instanceof $path_to_properties ? $value : new $path_to_properties($value);
+                $this->{$key} = $propertyValue;
+            } elseif (class_exists($path_to_collection)) {
+                if ($value instanceof $path_to_collection) {
+                    $this->{$key} = $value;
+                } elseif ($this->isAssoc($value)) {
+                    $this->{$key} = new $path_to_collection($value);
                 } else {
-                    $this->$key = new $path_to_entities(...$value);
+                    $collection = new $path_to_collection();
+                    foreach ($value as $item) {
+                        $collection->add($item);
+                    }
+                    $this->{$key} = $collection;
                 }
-                continue;
+            } elseif (class_exists($path_to_entities)) {
+                $entityValue = $value instanceof $path_to_entities ? $value : new $path_to_entities(...$value);
+                $this->{$key} = $entityValue;
+            } else {
+                // Handle as a simple field if the class doesn't exist
+                $this->{$key} = $this->createSimpleField(
+                    propertyName: $this->camelCaseToDashes($key),
+                    value: $value
+                );
             }
-
-            $this->$key = $this->createSimpleField(
-                propertyName: $this->camelCaseToDashes($key),
-                value: $value
-            );
-
         }
     }
+
+
 
     public function update(...$attributes): static
     {
