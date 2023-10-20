@@ -200,3 +200,9 @@ Initial version
 * Added `getReason()` and `getCustomerMessage()` methods for `Transaction`.
 * Updated test `TransactionTest`.
 * Resolved issue when positional argument used after named argument.
+
+## 1.5.0
+
+* Resolved test cases;
+* Implemented functionality of removing unsupported keys for array which used to updateOrder; 
+* 
