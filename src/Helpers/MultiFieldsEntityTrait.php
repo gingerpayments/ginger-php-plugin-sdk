@@ -9,8 +9,12 @@ use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 trait MultiFieldsEntityTrait
 {
     use HelperTrait;
-
-
+    public $notAllowedProperties = [
+        'events',
+        'is_capturable',
+        'order_id',
+        'project_id'
+    ];
     public function getPropertyName(): string
     {
         return $this->propertyName ?? false;
@@ -70,6 +74,16 @@ trait MultiFieldsEntityTrait
         }
     }
 
+    function removeKeysRecursive(array &$array, array $keysToRemove): void {
+        foreach ($array as $key => &$value) {
+            if (in_array($key, $keysToRemove)) {
+                unset($array[$key]);
+            } elseif (is_array($value)) {
+                // If the value is an array, recursively remove keys from it
+                $this->removeKeysRecursive($value, $keysToRemove);
+            }
+        }
+    }
 
 
     public function update(...$attributes): static

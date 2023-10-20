@@ -322,9 +322,11 @@ class Client
 
     public function updateOrder(Order $order): Order
     {
+        $orderData = $order->toArray();
+        $order->removeKeysRecursive($orderData, $order->notAllowedProperties);
         $order = $this->api_client->updateOrder(
             id: $order->getId()->get(),
-            orderData: $order->toArray()
+            orderData: $orderData
         );
         return self::fromArray(Order::class, $order);
     }

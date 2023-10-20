@@ -316,7 +316,7 @@ final class FromArrayTest extends TestCase
         $client = new Client(
             options: OrderStub::getMockedClientOptions()
         );
-        $order_array = $client->getApiClient()->getOrder($_ENV["ORDER_ID_FOR_TESTS"]);
+        $order_array = $client->getApiClient()->getOrder($GLOBALS['createdOrderId']);
         $expected = $order_array["customer"];
         $real = Client::fromArray(
             Customer::class,

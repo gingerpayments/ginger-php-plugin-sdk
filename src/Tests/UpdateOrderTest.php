@@ -90,11 +90,13 @@ class UpdateOrderTest extends TestCase
         $this->client = new Client(
             options: OrderStub::getMockedClientOptions()
         );
+
         $order = $this->client->sendOrder(
             order: OrderStub::getValidOrder()
         );
 
         $order->getCustomer()->getAdditionalAddress()->update(['country' => 'QQ'], 1);
+
         self::assertSame(
             expected: 'QQ',
             actual: $this->client->updateOrder(

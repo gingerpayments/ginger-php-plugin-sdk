@@ -55,6 +55,7 @@ class OrderTest extends TestCase
             OrderStub::getMockedClientOptions()
         );
         $order = $client->sendOrder(order: OrderStub::getValidOrder());
+        $GLOBALS['createdOrderId'] = $order->getId()->get();
         self::assertSame(
             expected: 'string',
             actual: gettype($order->getPaymentUrl())

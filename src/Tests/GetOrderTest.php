@@ -35,7 +35,7 @@ class GetOrderTest extends TestCase
      */
     public function test_get_order()
     {
-        $id = $_ENV["ORDER_ID_FOR_TESTS"];
+        $id =  $GLOBALS['createdOrderId'];
         $expected = $this->client->getApiClient()->getOrder(id: $id);
         $real = $this->client->getOrder(
             id: $id

@@ -50,7 +50,7 @@ final class Transaction implements MultiFieldsEntityInterface
         ?string              $reason = null,
         ?string              $customerMessage = null,
         ?bool                $isCapturable = null,
-        private ?Events      $events = null,
+//        private ?Events      $events = null,
         ?bool                $isFullyCaptured = false,
         mixed                ...$additionalProperties
 
