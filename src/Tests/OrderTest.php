@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class OrderTest extends TestCase
 {
-    private \GingerPluginSdk\Entities\Order $order;
+    private Order $order;
 
     public function setUp(): void
     {

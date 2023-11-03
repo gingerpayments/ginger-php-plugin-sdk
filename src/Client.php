@@ -3,6 +3,7 @@
 namespace GingerPluginSdk;
 error_reporting(E_ALL ^ E_DEPRECATED);
 
+use Exception;
 use Ginger\ApiClient;
 use Ginger\Ginger;
 use GingerPluginSdk\Collections\IdealIssuers;
@@ -15,7 +16,6 @@ use GingerPluginSdk\Exceptions\OrderNotFoundException;
 use GingerPluginSdk\Exceptions\RefundAlreadyDoneException;
 use GingerPluginSdk\Exceptions\RefundFailedException;
 use GingerPluginSdk\Helpers\HelperTrait;
-use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
 use GingerPluginSdk\Interfaces\ArbitraryArgumentsEntityInterface;
 use GingerPluginSdk\Properties\ClientOptions;
 use GingerPluginSdk\Properties\Currency;
@@ -34,7 +34,7 @@ class Client
     protected ApiClient $api_client;
 
     /**
-     * @param \GingerPluginSdk\Properties\ClientOptions $options
+     * @param ClientOptions $options
      */
     public function __construct(ClientOptions $options)
     {
@@ -49,7 +49,7 @@ class Client
     /**
      * Retrieves APIClient from original ginger-php package.
      *
-     * @return \Ginger\ApiClient
+     * @return ApiClient
      */
     public function getApiClient(): ApiClient
     {
@@ -60,7 +60,7 @@ class Client
      * Retrieve orders for API.
      * Returns an Order Entity object.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getOrder(string $id): Order
     {
@@ -68,7 +68,7 @@ class Client
             $api_order = $this->api_client->getOrder(
                 id: $id
             );
-        } catch (\Exception) {
+        } catch (Exception) {
             throw new OrderNotFoundException();
         }
         return self::fromArray(
@@ -101,7 +101,7 @@ class Client
                 orderId: $id,
                 transactionId: $order->getCurrentTransaction()->getId()->get()
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CaptureFailedException($exception->getMessage());
         }
 
@@ -115,7 +115,7 @@ class Client
      * @param string $className
      * @param array $data
      * @return object
-     * @throws \Exception
+     * @throws Exception
      *
      * @phpstan-template Q
      * @phpstan-param class-string<Q> $className
@@ -137,9 +137,9 @@ class Client
                 $item_type = $path_to_collection::ITEM_TYPE;
                 foreach ($value as $item) {
                     if (is_array($item)) {
-                        array_push($promise, self::fromArray($item_type, $item));
+                        $promise[] = self::fromArray($item_type, $item);
                     } else {
-                        array_push($promise, $item);
+                        $promise[] = $item;
                     }
                 }
                 $arguments[self::dashesToCamelCase($property_name)] = new $path_to_collection(...$promise);
@@ -177,12 +177,12 @@ class Client
                 }
             }
         }
-
+        print($className);
         try {
             return new $className(...$arguments);
         } catch
         (\Error $exception) {
-            throw new \Exception(sprintf("Error occurs while try to initialize %s class, result: %s", $className, $exception->getMessage()));
+            throw new Exception(sprintf("Error occurs while try to initialize %s class, result: %s", $className, $exception->getMessage()));
         }
     }
 
@@ -192,7 +192,7 @@ class Client
      * @param $apiKey
      * @param $useBundle
      * @param $endpoint
-     * @return \Ginger\ApiClient
+     * @return ApiClient
      */
     private function createClient($apiKey, $useBundle, $endpoint): ApiClient
     {
@@ -248,7 +248,7 @@ class Client
      * Returns collection of issuers entity.
      *
      * @return \GingerPluginSdk\Collections\IdealIssuers
-     * @throws \Exception
+     * @throws Exception
      */
     public function getIdealIssuers(): IdealIssuers
     {

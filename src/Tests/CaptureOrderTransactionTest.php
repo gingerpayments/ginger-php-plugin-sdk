@@ -2,7 +2,9 @@
 
 namespace GingerPluginSdk\Tests;
 
+use Exception;
 use GingerPluginSdk\Client;
+use GingerPluginSdk\Exceptions\CaptureFailedException;
 use GingerPluginSdk\Exceptions\InvalidOrderStatusException;
 use GingerPluginSdk\Properties\ClientOptions;
 use PHPUnit\Framework\TestCase;
@@ -30,8 +32,8 @@ class CaptureOrderTransactionTest extends TestCase
     }
 
     /**
-     * @throws \GingerPluginSdk\Exceptions\CaptureFailedException
-     * @throws \Exception
+     * @throws CaptureFailedException
+     * @throws Exception
      */
     public function test_only_completed_orders_could_be_captured()
     {

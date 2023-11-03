@@ -2,18 +2,18 @@
 
 namespace GingerPluginSdk\Helpers;
 
-use GingerPluginSdk\Interfaces\AbstractCollectionContainerInterface;
 use GingerPluginSdk\Bases\BaseField;
 use GingerPluginSdk\Interfaces\MultiFieldsEntityInterface;
 
 trait MultiFieldsEntityTrait
 {
     use HelperTrait;
-    public $notAllowedProperties = [
+    public array $notAllowedProperties = [
         'events',
         'is_capturable',
         'order_id',
-        'project_id'
+        'project_id',
+        'flags'
     ];
     public function getPropertyName(): string
     {

@@ -8,9 +8,9 @@ use GingerPluginSdk\Exceptions\OutOfPatternException;
 trait FieldsValidatorTrait
 {
     /**
-     * @throws \GingerPluginSdk\Exceptions\OutOfEnumException
+     * @throws OutOfEnumException
      */
-    public function validateEnum($value)
+    public function validateEnum($value): void
     {
         if (isset($this->enum) && !in_array($value, $this->enum)) {
             throw new OutOfEnumException($this->getPropertyName(), $value, json_encode($this->enum));
@@ -18,9 +18,9 @@ trait FieldsValidatorTrait
     }
 
     /**
-     * @throws \GingerPluginSdk\Exceptions\OutOfPatternException
+     * @throws OutOfPatternException
      */
-    public function validatePattern($value, $pattern)
+    public function validatePattern($value, $pattern): void
     {
         if (!preg_match($pattern, $value)) {
             throw new OutOfPatternException($this->getPropertyName());

@@ -2,9 +2,7 @@
 
 namespace GingerPluginSdk\Entities;
 
-use Cassandra\Date;
 use GingerPluginSdk\Bases\BaseField;
-use GingerPluginSdk\Collections\AbstractCollection;
 use GingerPluginSdk\Collections\AdditionalAddresses;
 use GingerPluginSdk\Collections\PhoneNumbers;
 use GingerPluginSdk\Helpers\FieldsValidatorTrait;
@@ -28,26 +26,28 @@ final class Customer implements MultiFieldsEntityInterface
     private BaseField $lastName;
     private BaseField $firstName;
     private BaseField|null $gender;
-    private BaseField $address;
-    private BaseField $addressType;
     private Country $country;
     private BaseField $postalCode;
     private BaseField $houseNumber;
     private PhoneNumbers|null $phoneNumbers = null;
     private BaseField|null $merchantCustomerId = null;
     private BaseField|null $ipAddress = null;
+    private BaseField|null $addressLine;
+    private BaseField|null $addressType;
 
     /**
-     * @param \GingerPluginSdk\Collections\AdditionalAddresses $additionalAddresses
+     * @param AdditionalAddresses $additionalAddresses
      * @param string $firstName
      * @param string $lastName
      * @param EmailAddress $emailAddress
      * @param string|null $gender - Customer's gender
      * @param PhoneNumbers|null $phoneNumbers
-     * @param \GingerPluginSdk\Properties\Birthdate|null $birthdate - Customer's birthdate (ISO 8601 / RFC 3339)
-     * @param \GingerPluginSdk\Properties\Country|null $country
+     * @param Birthdate|null $birthdate - Customer's birthdate (ISO 8601 / RFC 3339)
+     * @param Country|null $country
      * @param string|null $ipAddress
-     * @param string|null $addressType
+     * @param Locale|null $locale
+     * @param string|null $merchantCustomerId
+     * @param Address|null $address
      * @param mixed ...$additionalProperties
      */
     public function __construct(
@@ -60,9 +60,10 @@ final class Customer implements MultiFieldsEntityInterface
         private ?Birthdate          $birthdate = null,
         ?Country                    $country = null,
         ?string                     $ipAddress = null,
-        ?string                     $addressType = null,
         private ?Locale             $locale = null,
         ?string                     $merchantCustomerId = null,
+        ?string                     $address = null,
+        ?string                     $addressType = null,
         mixed                       ...$additionalProperties
     )
     {
@@ -77,17 +78,21 @@ final class Customer implements MultiFieldsEntityInterface
         );
 
         $this->country = $country ?? new Country(
-                $this->additionalAddresses->get()->getCountry()->get()
-            );
+            $this->additionalAddresses->get()->getCountry()->get()
+        );
 
-        if ($addressType) {
-            $this->addressType = $this->createSimpleField(
-            //TODO: add schema enum validation
-                propertyName: 'address_type',
-                value: $addressType,
+        if ($address) {
+            $this->addressLine = $this->createSimpleField(
+                propertyName: 'address',
+                value: $address
             );
         }
-
+        if ($addressType) {
+            $this->addressType = $this->createSimpleField(
+                propertyName: 'address_type',
+                value: $addressType
+            );
+        }
 
         if ($gender) {
             $this->gender = $this->createEnumeratedField(
@@ -109,6 +114,11 @@ final class Customer implements MultiFieldsEntityInterface
 
         if ($phoneNumbers) $this->setPhoneNumbers($phoneNumbers);
         $this->setIpAddress($ipAddress);
+    }
+
+    public function getAddress(): null|string
+    {
+        return $this->addressLine->get() ?? null;
     }
 
     public function getFirstName(): BaseField

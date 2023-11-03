@@ -12,7 +12,7 @@ trait SingleFieldTrait
     /**
      * @param $propertyName - This attribute will be used while parsing in toArray method as key
      * @param $value - This attribute will be used while parsing in toArray method as value
-     * @return \GingerPluginSdk\Bases\BaseField
+     * @return BaseField
      */
     protected function createSimpleField($propertyName, $value): BaseField
     {

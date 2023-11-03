@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace GingerPluginSdk\Tests;
 
-use GingerPluginSdk\Entities\Customer;
 use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase
@@ -47,6 +46,8 @@ class CustomerTest extends TestCase
                 'phoneNumbers' => [
                     '666666666',
                 ],
+                'address' => 'Donauweg 10 1234567 Amsterdam',
+                'address_type' => 'billing',
                 'gender' => 'male',
                 'first_name' => 'Alexander',
                 'last_name' => 'Tiutiunnyk',
@@ -150,5 +151,14 @@ class CustomerTest extends TestCase
             ],
             actual: OrderStub::getValidCustomer()->getPhoneNumbers()->getAll()
         );
+    }
+
+    public function test_direct_address_usage()
+    {
+        self::assertSame(
+            expected: 'Donauweg 10 1234567 Amsterdam',
+            actual: OrderStub::getValidCustomer()->getAddress(),
+        );
+
     }
 }

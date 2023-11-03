@@ -93,7 +93,9 @@ class OrderStub
             locale: new Locale(
                 'Ua_ua'
             ),
-            merchantCustomerId: '15'
+            merchantCustomerId: '15',
+            address: 'Donauweg 10 1234567 Amsterdam',
+            addressType: 'billing'
         );
     }
 

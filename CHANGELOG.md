@@ -205,4 +205,8 @@ Initial version
 
 * Resolved test cases;
 * Implemented functionality of removing unsupported keys for array which used to updateOrder; 
+
+## 1.5.1
+
+* Implemented possibility to provide address line and address type directly to customer entity;
 * 
