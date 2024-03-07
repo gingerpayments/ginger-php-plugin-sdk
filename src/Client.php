@@ -149,11 +149,10 @@ class Client
             /**
              * Process Entities
              */
-
-            if (class_exists($property_name)) {
-                $path_to_entity = $property_name;
-            } else {
+            if (class_exists(self::ENTITIES_PATH . self::dashesToCamelCase($property_name, true))) {
                 $path_to_entity = self::ENTITIES_PATH . self::dashesToCamelCase($property_name, true);
+            } else {
+                $path_to_entity = $property_name;
             }
 
             if (class_exists($path_to_entity) && is_array($value)) {
