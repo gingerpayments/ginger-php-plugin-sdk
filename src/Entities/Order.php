@@ -30,8 +30,8 @@ final class Order implements MultiFieldsEntityInterface
     public function __construct(
         private Currency     $currency,
         private Amount       $amount,
-        private Transactions $transactions,
         private Customer     $customer,
+        private ?Transactions $transactions = null,
         private ?OrderLines  $orderLines = null,
         private ?Extra       $extra = null,
         private ?Client      $client = null,

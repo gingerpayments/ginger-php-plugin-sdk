@@ -176,7 +176,6 @@ class Client
                 }
             }
         }
-        print($className);
         try {
             return new $className(...$arguments);
         } catch
