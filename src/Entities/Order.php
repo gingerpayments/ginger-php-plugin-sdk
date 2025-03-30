@@ -122,7 +122,7 @@ final class Order implements MultiFieldsEntityInterface
     }
 
 
-    public function getOrderUrl(): BaseField
+    public function getOrderUrl(): BaseField | null
     {
         return $this->orderUrl;
     }

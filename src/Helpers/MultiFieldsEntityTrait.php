@@ -66,7 +66,7 @@ trait MultiFieldsEntityTrait
                 $this->{$key} = $entityValue;
             } else {
                 // Handle as a simple field if the class doesn't exist
-                $this->{$key} = $this->createSimpleField(
+                $this->{$this->dashesToCamelCase($key)} = $this->createSimpleField(
                     propertyName: $this->camelCaseToDashes($key),
                     value: $value
                 );
