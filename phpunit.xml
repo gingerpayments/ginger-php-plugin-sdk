@@ -1,7 +1,7 @@
 <phpunit>
     <testsuites>
         <testsuite name="Generic Test Suite">
-            <file>src/Tests/OrderTestSuite.php</file>
+            <directory>src/Tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

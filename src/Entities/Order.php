@@ -25,13 +25,14 @@ final class Order implements MultiFieldsEntityInterface
     private BaseField|null $id = null;
     private BaseField|null $webhookUrl = null;
     private BaseField|null $returnUrl = null;
+    private BaseField|null $orderUrl = null;
     private BaseField|null $merchantOrderId = null;
 
     public function __construct(
         private Currency     $currency,
         private Amount       $amount,
-        private Transactions $transactions,
         private Customer     $customer,
+        private ?Transactions $transactions = null,
         private ?OrderLines  $orderLines = null,
         private ?Extra       $extra = null,
         private ?Client      $client = null,
@@ -120,7 +121,11 @@ final class Order implements MultiFieldsEntityInterface
         return $this->getCurrentTransaction()->getPaymentUrl()->get();
     }
 
-    //@TODO: Add get order url for pay now payment method.
+
+    public function getOrderUrl(): BaseField | null
+    {
+        return $this->orderUrl;
+    }
 
     public function getWebhookUrl(): BaseField
     {

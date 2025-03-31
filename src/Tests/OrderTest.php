@@ -67,8 +67,8 @@ class OrderTest extends TestCase
         $order = new Order(
             currency: new Currency('EUR'),
             amount: new Amount(500),
-            transactions: OrderStub::getValidTransactions(),
             customer: OrderStub::getValidCustomer(),
+            transactions: OrderStub::getValidTransactions(),
             orderLines: OrderStub::getValidOrderLines(),
             extra: OrderStub::getValidExtra(),
             client: OrderStub::getValidClient(),
@@ -86,8 +86,8 @@ class OrderTest extends TestCase
         $order = new Order(
             currency: new Currency('EUR'),
             amount: new Amount(500),
-            transactions: OrderStub::getValidTransactions(),
             customer: OrderStub::getValidCustomer(),
+            transactions: OrderStub::getValidTransactions(),
             orderLines: OrderStub::getValidOrderLines(),
             extra: OrderStub::getValidExtra(),
             client: OrderStub::getValidClient(),
