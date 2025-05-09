@@ -15,6 +15,7 @@ use GingerPluginSdk\Properties\Amount;
 use GingerPluginSdk\Properties\Currency;
 use GingerPluginSdk\Properties\Status;
 
+#[\AllowDynamicProperties]
 final class Order implements MultiFieldsEntityInterface
 {
     use HelperTrait;
