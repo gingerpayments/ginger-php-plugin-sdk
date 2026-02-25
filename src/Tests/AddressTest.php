@@ -127,4 +127,17 @@ class AddressTest extends TestCase
             actual: $address->getAddressType()->get()
         );
     }
+
+    public function test_postal_code_is_optional()
+    {
+        $address = new Address(
+            addressType: "customer",
+            country: new Country("UA"),
+            street: "Soborna",
+            city: "Poltava"
+        );
+
+        self::assertNull($address->getPostalCode());
+        self::assertArrayNotHasKey('postal_code', $address->toArray());
+    }
 }

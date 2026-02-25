@@ -18,7 +18,7 @@ final class Address implements MultiFieldsEntityInterface
     use SyncUpSchemasTrait;
 
     private BaseField $addressType;
-    private BaseField $postalCode;
+    private BaseField|null $postalCode = null;
     private Country $country;
     private BaseField $city;
     private BaseField $street;
@@ -27,8 +27,8 @@ final class Address implements MultiFieldsEntityInterface
 
     /**
      * @param string $addressType
-     * @param string $postalCode
      * @param Country $country - ISO 3166-1 alpha-2 country code
+     * @param string|null $postalCode
      * @param string|null $street
      * @param string|null $city
      * @param string|null $address
@@ -36,8 +36,8 @@ final class Address implements MultiFieldsEntityInterface
      */
     public function __construct(
         string  $addressType,
-        string  $postalCode,
         Country $country,
+        ?string $postalCode = null,
         ?string $street = null,
         ?string $city = null,
         ?string $address = null,
@@ -54,10 +54,12 @@ final class Address implements MultiFieldsEntityInterface
                 'delivery'
             ]
         );
-        $this->postalCode = $this->createSimpleField(
-            propertyName: 'postal_code',
-            value: $postalCode
-        );
+        if ($postalCode) {
+            $this->postalCode = $this->createSimpleField(
+                propertyName: 'postal_code',
+                value: $postalCode
+            );
+        }
         $this->street = $this->createSimpleField(
             propertyName: 'street',
             value: $street
@@ -86,9 +88,9 @@ final class Address implements MultiFieldsEntityInterface
         return $this->addressType;
     }
 
-     public function getPostalCode(): string
+     public function getPostalCode(): ?string
     {
-        return $this->postalCode->get();
+        return $this->postalCode?->get();
     }
 
      public function getCountry(): Country
