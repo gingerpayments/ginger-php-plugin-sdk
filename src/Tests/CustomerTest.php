@@ -86,6 +86,18 @@ class CustomerTest extends TestCase
         );
     }
 
+    public function test_first_name_is_optional()
+    {
+        $customer = new \GingerPluginSdk\Entities\Customer(
+            additionalAddresses: OrderStub::getValidAdditionalAddresses(),
+            lastName: 'Tiutiunnyk',
+            emailAddress: new \GingerPluginSdk\Properties\EmailAddress('tutunikssa@gmail.com'),
+        );
+
+        self::assertNull($customer->getFirstName());
+        self::assertArrayNotHasKey('first_name', $customer->toArray());
+    }
+
     public function test_get_last_name()
     {
         self::assertSame(

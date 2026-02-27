@@ -24,7 +24,7 @@ final class Customer implements MultiFieldsEntityInterface
     private string $propertyName = 'customer';
 
     private BaseField $lastName;
-    private BaseField $firstName;
+    private BaseField|null $firstName = null;
     private BaseField|null $gender;
     private Country $country;
     private BaseField $postalCode;
@@ -37,7 +37,6 @@ final class Customer implements MultiFieldsEntityInterface
 
     /**
      * @param AdditionalAddresses $additionalAddresses
-     * @param string $firstName
      * @param string $lastName
      * @param EmailAddress $emailAddress
      * @param string|null $gender - Customer's gender
@@ -48,11 +47,11 @@ final class Customer implements MultiFieldsEntityInterface
      * @param Locale|null $locale
      * @param string|null $merchantCustomerId
      * @param Address|null $address
+     * @param string|null $firstName
      * @param mixed ...$additionalProperties
      */
     public function __construct(
         private AdditionalAddresses $additionalAddresses,
-        string                      $firstName,
         string                      $lastName,
         private EmailAddress        $emailAddress,
         ?string                     $gender = null,
@@ -64,13 +63,16 @@ final class Customer implements MultiFieldsEntityInterface
         ?string                     $merchantCustomerId = null,
         ?string                     $address = null,
         ?string                     $addressType = null,
+        ?string                     $firstName = null,
         mixed                       ...$additionalProperties
     )
     {
-        $this->firstName = $this->createSimpleField(
-            propertyName: 'first_name',
-            value: $firstName
-        );
+        if ($firstName) {
+            $this->firstName = $this->createSimpleField(
+                propertyName: 'first_name',
+                value: $firstName
+            );
+        }
 
         $this->lastName = $this->createSimpleField(
             propertyName: 'last_name',
@@ -121,7 +123,7 @@ final class Customer implements MultiFieldsEntityInterface
         return $this->addressLine->get() ?? null;
     }
 
-    public function getFirstName(): BaseField
+    public function getFirstName(): BaseField|null
     {
         return $this->firstName;
     }
